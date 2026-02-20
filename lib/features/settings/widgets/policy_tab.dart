@@ -4,6 +4,7 @@ import 'package:bhutpurva_penal/features/settings/controllers/settings_controlle
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 class PolicyTab extends StatelessWidget {
   const PolicyTab({super.key});
@@ -110,24 +111,33 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
 
-        TextFormField(
-          controller: controller.privacyPolicyController,
-          maxLines: 40,
-          minLines: 20,
-          decoration: InputDecoration(
-            hintText: 'Enter privacy policy details here...',
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.all(12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: ColorConst.primary, width: 1.2),
-            ),
+        Container(
+          height: 400,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            children: [
+              ToolBar(
+                toolBarColor: Colors.white,
+                activeIconColor: ColorConst.primary,
+                controller: controller.privacyPolicyController,
+              ),
+              const Divider(height: 1, thickness: 1, color: Colors.grey),
+              Expanded(
+                child: QuillHtmlEditor(
+                  text: '',
+                  hintText: 'Enter privacy policy details here...',
+                  controller: controller.privacyPolicyController,
+                  isEnabled: true,
+                  minHeight: 300,
+                  padding: const EdgeInsets.all(12),
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
         const Gap(8),
@@ -136,7 +146,12 @@ class PolicyTab extends StatelessWidget {
           child: SizedBox(
             width: 200,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final htmlText = await controller.privacyPolicyController
+                    .getText();
+                // TODO: Send htmlText to your server
+                debugPrint('Privacy Policy HTML: $htmlText');
+              },
               child: const Text('Update'),
             ),
           ),
@@ -157,24 +172,35 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
 
-        TextFormField(
-          controller: controller.privacyPolicyController,
-          maxLines: 40,
-          minLines: 20,
-          decoration: InputDecoration(
-            hintText: 'Enter activist policy details here...',
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.all(12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: ColorConst.primary, width: 1.2),
-            ),
+        Container(
+          height: 400,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            children: [
+              ToolBar(
+                toolBarColor: Colors.white,
+                activeIconColor: ColorConst.primary,
+                controller: controller
+                    .activistPolicyController, // corrected controller here
+              ),
+              const Divider(height: 1, thickness: 1, color: Colors.grey),
+              Expanded(
+                child: QuillHtmlEditor(
+                  text: '',
+                  hintText: 'Enter activist policy details here...',
+                  controller: controller
+                      .activistPolicyController, // corrected controller here
+                  isEnabled: true,
+                  minHeight: 300,
+                  padding: const EdgeInsets.all(12),
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
         const Gap(8),
@@ -183,7 +209,12 @@ class PolicyTab extends StatelessWidget {
           child: SizedBox(
             width: 200,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final htmlText = await controller.activistPolicyController
+                    .getText();
+                // TODO: Send htmlText to your server
+                debugPrint('Activist Policy HTML: $htmlText');
+              },
               child: const Text('Update'),
             ),
           ),

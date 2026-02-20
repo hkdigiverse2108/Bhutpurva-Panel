@@ -128,7 +128,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store = StorageService();
+    final store = StorageService.instance;
     return Container(
       decoration: BoxDecoration(
         color: HelperFunctions.isDarkMode(context)
@@ -400,13 +400,13 @@ class _AvatarButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  store.user?['email']?.split('@').first ?? 'Admin',
+                  store.user?.email.split('@').first ?? 'Admin',
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  store.user?['email'] ?? 'Admin@gmail.com',
+                  store.user?.email ?? 'Admin@gmail.com',
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],

@@ -6,13 +6,10 @@ import 'package:get/get.dart';
 class AppMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-
-    final storage = StorageService();
+    final storage = StorageService.instance;
 
     final isAuthenticated = storage.isLoggedIn;
 
-    return isAuthenticated
-        ? null
-        : const RouteSettings(name: AppPages.login);
+    return isAuthenticated ? null : const RouteSettings(name: AppPages.login);
   }
 }

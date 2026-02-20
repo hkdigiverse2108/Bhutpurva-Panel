@@ -63,6 +63,12 @@ class LoginForm extends GetView<LoginController> {
               opacity: 0.0,
               autofillHints: const [AutofillHints.email],
               textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+              },
             ),
 
             const Gap(14),
@@ -87,6 +93,12 @@ class LoginForm extends GetView<LoginController> {
                   ),
                   onPressed: controller.togglePasswordVisibility,
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the password';
+                  }
+                  return null;
+                },
               ),
             ),
 
@@ -107,10 +119,10 @@ class LoginForm extends GetView<LoginController> {
             const Gap(16),
 
             /// LOGIN BUTTON
-            SizedBox(
-              height: 40,
-              child: Obx(
-                () => ElevatedButton(
+            Obx(
+              () => SizedBox(
+                height: 40,
+                child: ElevatedButton(
                   onPressed: controller.isLoading.value
                       ? null
                       : controller.onLogin,

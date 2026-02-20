@@ -4,7 +4,6 @@ import 'package:bhutpurva_penal/core/observers/route_observer.dart';
 import 'package:bhutpurva_penal/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'app_config.dart';
 
 class App extends StatelessWidget {

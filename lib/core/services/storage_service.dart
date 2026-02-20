@@ -1,7 +1,10 @@
+import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:get_storage/get_storage.dart';
 
-class StorageService {
+class StorageService  {
   final storage = GetStorage();
+
+  static final StorageService instance = StorageService();
 
   // Define keys
   static const String tokenKey = 'token';
@@ -18,10 +21,11 @@ class StorageService {
       value == null ? storage.remove(tokenKey) : storage.write(tokenKey, value);
 
   // User
-  Map<String, dynamic>? get user => storage.read(userKey);
+  UserModel? get user => UserModel.fromRawJson(storage.read(userKey));
 
-  set user(Map<String, dynamic>? value) =>
-      value == null ? storage.remove(userKey) : storage.write(userKey, value);
+  set user(UserModel? value) => value == null
+      ? storage.remove(userKey)
+      : storage.write(userKey, value.toRawJson());
 
   // Role
   String? get role => storage.read(roleKey);
@@ -43,6 +47,8 @@ class StorageService {
   void write(String key, dynamic value) => storage.write(key, value);
 
   void remove(String key) => storage.remove(key);
+
+  void clearSession() => storage.remove(tokenKey);
 
   void clearAll() => storage.erase();
 }

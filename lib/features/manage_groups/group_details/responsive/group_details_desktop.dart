@@ -106,8 +106,8 @@ class GroupDetailsDesktop extends StatelessWidget {
                           controller.onBatchTap(item);
                         },
                       ),
-                      DataCell(Text(item.monitor)),
-                      DataCell(Text(item.students.length.toString())),
+                      DataCell(Text(item.monitorIds.length.toString())),
+                      DataCell(Text('0')),
                       DataCell(
                         Row(
                           children: [

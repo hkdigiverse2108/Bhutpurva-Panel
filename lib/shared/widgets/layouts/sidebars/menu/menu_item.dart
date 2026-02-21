@@ -49,9 +49,9 @@ class _AdminMenuItemState extends State<AdminMenuItem> {
               child: Container(
                 decoration: BoxDecoration(
                   color: manuController.isActive(widget.route)
-                      ? ColorConst.primary.withOpacity(0.08)
+                      ? ColorConst.primary.withValues(alpha: 0.08)
                       : manuController.isHovering(widget.route)
-                      ? ColorConst.grey.withOpacity(0.08)
+                      ? ColorConst.grey.withValues(alpha: 0.08)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(SizeConst.cardRadiusMd),
                 ),

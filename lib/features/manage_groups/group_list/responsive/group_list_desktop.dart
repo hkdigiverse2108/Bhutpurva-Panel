@@ -87,13 +87,15 @@ class GroupListDesktop extends StatelessWidget {
             columns: const [
               AppTableColumn(title: "No", width: 60),
               AppTableColumn(title: "Name"),
-              AppTableColumn(title: "Description"),
+              AppTableColumn(title: "Leaders"),
               AppTableColumn(title: "Status", width: 120),
               AppTableColumn(title: "Actions", width: 140),
             ],
             rows: controller.groups,
             rowsPerPage: 10,
             onPageChanged: (page) {},
+            onAdd: controller.onCreateGroup,
+            onRefresh: controller.fetchGroups,
             rowBuilder: (group, index) {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),
@@ -112,7 +114,7 @@ class GroupListDesktop extends StatelessWidget {
                   ),
                   DataCell(
                     Text(
-                      group.description,
+                      group.leaders.length.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

@@ -25,9 +25,9 @@ class TableActionButton extends StatelessWidget {
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: effectiveColor.withOpacity(0.1),
+          color: effectiveColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: effectiveColor.withOpacity(0.3)),
+          border: Border.all(color: effectiveColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

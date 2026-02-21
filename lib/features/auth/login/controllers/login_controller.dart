@@ -5,7 +5,7 @@ import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/core/services/storage_service.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
-import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
+import 'package:bhutpurva_penal/shared/models/user/admin_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

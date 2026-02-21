@@ -72,7 +72,7 @@ class AppDataTable<T> extends StatelessWidget {
       color: Colors.white,
       borderRadius: BorderRadius.circular(14),
       boxShadow: [
-        BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 12),
+        BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 12),
       ],
     );
   }

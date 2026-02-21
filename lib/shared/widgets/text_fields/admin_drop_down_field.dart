@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AdminSearchSelectField<T> extends StatefulWidget {
   final String label;
@@ -10,6 +11,7 @@ class AdminSearchSelectField<T> extends StatefulWidget {
   final ValueChanged<T?> onChanged;
   final int maxVisibleItems;
   final bool outSide;
+  final bool isLoading;
 
   const AdminSearchSelectField({
     super.key,
@@ -21,6 +23,7 @@ class AdminSearchSelectField<T> extends StatefulWidget {
     this.prefixIcon,
     this.maxVisibleItems = 6,
     this.outSide = false,
+    this.isLoading = false,
   });
 
   @override
@@ -78,7 +81,8 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
 
     final availableHeight = openUpwards ? spaceAbove : spaceBelow;
 
-    final desiredHeight = (_filtered.length * _itemHeight).clamp(0, maxHeight);
+    final int itemCount = widget.isLoading ? 3 : _filtered.length;
+    final desiredHeight = (itemCount * _itemHeight).clamp(0, maxHeight);
 
     final dropdownHeight = desiredHeight.clamp(
       _minHeight,
@@ -112,8 +116,29 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
                       ),
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
-                        itemCount: _filtered.length,
+                        itemCount: itemCount,
                         itemBuilder: (_, index) {
+                          if (widget.isLoading) {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: _itemHeight,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 14,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           final item = _filtered[index];
                           return InkWell(
                             onTap: () {

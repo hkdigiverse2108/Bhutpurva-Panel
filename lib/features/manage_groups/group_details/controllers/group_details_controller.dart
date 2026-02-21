@@ -55,8 +55,9 @@ class GroupDetailsController extends GetxController {
         (index) => BatchesModel(
           id: index.toString(),
           name: 'Batch $index ${query.value}',
-          monitor: 'Monitor $index',
-          students: [],
+          monitorIds: [],
+          isActive: true,
+          createdAt: DateTime.now(),
         ),
       );
     } catch (e) {

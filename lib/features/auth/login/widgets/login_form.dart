@@ -20,7 +20,7 @@ class LoginForm extends GetView<LoginController> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             // BoxShadow(
-            //   color: Colors.black.withOpacity(0.06),
+            //   color: Colors.black.withValues(alpha: 0.06),
             //   blurRadius: 16,
             //   offset: const Offset(0, 8),
             // ),
@@ -59,7 +59,7 @@ class LoginForm extends GetView<LoginController> {
               keyboardType: TextInputType.emailAddress,
               controller: controller.emailController,
               prefixIcon: const Icon(PhosphorIconsBold.paperPlaneRight),
-              enabledBorderColor: Colors.black.withOpacity(0.3),
+              enabledBorderColor: Colors.black.withValues(alpha: 0.3),
               opacity: 0.0,
               autofillHints: const [AutofillHints.email],
               textInputAction: TextInputAction.next,
@@ -81,7 +81,7 @@ class LoginForm extends GetView<LoginController> {
                 controller: controller.passwordController,
                 obscureText: controller.isPasswordHidden.value,
                 prefixIcon: Icon(PhosphorIconsBold.password),
-                enabledBorderColor: Colors.black.withOpacity(0.3),
+                enabledBorderColor: Colors.black.withValues(alpha: 0.3),
                 opacity: 0.0,
                 autofillHints: const [AutofillHints.password],
                 textInputAction: TextInputAction.done,
@@ -128,7 +128,7 @@ class LoginForm extends GetView<LoginController> {
                       : controller.onLogin,
                   style: ElevatedButton.styleFrom(elevation: 0).copyWith(
                     overlayColor: WidgetStateProperty.all(
-                      Colors.white.withOpacity(0.08),
+                      Colors.white.withValues(alpha: 0.08),
                     ),
                   ),
                   child: controller.isLoading.value

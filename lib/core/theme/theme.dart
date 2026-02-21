@@ -125,14 +125,14 @@ class AppTheme {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(SizeConst.inputFieldRadius - 2),
         borderSide: BorderSide(
-          color: ColorConst.borderPrimary.withOpacity(0.6),
+          color: ColorConst.borderPrimary.withValues(alpha: 0.6),
         ),
       ),
 
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(SizeConst.inputFieldRadius - 2),
         borderSide: BorderSide(
-          color: ColorConst.borderPrimary.withOpacity(0.6),
+          color: ColorConst.borderPrimary.withValues(alpha: 0.6),
         ),
       ),
 
@@ -155,7 +155,7 @@ class AppTheme {
     // DIVIDERS / CARDS – subtle
     // ----------------------------------------------------------------
     cardColor: ColorConst.white,
-    dividerColor: ColorConst.grey.withOpacity(0.4),
+    dividerColor: ColorConst.grey.withValues(alpha: 0.4),
 
     snackBarTheme: SnackBarThemeData(
       backgroundColor: ColorConst.darkerGrey,

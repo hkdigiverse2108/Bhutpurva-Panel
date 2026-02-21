@@ -1,6 +1,13 @@
+import 'dart:developer';
+
 import 'package:bhutpurva_penal/app/app_pages.dart';
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/menu/menu_item.dart';
+import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +18,9 @@ class GroupListController extends GetxController {
   var isLoading = true.obs;
   var statusFilterLabel = 'Status'.obs;
 
-  int page = 0;
+  final apiService = ApiService();
+
+  int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
@@ -29,33 +38,43 @@ class GroupListController extends GetxController {
     super.onInit();
 
     _searchWorker = debounce(query, (_) {
-      page = 0;
-      fetchUsers();
+      page = 1;
+      fetchGroups();
     }, time: const Duration(milliseconds: 400));
 
-    fetchUsers();
+    fetchGroups();
   }
 
-  void fetchUsers() async {
-    isLoading.value = true;
+  void fetchGroups() async {
+    try {
+      isLoading.value = true;
+      final ResModel response = await apiService.get(
+        ApiConstants.groups(
+          page: page,
+          limit: rowsPerPage,
+          query: query.value,
+          status: statusFilter,
+        ),
+      );
 
-    // 🔥 API params you will eventually pass:
-    // page, rowsPerPage, query.value, statusFilter
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    groups.value = List.generate(
-      10,
-      (i) => GroupModel(
-        id: i,
-        name: "Group $i ${query.value}",
-        description: "Description $i",
-        isActive: statusFilter ?? (i % 2 == 0),
-      ),
-    );
-
-    total = 50;
-    isLoading.value = false;
+      if (response.status == 200) {
+        groups.value = (response.data['groups'] as List<dynamic>)
+            .map((e) => GroupModel.fromJson(e))
+            .toList();
+        total = response.data['totalData'];
+      }
+    } catch (e) {
+      log(e.toString());
+      AppSnackBar.show(
+        title: "Error",
+        message: "Failed to fetch groups",
+        type: AppSnackBarType.error,
+      );
+      groups.value = [];
+      total = 0;
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void onSearchChanged(String value) {
@@ -64,19 +83,19 @@ class GroupListController extends GetxController {
 
   void onPageChange(int value) {
     page = value ~/ rowsPerPage;
-    fetchUsers();
+    fetchGroups();
   }
 
   void setStatusFilter(bool? value) {
     statusFilter = value;
     page = 0;
-    fetchUsers();
+    fetchGroups();
   }
 
   void clearFilters() {
     statusFilter = null;
     page = 0;
-    fetchUsers();
+    fetchGroups();
   }
 
   void onCreateGroup() {

@@ -1,7 +1,7 @@
-import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
+import 'package:bhutpurva_penal/shared/models/user/admin_model.dart';
 import 'package:get_storage/get_storage.dart';
 
-class StorageService  {
+class StorageService {
   final storage = GetStorage();
 
   static final StorageService instance = StorageService();
@@ -21,9 +21,9 @@ class StorageService  {
       value == null ? storage.remove(tokenKey) : storage.write(tokenKey, value);
 
   // User
-  UserModel? get user => UserModel.fromRawJson(storage.read(userKey));
+  AdminModel? get user => AdminModel.fromRawJson(storage.read(userKey));
 
-  set user(UserModel? value) => value == null
+  set user(AdminModel? value) => value == null
       ? storage.remove(userKey)
       : storage.write(userKey, value.toRawJson());
 

@@ -27,7 +27,7 @@ class Sidebar extends StatelessWidget {
               : ColorConst.white,
           border: Border(
             right: BorderSide(
-              color: ColorConst.grey.withOpacity(0.3),
+              color: ColorConst.grey.withValues(alpha: 0.3),
               width: 1,
             ),
           ),

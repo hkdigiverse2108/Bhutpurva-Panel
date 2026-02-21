@@ -15,6 +15,7 @@ class AppPaginatedTable<T> extends StatelessWidget {
 
   final void Function(int page)? onPageChanged;
   final VoidCallback? onAdd;
+  final VoidCallback? onRefresh;
   final bool checkboxColumn;
 
   const AppPaginatedTable({
@@ -26,16 +27,13 @@ class AppPaginatedTable<T> extends StatelessWidget {
     required this.rowsPerPage,
     this.onPageChanged,
     this.onAdd,
+    this.onRefresh,
     this.isLoading = false,
     this.checkboxColumn = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (rows.isEmpty && !isLoading) {
-      return AppTableEmpty(message: "No records found", onAdd: onAdd);
-    }
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -43,13 +41,20 @@ class AppPaginatedTable<T> extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 16,
             offset: const Offset(0, 6),
           ),
         ],
       ),
       child: PaginatedDataTable2(
+        empty: !isLoading
+            ? AppTableEmpty(
+                message: "No records found",
+                onAdd: onAdd,
+                onRefresh: onRefresh,
+              )
+            : null,
         minWidth: 900,
         columnSpacing: 20,
         horizontalMargin: 16,

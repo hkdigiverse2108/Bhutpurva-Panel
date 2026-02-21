@@ -85,8 +85,8 @@ class BatchListMobile extends StatelessWidget {
                     Get.toNamed(AppPages.batchDetails);
                   },
                 ),
-                DataCell(Text(item.monitor)),
-                DataCell(Text(item.students.length.toString())),
+                DataCell(Text(item.monitorIds.length.toString())),
+                DataCell(Text('0')),
                 DataCell(
                   Row(
                     children: [

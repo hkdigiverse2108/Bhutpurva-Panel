@@ -96,7 +96,7 @@ class GroupListMobile extends StatelessWidget {
             columns: const [
               AppTableColumn(title: "No", width: 60),
               AppTableColumn(title: "Name"),
-              AppTableColumn(title: "Description"),
+              AppTableColumn(title: "Leader"),
               AppTableColumn(title: "Status", width: 120),
               AppTableColumn(title: "Actions", width: 140),
             ],
@@ -111,7 +111,7 @@ class GroupListMobile extends StatelessWidget {
                   DataCell(Text(group.name)),
                   DataCell(
                     Text(
-                      group.description,
+                      group.leaders.length.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

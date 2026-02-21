@@ -57,7 +57,7 @@ class OuterLabelTextField extends StatelessWidget {
           textInputAction: textInputAction,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white.withOpacity(opacity),
+            fillColor: Colors.white.withValues(alpha: opacity),
             hintText: hint,
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,

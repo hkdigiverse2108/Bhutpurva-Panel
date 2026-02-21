@@ -1,39 +1,70 @@
+import 'dart:developer';
+
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
-import 'package:bhutpurva_penal/shared/models/leader_models/leader_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
+import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateGroupController extends GetxController {
   static CreateGroupController get instance => Get.find();
 
+  final apiService = ApiService();
+
   final isLoading = false.obs;
+  final isLeadersLoading = false.obs;
+  final isBatchesLoading = false.obs;
   final nameController = TextEditingController();
 
-  final leaders = <LeaderModel>[
-    LeaderModel(
-      name: 'Leader 1',
-      email: 'leader1@gmail.com',
-      phone: '1234567890',
-    ),
-    LeaderModel(
-      name: 'Leader 2',
-      email: 'leader2@gmail.com',
-      phone: '1234567890',
-    ),
-    LeaderModel(
-      name: 'Leader 3',
-      email: 'leader3@gmail.com',
-      phone: '1234567890',
-    ),
-  ].obs;
-  final selectedLeaders = <LeaderModel>[].obs;
+  final leaders = <UserModel>[].obs;
+  final selectedLeaders = <UserModel>[].obs;
 
-  final batches = <BatchesModel>[
-    BatchesModel(id: '1', name: 'Batch 1', students: [], monitor: 'Leader 1'),
-    BatchesModel(id: '2', name: 'Batch 2', students: [], monitor: 'Leader 2'),
-    BatchesModel(id: '3', name: 'Batch 3', students: [], monitor: 'Leader 3'),
-  ].obs;
+  final batches = <BatchesModel>[].obs;
   final selectedBatches = <BatchesModel>[].obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    getLeaders();
+    getBatches();
+  }
+
+  void getLeaders() async {
+    try {
+      isLeadersLoading.value = true;
+      final ResModel response = await apiService.get(ApiConstants.users());
+
+      if (response.status == 200) {
+        response.data['users'].forEach((element) {
+          leaders.add(UserModel.fromJson(element));
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLeadersLoading.value = false;
+    }
+  }
+
+  void getBatches() async {
+    try {
+      isBatchesLoading.value = true;
+      final ResModel response = await apiService.get(ApiConstants.batches());
+
+      if (response.status == 200) {
+        response.data['batch'].forEach((element) {
+          batches.add(BatchesModel.fromJson(element));
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isBatchesLoading.value = false;
+    }
+  }
 
   void createGroup() {
     isLoading.value = true;

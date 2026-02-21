@@ -3,11 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class GlassCard extends StatelessWidget {
-  const GlassCard({
-    super.key,
-    required this.child,
-    this.radius = 18,
-  });
+  const GlassCard({super.key, required this.child, this.radius = 18});
 
   final Widget child;
   final double radius;
@@ -20,7 +16,7 @@ class GlassCard extends StatelessWidget {
         boxShadow: [
           // 🔹 outer glow shadow
           // BoxShadow(
-          //   color: Colors.black.withOpacity(0.01),
+          //   color: Colors.black.withValues(alpha: 0.01),
           //   blurRadius: 30,
           //   spreadRadius: 2,
           // ),
@@ -29,16 +25,13 @@ class GlassCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 18,
-            sigmaY: 18,
-          ),
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08), // 🔑 glass
+              color: Colors.white.withValues(alpha: 0.08), // 🔑 glass
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
-                color: Colors.white.withOpacity(0.25),
+                color: Colors.white.withValues(alpha: 0.25),
                 width: 1.2,
               ),
             ),

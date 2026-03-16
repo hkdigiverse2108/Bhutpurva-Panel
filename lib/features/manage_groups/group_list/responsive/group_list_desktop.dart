@@ -114,7 +114,7 @@ class GroupListDesktop extends StatelessWidget {
                   ),
                   DataCell(
                     Text(
-                      group.leaders.length.toString(),
+                      group.leaderIds?.length.toString() ?? "0",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -146,7 +146,12 @@ class GroupListDesktop extends StatelessWidget {
                   DataCell(
                     Row(
                       children: [
-                        tableActionIconButton(icon: Icons.edit, onTap: () {}),
+                        tableActionIconButton(
+                          icon: Icons.edit,
+                          onTap: () {
+                            controller.onEditGroup(group);
+                          },
+                        ),
                         const SizedBox(width: 6),
                         tableActionIconButton(
                           icon: Icons.delete,

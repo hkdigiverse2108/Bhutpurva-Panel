@@ -21,6 +21,7 @@ import 'package:bhutpurva_penal/features/manage_batches/bindings/manage_batch_bi
 import 'package:bhutpurva_penal/features/manage_batches/create_batch/create_batch.dart';
 import 'package:bhutpurva_penal/features/manage_groups/bindings/manage_group_binding.dart';
 import 'package:bhutpurva_penal/features/manage_groups/create_group/create_group.dart';
+import 'package:bhutpurva_penal/features/manage_groups/edit_group/edit_group.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_details/group_details.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_list/group_list.dart';
 import 'package:bhutpurva_penal/features/settings/bindings/settings_binding.dart';
@@ -54,6 +55,12 @@ class AppRoutes {
     GetPage(
       name: AppPages.createGroup,
       page: () => const CreateGroup(),
+      binding: ManageGroupBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editGroup,
+      page: () => const EditGroup(),
       binding: ManageGroupBinding(),
       middlewares: [AppMiddleware()],
     ),

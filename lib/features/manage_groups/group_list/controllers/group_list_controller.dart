@@ -179,6 +179,13 @@ class GroupListController extends GetxController {
     Get.toNamed(AppPages.groupDetails, arguments: group);
   }
 
+  void onEditGroup(GroupModel group) async {
+    final result = await Get.toNamed(AppPages.editGroup, arguments: group);
+    if (result == true) {
+      fetchGroups();
+    }
+  }
+
   @override
   void onClose() {
     _searchWorker.dispose();

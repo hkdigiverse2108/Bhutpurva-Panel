@@ -2,7 +2,7 @@ import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
-import 'package:bhutpurva_penal/features/manage_groups/create_group/controllers/create_group_controller.dart';
+import 'package:bhutpurva_penal/features/manage_groups/edit_group/controllers/edit_group_controller.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
@@ -17,12 +17,12 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class CreateGroupDesktop extends StatelessWidget {
-  const CreateGroupDesktop({super.key});
+class EditGroupDesktop extends StatelessWidget {
+  const EditGroupDesktop({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = CreateGroupController.instance;
+    final controller = EditGroupController.instance;
     return Scaffold(
       body: Obx(
         () => AppFullScreenLoader(
@@ -31,11 +31,11 @@ class CreateGroupDesktop extends StatelessWidget {
             width: 600,
             child: AdminFormPageLayout(
               header: const BreadcrumbWithHeading(
-                heading: 'Create Group',
+                heading: 'Edit Group',
                 returnToPreviousScreen: true,
                 breadcrumbsItems: [
                   BreadcrumbItem(title: 'Groups', route: AppPages.manageGroups),
-                  BreadcrumbItem(title: 'Create Group'),
+                  BreadcrumbItem(title: 'Edit Group'),
                 ],
               ),
               body: Form(
@@ -234,9 +234,9 @@ class CreateGroupDesktop extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               AdminFormButton(
-                                label: 'Create Group',
+                                label: 'Update Group',
                                 isLoading: controller.isLoading.value,
-                                onPressed: controller.createGroup,
+                                onPressed: controller.updateGroup,
                               ),
                             ],
                           );
@@ -258,9 +258,9 @@ class CreateGroupDesktop extends StatelessWidget {
                             SizedBox(
                               width: 150,
                               child: AdminFormButton(
-                                label: 'Create Group',
+                                label: 'Update Group',
                                 isLoading: controller.isLoading.value,
-                                onPressed: controller.createGroup,
+                                onPressed: controller.updateGroup,
                               ),
                             ),
                           ],

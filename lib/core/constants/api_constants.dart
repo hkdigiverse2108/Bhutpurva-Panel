@@ -4,6 +4,9 @@ class ApiConstants {
   static const login = 'auth/login';
 
   // groups
+  static const createGroup = 'group/create';
+  static const updateGroup = 'group/update';
+  static String groupDetails(String id) => 'group/get/$id';
   static String groups({
     int page = 1,
     int? limit,

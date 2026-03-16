@@ -255,7 +255,6 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize =>
       Size.fromHeight(DeviceUtility.getAppBarHeight() + 15);
 }

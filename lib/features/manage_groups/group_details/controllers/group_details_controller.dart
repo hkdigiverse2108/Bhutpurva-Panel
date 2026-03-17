@@ -76,19 +76,7 @@ class GroupDetailsController extends GetxController {
       isLeadersLoading.value = true;
       await Future.delayed(const Duration(seconds: 1));
 
-      leaders.value = List.generate(
-        20,
-        (index) => StudentModel(
-          id: (index + 1).toString(),
-          name: 'Student $index ${query.value}',
-          email: 'Student$index@gmail.com',
-          phone: '1234567890',
-          address: 'Address $index',
-          image: ImageConst.logo,
-          age: 20,
-          profileStatus: 'Not Updated',
-        ),
-      );
+      leaders.value = [];
     } catch (e) {
       AppSnackBar.show(
         title: 'Error',

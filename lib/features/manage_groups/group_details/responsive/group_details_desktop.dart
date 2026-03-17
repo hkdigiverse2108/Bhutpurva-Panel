@@ -133,7 +133,7 @@ class GroupDetailsDesktop extends StatelessWidget {
             if (controller.isLeadersLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('leaders_shimmer'),
-                columnWidths: [60, null, null, 60, null, 120, 140],
+                columnWidths: [60, null, null, null, 120, 140],
               );
             } else {
               child = AppPaginatedTable(
@@ -142,9 +142,8 @@ class GroupDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'No', width: 60),
                   AppTableColumn(title: 'Name'),
                   AppTableColumn(title: 'Mobile Number'),
-                  AppTableColumn(title: 'Age', width: 60),
-                  AppTableColumn(title: 'Address'),
-                  AppTableColumn(title: 'Profile Status', width: 120),
+                  AppTableColumn(title: 'City'),
+                  AppTableColumn(title: 'Status', width: 120),
                   AppTableColumn(title: 'Actions', width: 140),
                 ],
                 rows: controller.leaders,
@@ -157,10 +156,11 @@ class GroupDetailsDesktop extends StatelessWidget {
                     cells: [
                       DataCell(Text(item.id)),
                       DataCell(Text(item.name)),
-                      DataCell(Text(item.phone)),
-                      DataCell(Text(item.age.toString())),
-                      DataCell(Text(item.address)),
-                      DataCell(Text(item.profileStatus)),
+                      DataCell(Text(item.phoneNumber)),
+                      DataCell(Text(item.addressIds.isNotEmpty ? item.addressIds.first.city : 'N/A')),
+                      DataCell(
+                        Text(item.isVerified ? 'Verified' : 'Not Verified'),
+                      ),
                       DataCell(
                         TableActionButton(
                           onTap: () {

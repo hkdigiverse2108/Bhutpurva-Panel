@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class LifeLightModel {
-  String id;
-  UserId userId;
-  String lifeLight;
-  String status;
-  bool isDeleted;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final String id;
+  final UserId userId;
+  final String lifeLight;
+  final String status;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   LifeLightModel({
     required this.id,
@@ -46,9 +46,9 @@ class LifeLightModel {
 }
 
 class UserId {
-  String id;
-  String email;
-  String name;
+  final String id;
+  final String email;
+  final String name;
 
   UserId({required this.id, required this.email, required this.name});
 

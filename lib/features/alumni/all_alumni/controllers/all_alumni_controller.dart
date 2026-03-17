@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
-import 'package:bhutpurva_penal/core/constants/image_const.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
@@ -72,9 +73,10 @@ class AllAlumniController extends GetxController {
               .map((e) => StudentModel.fromJson(e))
               .toList(),
         );
-        total = res.data['total'];
+        total = res.data['totalData'] ?? 0;
       }
     } catch (e) {
+      log(e.toString());
       AppSnackBar.show(
         title: "Error",
         message: "Failed to fetch alumni",

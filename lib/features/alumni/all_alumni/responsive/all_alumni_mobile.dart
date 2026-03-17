@@ -93,7 +93,7 @@ class AllAlumniMobile extends StatelessWidget {
         body: Obx(() {
           if (controller.isLoading.value) {
             return const AppTableShimmer(
-              columnWidths: [60, null, null, 60, null, 120, 140],
+              columnWidths: [60, null, null, null, 120, 140],
             );
           }
           return AppPaginatedTable(
@@ -101,9 +101,8 @@ class AllAlumniMobile extends StatelessWidget {
               AppTableColumn(title: 'No', width: 60),
               AppTableColumn(title: 'Name'),
               AppTableColumn(title: 'Mobile Number'),
-              AppTableColumn(title: 'age', width: 60),
-              AppTableColumn(title: 'Address'),
-              AppTableColumn(title: 'Profile Status', width: 120),
+              AppTableColumn(title: 'City'),
+              AppTableColumn(title: 'Status', width: 120),
               AppTableColumn(title: 'Actions', width: 140),
             ],
             rows: controller.allAlumni,
@@ -113,12 +112,17 @@ class AllAlumniMobile extends StatelessWidget {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),
                 cells: [
-                  DataCell(Text(item.id)),
+                  DataCell(Text((index + 1).toString())),
                   DataCell(Text(item.name)),
-                  DataCell(Text(item.phone)),
-                  DataCell(Text(item.age.toString())),
-                  DataCell(Text(item.address)),
-                  DataCell(Text(item.profileStatus)),
+                  DataCell(Text(item.phoneNumber)),
+                  DataCell(
+                    Text(
+                      item.addressIds.isNotEmpty
+                          ? item.addressIds.first.city
+                          : 'N/A',
+                    ),
+                  ),
+                  DataCell(Text(item.isVerified ? 'Verified' : 'Not Verified')),
                   DataCell(
                     Row(
                       children: [

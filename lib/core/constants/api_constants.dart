@@ -21,7 +21,7 @@ class ApiConstants {
       url += '&search=$query';
     }
     if (status != null && status.toString().isNotEmpty) {
-      url += '&status=$status';
+      url += '&isActive=$status';
     }
     return url;
   }

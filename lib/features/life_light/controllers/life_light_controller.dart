@@ -6,6 +6,7 @@ import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:developer';
 
 class LifeLightController extends GetxController {
   static LifeLightController get instance => Get.find();
@@ -44,9 +45,10 @@ class LifeLightController extends GetxController {
               .map((e) => LifeLightModel.fromJson(e))
               .toList(),
         );
-        total = res.data['total'];
+        total = res.data['totalData'] ?? 0;
       }
     } catch (e) {
+      log(e.toString());
       AppSnackBar.show(
         title: 'Error',
         message: e.toString(),

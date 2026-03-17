@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
@@ -39,13 +41,14 @@ class AnubhutiController extends GetxController {
       final ResModel res = await apiService.get(ApiConstants.anubhuti());
       if (res.status == 200) {
         anubhuti.assignAll(
-          (res.data['anubhuti'] as List)
+          ((res.data['anubhutis'] ?? []) as List)
               .map((e) => AnubhutiModel.fromJson(e))
               .toList(),
         );
-        total = res.data['total'];
+        total = res.data['totalData'] ?? 0;
       }
     } catch (e) {
+      log(e.toString());
       AppSnackBar.show(
         title: 'Error',
         message: e.toString(),

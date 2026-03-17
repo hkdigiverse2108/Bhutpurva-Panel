@@ -48,36 +48,7 @@ class CreateBatchController extends GetxController {
   final selectedDevotees = <DevoteeModel>[].obs;
 
   final students = <StudentModel>[
-    StudentModel(
-      name: 'John Doe',
-      age: 25,
-      address: '123 Main St',
-      phone: '123-456-7890',
-      email: 'john.doe@example.com',
-      id: '1',
-      image: '',
-      profileStatus: '',
-    ),
-    StudentModel(
-      name: 'John',
-      age: 25,
-      address: '123 Main St',
-      phone: '123-456-7890',
-      email: 'john.doe@example.com',
-      id: '2',
-      image: '',
-      profileStatus: '',
-    ),
-    StudentModel(
-      name: 'John.D',
-      age: 25,
-      address: '123 Main St',
-      phone: '123-456-7890',
-      email: 'john.doe@example.com',
-      id: '3',
-      image: '',
-      profileStatus: '',
-    ),
+    
   ].obs;
 
   final selectedStudents = <StudentModel>[].obs;

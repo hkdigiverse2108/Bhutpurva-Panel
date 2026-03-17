@@ -73,13 +73,7 @@ class GroupListDesktop extends StatelessWidget {
         body: Obx(() {
           if (controller.isLoading.value) {
             return const AppTableShimmer(
-              columnWidths: [
-                60, // No
-                null, // Name (flex)
-                null, // Email
-                120, // Status
-                140, // Actions
-              ],
+              columnWidths: [60, null, null, null, 120, 140],
             );
           }
 
@@ -87,7 +81,8 @@ class GroupListDesktop extends StatelessWidget {
             columns: const [
               AppTableColumn(title: "No", width: 60),
               AppTableColumn(title: "Name"),
-              AppTableColumn(title: "Leaders"),
+              AppTableColumn(title: "Leader Count"),
+              AppTableColumn(title: "Batch Count"),
               AppTableColumn(title: "Status", width: 120),
               AppTableColumn(title: "Actions", width: 140),
             ],
@@ -115,6 +110,13 @@ class GroupListDesktop extends StatelessWidget {
                   DataCell(
                     Text(
                       group.leaderIds?.length.toString() ?? "0",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      group.batchCount.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

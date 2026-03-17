@@ -1,11 +1,16 @@
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/life_light_models/life_light_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LifeLightController extends GetxController {
   static LifeLightController get instance => Get.find();
+
+  final apiService = ApiService();
 
   var isLoading = true.obs;
   var lifeLight = <LifeLightModel>[].obs;
@@ -32,21 +37,15 @@ class LifeLightController extends GetxController {
   void fetchLifeLight() async {
     try {
       isLoading.value = true;
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      lifeLight.value = List.generate(
-        10,
-        (index) => LifeLightModel(
-          id: '$index',
-          name: 'User $index',
-          email: 'User$index@gmail.com',
-          phoneNumber: '1234567890',
-          message: 'Message $index',
-          status: 'Active',
-          createdAt: DateTime.now().toString(),
-        ),
-      );
+      final ResModel res = await apiService.get(ApiConstants.lifeLight());
+      if (res.status == 200) {
+        lifeLight.assignAll(
+          (res.data['lifeLight'] as List)
+              .map((e) => LifeLightModel.fromJson(e))
+              .toList(),
+        );
+        total = res.data['total'];
+      }
     } catch (e) {
       AppSnackBar.show(
         title: 'Error',

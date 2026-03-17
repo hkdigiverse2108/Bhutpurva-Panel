@@ -1,11 +1,15 @@
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/anubhuti_models/anubhuti_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AnubhutiController extends GetxController {
   static AnubhutiController get instance => Get.find();
+  final apiService = ApiService();
 
   var isLoading = true.obs;
   var anubhuti = <AnubhutiModel>[].obs;
@@ -32,20 +36,15 @@ class AnubhutiController extends GetxController {
   void fetchAnubhuti() async {
     try {
       isLoading.value = true;
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      anubhuti.value = List.generate(
-        10,
-        (index) => AnubhutiModel(
-          id: '$index',
-          name: 'User $index',
-          email: 'User$index@gmail.com',
-          phoneNumber: '1234567890',
-          message: 'Message $index',
-          createdAt: DateTime.now().toString(),
-        ),
-      );
+      final ResModel res = await apiService.get(ApiConstants.anubhuti());
+      if (res.status == 200) {
+        anubhuti.assignAll(
+          (res.data['anubhuti'] as List)
+              .map((e) => AnubhutiModel.fromJson(e))
+              .toList(),
+        );
+        total = res.data['total'];
+      }
     } catch (e) {
       AppSnackBar.show(
         title: 'Error',

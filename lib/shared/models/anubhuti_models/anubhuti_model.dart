@@ -14,4 +14,15 @@ class AnubhutiModel {
     required this.message,
     required this.createdAt,
   });
+
+  factory AnubhutiModel.fromJson(Map<String, dynamic> json) {
+    return AnubhutiModel(
+      id: json['_id'],
+      name: json['name'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      message: json['message'],
+      createdAt: json['createdAt'],
+    );
+  }
 }

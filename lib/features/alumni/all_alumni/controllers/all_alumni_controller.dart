@@ -1,6 +1,10 @@
 import 'package:bhutpurva_penal/app/app_pages.dart';
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/image_const.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -8,30 +12,32 @@ import 'package:get/get.dart';
 
 class AllAlumniController extends GetxController {
   static AllAlumniController get instance => Get.find();
+  final apiService = ApiService();
 
   var isLoading = false.obs;
   var allAlumni = <StudentModel>[].obs;
 
   var ageFilter = ''.obs;
-  var ages = [
-    'All',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-  ].obs;
+  // var ages = [
+  //   'All',
+  //   '18',
+  //   '19',
+  //   '20',
+  //   '21',
+  //   '22',
+  //   '23',
+  //   '24',
+  //   '25',
+  //   '26',
+  //   '27',
+  //   '28',
+  //   '29',
+  //   '30',
+  // ].obs;
 
   var roleFilter = ''.obs;
-  var roles = ['All', 'Members', 'Monitors', 'Leaders'].obs;
+  var batchFilter = ''.obs;
+  var batches = <BatchesModel>[].obs;
 
   int page = 0;
   int rowsPerPage = 10;
@@ -59,21 +65,15 @@ class AllAlumniController extends GetxController {
     try {
       isLoading.value = true;
 
-      await Future.delayed(const Duration(seconds: 1));
-
-      allAlumni.value = List.generate(
-        20,
-        (index) => StudentModel(
-          id: (index + 1).toString(),
-          name: 'Student $index ${query.value}',
-          email: 'Student$index@gmail.com',
-          phone: '1234567890',
-          address: 'Address $index',
-          image: ImageConst.logo,
-          age: 20,
-          profileStatus: 'Not Updated',
-        ),
-      );
+      final ResModel res = await apiService.get(ApiConstants.alumni());
+      if (res.status == 200) {
+        allAlumni.assignAll(
+          (res.data['users'] as List)
+              .map((e) => StudentModel.fromJson(e))
+              .toList(),
+        );
+        total = res.data['total'];
+      }
     } catch (e) {
       AppSnackBar.show(
         title: "Error",

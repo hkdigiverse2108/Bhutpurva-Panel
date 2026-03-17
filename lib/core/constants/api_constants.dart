@@ -73,4 +73,40 @@ class ApiConstants {
     }
     return url;
   }
+
+  // life-light
+  static String lifeLight({int page = 1, int? limit, String? query}) {
+    String url = 'lifeLight/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
+  // anubhuti
+  static String anubhuti({int page = 1, int? limit, String? query}) {
+    String url = 'anubhuti/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
+  // alumni
+  static String alumni({int page = 1, int? limit, String? query}) {
+    String url = 'user/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
 }

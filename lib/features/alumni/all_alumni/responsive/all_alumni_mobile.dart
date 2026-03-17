@@ -68,8 +68,10 @@ class AllAlumniMobile extends StatelessWidget {
               label: 'age',
               hint: 'Select age',
               value: controller.ageFilter.value,
-              items: controller.ages
-                  .map((age) => AdminDropdownItem(value: age, label: age))
+              items: controller.batches
+                  .map(
+                    (age) => AdminDropdownItem(value: age.id, label: age.name),
+                  )
                   .toList(),
               onChanged: controller.onAgeChanged,
             ),
@@ -77,8 +79,11 @@ class AllAlumniMobile extends StatelessWidget {
               label: 'Role',
               hint: 'Select role',
               value: controller.roleFilter.value,
-              items: controller.roles
-                  .map((role) => AdminDropdownItem(value: role, label: role))
+              items: controller.batches
+                  .map(
+                    (role) =>
+                        AdminDropdownItem(value: role.id, label: role.name),
+                  )
                   .toList(),
               onChanged: controller.onRoleChanged,
             ),

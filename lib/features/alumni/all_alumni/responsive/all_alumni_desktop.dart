@@ -60,8 +60,10 @@ class AllAlumniDesktop extends StatelessWidget {
               label: 'Age',
               hint: 'Select age',
               value: controller.ageFilter.value,
-              items: controller.ages
-                  .map((age) => AdminDropdownItem(value: age, label: age))
+              items: controller.batches
+                  .map(
+                    (age) => AdminDropdownItem(value: age.id, label: age.name),
+                  )
                   .toList(),
               onChanged: controller.onAgeChanged,
             ),
@@ -69,8 +71,11 @@ class AllAlumniDesktop extends StatelessWidget {
               label: 'Role',
               hint: 'Select role',
               value: controller.roleFilter.value,
-              items: controller.roles
-                  .map((role) => AdminDropdownItem(value: role, label: role))
+              items: controller.batches
+                  .map(
+                    (batch) =>
+                        AdminDropdownItem(value: batch.id, label: batch.name),
+                  )
                   .toList(),
               onChanged: controller.onRoleChanged,
             ),

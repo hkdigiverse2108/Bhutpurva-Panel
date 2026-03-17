@@ -57,14 +57,14 @@ class LifeLightDesktop extends GetView<LifeLightController> {
               color: TableHelpers.rowHoverColor(),
               cells: [
                 DataCell(Text('${index + 1}')),
-                DataCell(Text(item.name)),
-                DataCell(Text(item.email)),
-                DataCell(Text(item.message)),
+                DataCell(Text(item.userId.name)),
+                DataCell(Text(item.userId.email)),
+                DataCell(Text(item.lifeLight)),
                 DataCell(
                   Text(
                     DateFormat(
                       'dd, MMM yyyy',
-                    ).format(DateTime.parse(item.createdAt)),
+                    ).format(DateTime.parse(item.createdAt.toString())),
                   ),
                 ),
                 DataCell(

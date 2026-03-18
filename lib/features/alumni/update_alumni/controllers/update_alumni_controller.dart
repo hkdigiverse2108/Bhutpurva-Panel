@@ -2,6 +2,7 @@ import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
+import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,8 @@ import 'package:intl/intl.dart';
 class UpdateAlumniController extends BaseController {
   static UpdateAlumniController get instance => Get.find();
   final apiService = ApiService();
+
+  final RxBool isUpdateLoading = false.obs;
 
   late String id;
 
@@ -85,7 +88,19 @@ class UpdateAlumniController extends BaseController {
     executeApi(
       apiCall: () async {
         final ResModel res = await apiService.get(ApiConstants.userDetails(id));
-        if (res.status == 200) {}
+        if (res.status == 200) {
+          final user = UserModel.fromJson(res.data);
+          nameController.text = user.name;
+          fatherNameController.text = user.fatherName;
+          surnameController.text = user.surname;
+          phoneController.text = user.phoneNumber;
+          emailController.text = user.email;
+          whatsappNumberController.text = user.whatsappNumber;
+          gender.value = user.gender;
+          professions.assignAll(user.professions);
+          maritalStatus.value = user.maritalStatus;
+          bloodGroup.value = user.bloodGroup;
+        }
       },
       errorMessage: "Failed to fetch alumni",
     );

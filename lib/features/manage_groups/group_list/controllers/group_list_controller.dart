@@ -58,10 +58,11 @@ class GroupListController extends GetxController {
       );
 
       if (response.status == 200) {
-        groups.value = (response.data['groups'] as List<dynamic>)
+        final dataList = response.data['groups'] ?? response.data['data'] ?? [];
+        groups.value = (dataList as List<dynamic>)
             .map((e) => GroupModel.fromJson(e))
             .toList();
-        total = response.data['totalData'];
+        total = response.data['totalData'] ?? response.data['total'] ?? 0;
       }
     } catch (e) {
       log(e.toString());

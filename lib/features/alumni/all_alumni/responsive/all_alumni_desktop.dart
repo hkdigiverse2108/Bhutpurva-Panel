@@ -3,6 +3,7 @@ import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/alumni/all_alumni/controllers/all_alumni_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_Icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_filter_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_filter.dart';
@@ -119,11 +120,10 @@ class AllAlumniDesktop extends StatelessWidget {
                   DataCell(
                     Row(
                       children: [
-                        TableActionButton(
+                        tableActionIconButton(
                           onTap: () {
                             controller.onEditStudent(item);
                           },
-                          label: 'Edit Profile',
                           icon: Icons.edit,
                         ),
                       ],

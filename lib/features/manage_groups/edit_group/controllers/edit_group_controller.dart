@@ -55,14 +55,15 @@ class EditGroupController extends GetxController {
       final ResModel response = await apiService.get(ApiConstants.users());
 
       if (response.status == 200) {
-        response.data['users'].forEach((element) {
+        final usersList = response.data['users'] ?? response.data['data'] ?? [];
+        for (var element in usersList) {
           final user = UserModel.fromJson(element);
           leaders.add(user);
           if (group != null &&
               group!.leaderIds!.any((l) => (l.id) == user.id)) {
             selectedLeaders.add(user);
           }
-        });
+        }
       }
     } catch (e) {
       log(e.toString());
@@ -77,10 +78,11 @@ class EditGroupController extends GetxController {
       final ResModel response = await apiService.get(ApiConstants.batches());
 
       if (response.status == 200) {
-        response.data['batch'].forEach((element) {
+        final batchList = response.data['batch'] ?? response.data['batches'] ?? response.data['data'] ?? [];
+        for (var element in batchList) {
           final batch = BatchesModel.fromJson(element);
           batches.add(batch);
-        });
+        }
 
         if (group != null) {
           // Preselect batches assigned to this group
@@ -88,12 +90,13 @@ class EditGroupController extends GetxController {
             ApiConstants.batches(groupId: group!.id),
           );
           if (groupBatchesResponse.status == 200) {
-            groupBatchesResponse.data['batch'].forEach((element) {
+            final groupBatchList = groupBatchesResponse.data['batch'] ?? groupBatchesResponse.data['batches'] ?? groupBatchesResponse.data['data'] ?? [];
+            for (var element in groupBatchList) {
               final batch = BatchesModel.fromJson(element);
               if (!selectedBatches.any((b) => b.id == batch.id)) {
                 selectedBatches.add(batch);
               }
-            });
+            }
           }
         }
       }

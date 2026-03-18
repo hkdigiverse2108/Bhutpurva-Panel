@@ -1,19 +1,16 @@
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/life_light_models/life_light_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:developer';
 
-class LifeLightController extends GetxController {
+class LifeLightController extends BaseController {
   static LifeLightController get instance => Get.find();
 
   final apiService = ApiService();
 
-  var isLoading = true.obs;
   var lifeLight = <LifeLightModel>[].obs;
 
   int page = 0;
@@ -35,28 +32,27 @@ class LifeLightController extends GetxController {
     fetchLifeLight();
   }
 
-  void fetchLifeLight() async {
-    try {
-      isLoading.value = true;
-      final ResModel res = await apiService.get(ApiConstants.lifeLight());
-      if (res.status == 200) {
-        lifeLight.assignAll(
-          (res.data['lifeLight'] as List)
-              .map((e) => LifeLightModel.fromJson(e))
-              .toList(),
+  void fetchLifeLight() {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.get(
+          ApiConstants.lifeLight(
+            page: page,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
         );
-        total = res.data['totalData'] ?? 0;
-      }
-    } catch (e) {
-      log(e.toString());
-      AppSnackBar.show(
-        title: 'Error',
-        message: e.toString(),
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+
+        if (res.status == 200) {
+          final dataList = res.data['lifeLight'] ?? res.data['data'] ?? [];
+          lifeLight.assignAll(
+            (dataList as List).map((e) => LifeLightModel.fromJson(e)).toList(),
+          );
+          total = res.data['totalData'] ?? res.data['total'] ?? 0;
+        }
+      },
+      errorMessage: "Failed to fetch life light data",
+    );
   }
 
   void onSearchChanged(String value) {

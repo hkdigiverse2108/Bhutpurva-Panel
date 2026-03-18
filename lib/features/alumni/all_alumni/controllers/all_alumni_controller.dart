@@ -68,12 +68,11 @@ class AllAlumniController extends GetxController {
 
       final ResModel res = await apiService.get(ApiConstants.alumni());
       if (res.status == 200) {
+        final usersList = res.data['users'] ?? res.data['data'] ?? [];
         allAlumni.assignAll(
-          (res.data['users'] as List)
-              .map((e) => StudentModel.fromJson(e))
-              .toList(),
+          (usersList as List).map((e) => StudentModel.fromJson(e)).toList(),
         );
-        total = res.data['totalData'] ?? 0;
+        total = res.data['totalData'] ?? res.data['total'] ?? 0;
       }
     } catch (e) {
       log(e.toString());

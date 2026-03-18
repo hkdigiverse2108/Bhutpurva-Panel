@@ -72,7 +72,7 @@ class BatchListDesktop extends StatelessWidget {
           rowBuilder: (item, index) {
             return DataRow(
               cells: [
-                DataCell(Text(item.id)),
+                DataCell(Text((index + 1).toString())),
                 DataCell(
                   Text(item.name, style: TextStyle(color: ColorConst.primary)),
                   onTap: () {

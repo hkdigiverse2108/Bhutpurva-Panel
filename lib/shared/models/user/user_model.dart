@@ -312,11 +312,11 @@ class Class1Class {
 }
 
 class UsersDropdownModel {
-  String id;
-  String name;
-  String fatherName;
-  String surname;
-  String role;
+  final String id;
+  final String name;
+  final String fatherName;
+  final String surname;
+  final String role;
 
   UsersDropdownModel({
     required this.id,

@@ -17,8 +17,8 @@ class CreateGroupController extends BaseController {
   final isBatchesLoading = false.obs;
   final nameController = TextEditingController();
 
-  final leaders = <UserModel>[].obs;
-  final selectedLeaders = <UserModel>[].obs;
+  final leaders = <UsersDropdownModel>[].obs;
+  final selectedLeaders = <UsersDropdownModel>[].obs;
 
   final batches = <BatchesModel>[].obs;
   final selectedBatches = <BatchesModel>[].obs;
@@ -38,10 +38,10 @@ class CreateGroupController extends BaseController {
           ApiConstants.usersDropdown(roleFilter: AlumniRole.leader.name),
         );
         if (response.status == 200) {
-          final usersList = response.data['data'] ?? [];
+          final usersList = response.data ?? [];
           leaders.assignAll(
             (usersList as Iterable)
-                .map<UserModel>((e) => UserModel.fromJson(e))
+                .map<UsersDropdownModel>((e) => UsersDropdownModel.fromJson(e))
                 .toList(),
           );
         }

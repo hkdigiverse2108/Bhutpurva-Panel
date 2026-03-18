@@ -65,7 +65,7 @@ class CreateGroupDesktop extends StatelessWidget {
                         ),
 
                         Obx(
-                          () => AdminSearchSelectField<UserModel>(
+                          () => AdminSearchSelectField<UsersDropdownModel>(
                             label: 'Select Leaders',
                             hint: 'Search leader',
                             prefixIcon: PhosphorIconsBold.user,

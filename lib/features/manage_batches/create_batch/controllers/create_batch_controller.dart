@@ -21,7 +21,7 @@ class CreateBatchController extends GetxController {
       phone: '123-456-7890',
       email: 'john.doe@example.com',
       id: '1',
-    ),  
+    ),
     MoniterModel(
       name: 'Jane Smith',
       address: '456 Maple St',

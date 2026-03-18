@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/feedback/controllers/feedback_controller.dart';
 import 'package:bhutpurva_penal/shared/models/feedback_models/feedback_model.dart';
@@ -24,17 +26,17 @@ class FeedbackDesktop extends StatelessWidget {
 
     return Scaffold(
       body: AdminTablePageLayout(
-        header: BreadcrumbWithHeading(
-          heading: 'FeedBack',
-          breadcrumbsItems: [BreadcrumbItem(title: 'FeedBack')],
+        header: const BreadcrumbWithHeading(
+          heading: 'Feedback',
+          breadcrumbsItems: [BreadcrumbItem(title: 'Feedback')],
         ),
         toolbar: AdminTableToolbar(
           search: TableSearchField(
             controller: controller.searchController,
-            hint: 'Search Group...',
+            hint: 'Search feedback...',
             onSearchChanged: controller.onSearchChanged,
           ),
-          actions: [SizedBox()],
+          actions: const [SizedBox()],
         ),
         body: Obx(() {
           if (controller.isLoading.value) {
@@ -51,6 +53,7 @@ class FeedbackDesktop extends StatelessWidget {
               AppTableColumn(title: 'Created At', width: 120),
               AppTableColumn(title: 'Action', width: 140),
             ],
+
             rows: controller.feedbacks,
             totalRows: controller.total,
             rowsPerPage: controller.rowsPerPage,
@@ -58,24 +61,35 @@ class FeedbackDesktop extends StatelessWidget {
             rowBuilder: (item, index) {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),
+
                 cells: [
                   DataCell(Text('${index + 1}')),
-                  DataCell(Text(item.name)),
-                  DataCell(Text(item.email)),
+                  DataCell(Text(item.userId.name)),
+                  DataCell(Text(item.userId.email)),
                   DataCell(Text(item.feedback)),
                   DataCell(
-                    Text(
-                      DateFormat(
-                        'dd, MMM yyyy',
-                      ).format(DateTime.parse(item.createdAt)),
-                    ),
+                    Text(DateFormat('dd, MMM yyyy').format(item.createdAt)),
                   ),
                   DataCell(
                     Row(
                       children: [
                         tableActionIconButton(
                           icon: Iconsax.trash,
-                          onTap: () {},
+                          onTap: () {
+                            // Show a confirmation dialog
+                            Get.defaultDialog(
+                              title: 'Delete Feedback',
+                              middleText:
+                                  'Are you sure you want to delete this feedback?',
+                              textCancel: 'Cancel',
+                              textConfirm: 'Delete',
+                              confirmTextColor: Colors.white,
+                              onConfirm: () {
+                                Get.back();
+                                controller.deleteFeedback(item.id);
+                              },
+                            );
+                          },
                           color: Colors.red,
                         ),
                       ],

@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/feedback_models/feedback_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,20 +34,41 @@ class FeedbackController extends BaseController {
   void fetchFeedbacks() {
     executeApi(
       apiCall: () async {
-        await Future.delayed(const Duration(seconds: 1));
-
-        feedbacks.assignAll(List.generate(
-          10,
-          (index) => FeedbackModel(
-            id: index,
-            name: "Feedback $index",
-            email: "feedback$index@example.com",
-            feedback: "Feedback $index",
-            createdAt: DateTime.now().toString(),
+        final ResModel response = await ApiService().get(
+          ApiConstants.feedback(
+            page: page + 1,
+            limit: rowsPerPage,
+            query: query.value,
           ),
-        ));
+        );
+        if (response.status == 200) {
+          final feedbackList =
+              response.data['feedback'] ??
+              response.data['feedbacks'] ??
+              response.data['data'] ??
+              [];
+          feedbacks.assignAll(
+            (feedbackList as Iterable)
+                .map<FeedbackModel>((e) => FeedbackModel.fromJson(e))
+                .toList(),
+          );
+          total = response.data['totalData'] ?? 0;
+        }
       },
       errorMessage: "Failed to fetch feedbacks",
+    );
+  }
+  
+  void deleteFeedback(String id) {
+    executeApi(
+      apiCall: () async {
+        // ... assuming there's a delete endpoint ...
+        // final ResModel response = await ApiService().delete('${ApiConstants.deleteFeedback}/$id');
+        // For now, let's just remove it locally as a placeholder for the logic
+        feedbacks.removeWhere((f) => f.id == id);
+        total--;
+      },
+      errorMessage: "Failed to delete feedback",
     );
   }
 

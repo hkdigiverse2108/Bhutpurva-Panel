@@ -46,7 +46,19 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
   void initState() {
     super.initState();
     _filtered = widget.items;
+    _updateControllerValue();
+  }
 
+  @override
+  void didUpdateWidget(covariant AdminSearchSelectField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value || oldWidget.items != widget.items) {
+      _filtered = widget.items;
+      _updateControllerValue();
+    }
+  }
+
+  void _updateControllerValue() {
     final selected = widget.items
         .where((e) => e.value == widget.value)
         .cast<AdminDropdownItem<T>?>()
@@ -54,6 +66,8 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
 
     if (selected != null) {
       _controller.text = selected.label;
+    } else {
+      _controller.clear();
     }
   }
 

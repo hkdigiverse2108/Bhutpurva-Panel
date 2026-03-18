@@ -118,4 +118,16 @@ class ApiConstants {
     }
     return url;
   }
+
+  // feedback
+  static String feedback({int page = 1, int? limit, String? query}) {
+    String url = 'feedback/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
 }

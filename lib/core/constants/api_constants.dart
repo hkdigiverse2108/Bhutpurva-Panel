@@ -28,6 +28,14 @@ class ApiConstants {
 
   // users
   static String userDetails(String id) => 'user/get/$id';
+  static String usersDropdown({String? roleFilter}) {
+    String url = 'user/dropdown';
+    if (roleFilter != null && roleFilter.isNotEmpty) {
+      url += '?roleFilter=$roleFilter';
+    }
+    return url;
+  }
+
   static String users({
     int page = 1,
     int? limit,

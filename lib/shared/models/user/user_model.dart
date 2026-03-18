@@ -310,3 +310,41 @@ class Class1Class {
 
   Map<String, dynamic> toJson() => {"isStudied": isStudied, "branch": branch};
 }
+
+class UsersDropdownModel {
+  String id;
+  String name;
+  String fatherName;
+  String surname;
+  String role;
+
+  UsersDropdownModel({
+    required this.id,
+    required this.name,
+    required this.fatherName,
+    required this.surname,
+    required this.role,
+  });
+
+  factory UsersDropdownModel.fromRawJson(String str) =>
+      UsersDropdownModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory UsersDropdownModel.fromJson(Map<String, dynamic> json) =>
+      UsersDropdownModel(
+        id: json["_id"],
+        name: json["name"],
+        fatherName: json["fatherName"],
+        surname: json["surname"],
+        role: json["role"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "fatherName": fatherName,
+    "surname": surname,
+    "role": role,
+  };
+}

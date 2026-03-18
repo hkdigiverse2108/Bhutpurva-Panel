@@ -1,3 +1,4 @@
+import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
@@ -33,10 +34,11 @@ class CreateGroupController extends BaseController {
     executeApi(
       loadingState: isLeadersLoading,
       apiCall: () async {
-        final ResModel response = await apiService.get(ApiConstants.users());
+        final ResModel response = await apiService.get(
+          ApiConstants.usersDropdown(roleFilter: AlumniRole.leader.name),
+        );
         if (response.status == 200) {
-          final usersList =
-              response.data['users'] ?? response.data['data'] ?? [];
+          final usersList = response.data['data'] ?? [];
           leaders.assignAll(
             (usersList as Iterable)
                 .map<UserModel>((e) => UserModel.fromJson(e))

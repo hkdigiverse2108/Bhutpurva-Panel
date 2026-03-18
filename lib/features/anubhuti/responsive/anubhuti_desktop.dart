@@ -46,7 +46,7 @@ class AnubhutiDesktop extends StatelessWidget {
             AppTableColumn(title: 'No', width: 60),
             AppTableColumn(title: 'Name'),
             AppTableColumn(title: 'Email'),
-            AppTableColumn(title: 'Feedback'),
+            AppTableColumn(title: 'Anubhuti'),
             AppTableColumn(title: 'Created At', width: 120),
             AppTableColumn(title: 'Action', width: 140),
           ],
@@ -59,15 +59,11 @@ class AnubhutiDesktop extends StatelessWidget {
               color: TableHelpers.rowHoverColor(),
               cells: [
                 DataCell(Text('${index + 1}')),
-                DataCell(Text(item.name)),
-                DataCell(Text(item.email)),
-                DataCell(Text(item.message)),
+                DataCell(Text(item.userId.name)),
+                DataCell(Text(item.userId.email)),
+                DataCell(Text(item.anubhuti)),
                 DataCell(
-                  Text(
-                    DateFormat(
-                      'dd, MMM yyyy',
-                    ).format(DateTime.parse(item.createdAt)),
-                  ),
+                  Text(DateFormat('dd, MMM yyyy').format(item.createdAt)),
                 ),
                 DataCell(
                   Row(

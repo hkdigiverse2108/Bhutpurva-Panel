@@ -5,3 +5,5 @@ enum AdminButtonVariant { primary, secondary, danger, ghost }
 enum AppSnackBarType { success, error, warning, info }
 
 enum PolicyType { privacy, activist }
+
+enum AlumniRole { leader, monitor, user }

@@ -1,11 +1,16 @@
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class UpdateAlumniController extends GetxController {
+class UpdateAlumniController extends BaseController {
   static UpdateAlumniController get instance => Get.find();
+  final apiService = ApiService();
 
-  final isLoading = false.obs;
+  late String id;
 
   var selectedTab = 0.obs;
 
@@ -66,6 +71,24 @@ class UpdateAlumniController extends GetxController {
     } else {
       return null;
     }
+  }
+
+  @override
+  void onInit() {
+    id = Get.arguments ?? "";
+    fetchAlumniDetails();
+    super.onInit();
+  }
+
+  // call api
+  void fetchAlumniDetails() {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.get(ApiConstants.userDetails(id));
+        if (res.status == 200) {}
+      },
+      errorMessage: "Failed to fetch alumni",
+    );
   }
 
   void onTabChanged(int index) {

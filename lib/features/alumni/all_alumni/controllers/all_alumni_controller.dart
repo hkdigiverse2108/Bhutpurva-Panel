@@ -61,13 +61,15 @@ class AllAlumniController extends BaseController {
   void fetchAlumni() {
     executeApi(
       apiCall: () async {
-        final ResModel res = await apiService.get(ApiConstants.alumni(
-        page: page,
-        limit: rowsPerPage,
-        query: query.value,
-      ));
-      if (res.status == 200) {
-        final usersList = res.data['users'] ?? res.data['data'] ?? [];
+        final ResModel res = await apiService.get(
+          ApiConstants.alumni(
+            page: page,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
+        );
+        if (res.status == 200) {
+          final usersList = res.data['users'] ?? res.data['data'] ?? [];
           allAlumni.assignAll(
             (usersList as Iterable)
                 .map<StudentModel>((e) => StudentModel.fromJson(e))
@@ -89,8 +91,8 @@ class AllAlumniController extends BaseController {
     fetchAlumni();
   }
 
-  void onEditStudent(StudentModel student) {
-    Get.toNamed(AppPages.editAlumni, arguments: student);
+  void onEditStudent(String id) {
+    Get.toNamed(AppPages.editAlumni, arguments: id);
   }
 
   void onAgeChanged(String value) {

@@ -123,7 +123,7 @@ class AllAlumniDesktop extends StatelessWidget {
                       children: [
                         tableActionIconButton(
                           onTap: () {
-                            controller.onEditStudent(item);
+                            controller.onEditStudent(item.id);
                           },
                           icon: Icons.edit,
                         ),

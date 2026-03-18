@@ -1,4 +1,5 @@
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/features/alumni/update_alumni/controllers/update_alumni_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
@@ -261,6 +262,17 @@ class PrimaryDetails extends StatelessWidget {
                 ],
               ),
             ),
+          ],
+        ),
+        // add only role dropdown
+        AdminSearchSelectField(
+          label: 'Role',
+          prefixIcon: PhosphorIconsBold.user,
+          onChanged: (value) {},
+          items: [
+            AdminDropdownItem(value: AlumniRole.leader.name, label: 'Leader'),
+            AdminDropdownItem(value: AlumniRole.monitor.name, label: 'Monitor'),
+            AdminDropdownItem(value: AlumniRole.user.name, label: 'User'),
           ],
         ),
       ],

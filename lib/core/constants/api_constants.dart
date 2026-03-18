@@ -27,6 +27,7 @@ class ApiConstants {
   }
 
   // users
+  static String userDetails(String id) => 'user/get/$id';
   static String users({
     int page = 1,
     int? limit,

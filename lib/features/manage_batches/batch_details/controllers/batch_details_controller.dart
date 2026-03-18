@@ -1,12 +1,15 @@
-import 'package:bhutpurva_penal/core/constants/enums.dart';
-import 'package:bhutpurva_penal/core/constants/image_const.dart';
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BatchDetailsController extends GetxController {
+class BatchDetailsController extends BaseController {
   static BatchDetailsController get instance => Get.find();
+
+  final apiService = ApiService();
+  BatchesModel? batch;
 
   var isStudentsLoading = false.obs;
   var isMonitorsLoading = false.obs;
@@ -21,8 +24,10 @@ class BatchDetailsController extends GetxController {
 
   int rowsPerPage = 10;
 
-  int studentsPage = 0;
-  int monitorsPage = 0;
+  int studentsPage = 1;
+  int monitorsPage = 1;
+  int totalStudents = 0;
+  int totalMonitors = 0;
 
   final searchController = TextEditingController();
   var query = ''.obs;
@@ -32,13 +37,14 @@ class BatchDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    batch = Get.arguments as BatchesModel?;
     normalRoute.value = false;
     _searchWorker = debounce(query, (_) {
       if (tab.value == 0) {
-        studentsPage = 0;
+        studentsPage = 1;
         fetchStudents();
       } else {
-        monitorsPage = 0;
+        monitorsPage = 1;
         fetchMonitors();
       }
     }, time: const Duration(milliseconds: 400));
@@ -47,40 +53,28 @@ class BatchDetailsController extends GetxController {
     fetchMonitors();
   }
 
-  void fetchStudents() async {
-    try {
-      isStudentsLoading.value = true;
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      students.value = [];
-    } catch (e) {
-      AppSnackBar.show(
-        title: 'Error',
-        message: e.toString(),
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isStudentsLoading.value = false;
-    }
+  void fetchStudents() {
+    executeApi(
+      loadingState: isStudentsLoading,
+      apiCall: () async {
+        // Placeholder for batch-specific students if endpoint exists
+        // For now, keeping it as is but prepared for real integration
+        await Future.delayed(const Duration(milliseconds: 500));
+        students.clear();
+        totalStudents = 0;
+      },
+    );
   }
 
-  void fetchMonitors() async {
-    try {
-      isMonitorsLoading.value = true;
-
-      await Future.delayed(const Duration(seconds: 1));
-
-      monitors.value = [];
-    } catch (e) {
-      AppSnackBar.show(
-        title: 'Error',
-        message: e.toString(),
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isMonitorsLoading.value = false;
-    }
+  void fetchMonitors() {
+    executeApi(
+      loadingState: isMonitorsLoading,
+      apiCall: () async {
+        await Future.delayed(const Duration(milliseconds: 500));
+        monitors.clear();
+        totalMonitors = 0;
+      },
+    );
   }
 
   void onTabChange(int value) {
@@ -91,7 +85,15 @@ class BatchDetailsController extends GetxController {
     query.value = value;
   }
 
-  void onPageChange() {}
+  void onPageChange(int value) {
+    if (tab.value == 0) {
+      studentsPage = (value ~/ rowsPerPage) + 1;
+      fetchStudents();
+    } else {
+      monitorsPage = (value ~/ rowsPerPage) + 1;
+      fetchMonitors();
+    }
+  }
 
   void removeSelected(StudentModel item) {
     selectedStudent.remove(item);

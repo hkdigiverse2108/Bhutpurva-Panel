@@ -87,8 +87,9 @@ class GroupListDesktop extends StatelessWidget {
               AppTableColumn(title: "Actions", width: 140),
             ],
             rows: controller.groups,
-            rowsPerPage: 10,
-            onPageChanged: (page) {},
+            totalRows: controller.total,
+            rowsPerPage: controller.rowsPerPage,
+            onPageChanged: controller.onPageChange,
             onAdd: controller.onCreateGroup,
             onRefresh: controller.fetchGroups,
             rowBuilder: (group, index) {

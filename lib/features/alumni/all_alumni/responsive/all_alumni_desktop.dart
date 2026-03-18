@@ -99,9 +99,10 @@ class AllAlumniDesktop extends StatelessWidget {
               AppTableColumn(title: 'Actions', width: 140),
             ],
             rows: controller.allAlumni,
-            rowsPerPage: 10,
+            totalRows: controller.total,
+            rowsPerPage: controller.rowsPerPage,
             checkboxColumn: true,
-            onPageChanged: (page) {},
+            onPageChanged: controller.onPageChange,
             rowBuilder: (item, index) {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),

@@ -50,8 +50,9 @@ class LifeLightDesktop extends GetView<LifeLightController> {
             AppTableColumn(title: 'Action', width: 140),
           ],
           rows: controller.lifeLight,
-          rowsPerPage: 10,
-          onPageChanged: (page) {},
+          totalRows: controller.total,
+          rowsPerPage: controller.rowsPerPage,
+          onPageChanged: controller.onPageChange,
           rowBuilder: (item, index) {
             return DataRow(
               color: TableHelpers.rowHoverColor(),

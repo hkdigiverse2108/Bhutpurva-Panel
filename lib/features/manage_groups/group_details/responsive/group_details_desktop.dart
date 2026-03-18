@@ -2,6 +2,7 @@ import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_details/controllers/group_details_controller.dart';
+import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_Icon_button.dart';
@@ -88,8 +89,9 @@ class GroupDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: "Actions", width: 140),
                 ],
                 rows: controller.batches,
-                rowsPerPage: 10,
-                onPageChanged: (page) {},
+                totalRows: controller.totalBatches,
+                rowsPerPage: controller.rowsPerPage,
+                onPageChanged: controller.onPageChange,
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
@@ -147,19 +149,28 @@ class GroupDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Actions', width: 140),
                 ],
                 rows: controller.leaders,
-                rowsPerPage: 10,
+                totalRows: controller.totalLeaders,
+                rowsPerPage: controller.rowsPerPage,
+                onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
-                onPageChanged: (page) {},
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
                       DataCell(Text(item.id)),
-                      DataCell(Text(item.name)),
-                      DataCell(Text(item.phoneNumber)),
-                      DataCell(Text(item.addressIds.isNotEmpty ? item.addressIds.first.city : 'N/A')),
+                      DataCell(Text(item.name ?? 'N/A')),
+                      DataCell(Text(item.phoneNumber ?? 'N/A')),
+                      DataCell(Text(
+                        (item is StudentModel && item.addressIds.isNotEmpty)
+                            ? item.addressIds.first.city
+                            : 'N/A',
+                      )),
                       DataCell(
-                        Text(item.isVerified ? 'Verified' : 'Not Verified'),
+                        Text(
+                          (item is StudentModel && item.isVerified)
+                              ? 'Verified'
+                              : 'Not Verified',
+                        ),
                       ),
                       DataCell(
                         TableActionButton(

@@ -1,22 +1,18 @@
-import 'dart:developer';
-
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/anubhuti_models/anubhuti_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AnubhutiController extends GetxController {
+class AnubhutiController extends BaseController {
   static AnubhutiController get instance => Get.find();
   final apiService = ApiService();
 
-  var isLoading = true.obs;
   var anubhuti = <AnubhutiModel>[].obs;
 
-  int page = 0;
+  int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
@@ -29,34 +25,32 @@ class AnubhutiController extends GetxController {
   void onInit() {
     super.onInit();
     _searchWorker = debounce(query, (_) {
-      page = 0;
+      page = 1;
       fetchAnubhuti();
     }, time: const Duration(milliseconds: 400));
     fetchAnubhuti();
   }
 
-  void fetchAnubhuti() async {
-    try {
-      isLoading.value = true;
-      final ResModel res = await apiService.get(ApiConstants.anubhuti());
-      if (res.status == 200) {
-        anubhuti.assignAll(
-          ((res.data['anubhutis'] ?? []) as List)
-              .map((e) => AnubhutiModel.fromJson(e))
-              .toList(),
-        );
-        total = res.data['totalData'] ?? 0;
-      }
-    } catch (e) {
-      log(e.toString());
-      AppSnackBar.show(
-        title: 'Error',
-        message: e.toString(),
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+  void fetchAnubhuti() {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.get(ApiConstants.anubhuti(
+          page: page,
+          limit: rowsPerPage,
+          query: query.value,
+        ));
+        if (res.status == 200) {
+          final dataList = res.data['anubhutis'] ?? res.data['data'] ?? [];
+          anubhuti.assignAll(
+            (dataList as Iterable)
+                .map<AnubhutiModel>((e) => AnubhutiModel.fromJson(e))
+                .toList(),
+          );
+          total = res.data['totalData'] ?? 0;
+        }
+      },
+      errorMessage: "Failed to fetch anubhuti",
+    );
   }
 
   void onSearchChanged(String value) {
@@ -64,7 +58,7 @@ class AnubhutiController extends GetxController {
   }
 
   void onPageChange(int value) {
-    page = value ~/ rowsPerPage;
+    page = (value ~/ rowsPerPage) + 1;
     fetchAnubhuti();
   }
 

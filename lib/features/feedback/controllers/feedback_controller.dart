@@ -1,14 +1,12 @@
-import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/shared/models/feedback_models/feedback_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FeedbackController extends GetxController {
+class FeedbackController extends BaseController {
   static FeedbackController get instance => Get.find();
 
   var feedbacks = <FeedbackModel>[].obs;
-  var isLoading = true.obs;
 
   int page = 0;
   int rowsPerPage = 10;
@@ -29,31 +27,24 @@ class FeedbackController extends GetxController {
     fetchFeedbacks();
   }
 
-  void fetchFeedbacks() async {
-    try {
-      isLoading.value = true;
+  void fetchFeedbacks() {
+    executeApi(
+      apiCall: () async {
+        await Future.delayed(const Duration(seconds: 1));
 
-      await Future.delayed(const Duration(seconds: 1));
-
-      feedbacks.value = List.generate(
-        10,
-        (index) => FeedbackModel(
-          id: index,
-          name: "Feedback $index",
-          email: "feedback$index@example.com",
-          feedback: "Feedback $index",
-          createdAt: DateTime.now().toString(),
-        ),
-      );
-    } catch (e) {
-      AppSnackBar.show(
-        title: 'Error',
-        message: e.toString(),
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+        feedbacks.assignAll(List.generate(
+          10,
+          (index) => FeedbackModel(
+            id: index,
+            name: "Feedback $index",
+            email: "feedback$index@example.com",
+            feedback: "Feedback $index",
+            createdAt: DateTime.now().toString(),
+          ),
+        ));
+      },
+      errorMessage: "Failed to fetch feedbacks",
+    );
   }
 
   void onSearchChanged(String value) {

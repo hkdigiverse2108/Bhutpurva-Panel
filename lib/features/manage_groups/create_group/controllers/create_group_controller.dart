@@ -38,7 +38,9 @@ class CreateGroupController extends BaseController {
           final usersList =
               response.data['users'] ?? response.data['data'] ?? [];
           leaders.assignAll(
-            usersList.map((e) => UserModel.fromJson(e)).toList(),
+            (usersList as Iterable)
+                .map<UserModel>((e) => UserModel.fromJson(e))
+                .toList(),
           );
         }
       },
@@ -58,7 +60,9 @@ class CreateGroupController extends BaseController {
               response.data['data'] ??
               [];
           batches.assignAll(
-            batchList.map((e) => BatchesModel.fromJson(e)).toList(),
+            (batchList as Iterable)
+                .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+                .toList(),
           );
         }
       },

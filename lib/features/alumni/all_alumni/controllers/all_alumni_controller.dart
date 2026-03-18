@@ -1,21 +1,17 @@
-import 'dart:developer';
-
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AllAlumniController extends GetxController {
+class AllAlumniController extends BaseController {
   static AllAlumniController get instance => Get.find();
   final apiService = ApiService();
 
-  var isLoading = false.obs;
   var allAlumni = <StudentModel>[].obs;
 
   var ageFilter = ''.obs;
@@ -40,7 +36,7 @@ class AllAlumniController extends GetxController {
   var batchFilter = ''.obs;
   var batches = <BatchesModel>[].obs;
 
-  int page = 0;
+  int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
@@ -54,7 +50,7 @@ class AllAlumniController extends GetxController {
   @override
   void onInit() {
     _searchWorker = debounce(query, (_) {
-      page = 0;
+      page = 1;
       fetchAlumni();
     }, time: const Duration(milliseconds: 400));
 
@@ -62,28 +58,26 @@ class AllAlumniController extends GetxController {
     super.onInit();
   }
 
-  void fetchAlumni() async {
-    try {
-      isLoading.value = true;
-
-      final ResModel res = await apiService.get(ApiConstants.alumni());
+  void fetchAlumni() {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.get(ApiConstants.alumni(
+        page: page,
+        limit: rowsPerPage,
+        query: query.value,
+      ));
       if (res.status == 200) {
         final usersList = res.data['users'] ?? res.data['data'] ?? [];
-        allAlumni.assignAll(
-          (usersList as List).map((e) => StudentModel.fromJson(e)).toList(),
-        );
-        total = res.data['totalData'] ?? res.data['total'] ?? 0;
-      }
-    } catch (e) {
-      log(e.toString());
-      AppSnackBar.show(
-        title: "Error",
-        message: "Failed to fetch alumni",
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+          allAlumni.assignAll(
+            (usersList as Iterable)
+                .map<StudentModel>((e) => StudentModel.fromJson(e))
+                .toList(),
+          );
+          total = res.data['totalData'] ?? res.data['total'] ?? 0;
+        }
+      },
+      errorMessage: "Failed to fetch alumni",
+    );
   }
 
   void onSearchChanged(String value) {
@@ -91,7 +85,7 @@ class AllAlumniController extends GetxController {
   }
 
   void onPageChange(int value) {
-    page = value ~/ rowsPerPage;
+    page = (value ~/ rowsPerPage) + 1;
     fetchAlumni();
   }
 

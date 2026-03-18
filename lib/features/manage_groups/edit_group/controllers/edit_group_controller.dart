@@ -1,22 +1,18 @@
-import 'dart:developer';
-
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditGroupController extends GetxController {
+class EditGroupController extends BaseController {
   static EditGroupController get instance => Get.find();
 
   final apiService = ApiService();
 
-  final isLoading = false.obs;
   final isLeadersLoading = false.obs;
   final isBatchesLoading = false.obs;
   final nameController = TextEditingController();
@@ -32,107 +28,104 @@ class EditGroupController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    isLoading.value = true;
     if (Get.arguments != null && Get.arguments is GroupModel) {
       group = Get.arguments as GroupModel;
       nameController.text = group!.name;
     } else {
-      AppSnackBar.show(
-        title: "Error",
-        message: "Group data is missing.",
-        type: AppSnackBarType.error,
-      );
       Get.back();
     }
     getLeaders();
     getBatches();
-    isLoading.value = false;
   }
 
-  void getLeaders() async {
-    try {
-      isLeadersLoading.value = true;
-      final ResModel response = await apiService.get(ApiConstants.users());
+  void getLeaders() {
+    executeApi(
+      loadingState: isLeadersLoading,
+      apiCall: () async {
+        final ResModel response = await apiService.get(ApiConstants.users());
 
-      if (response.status == 200) {
-        final usersList = response.data['users'] ?? response.data['data'] ?? [];
-        for (var element in usersList) {
-          final user = UserModel.fromJson(element);
-          leaders.add(user);
-          if (group != null &&
-              group!.leaderIds!.any((l) => (l.id) == user.id)) {
-            selectedLeaders.add(user);
+        if (response.status == 200) {
+          final usersList =
+              response.data['users'] ?? response.data['data'] ?? [];
+          final allLeaders = (usersList as Iterable)
+              .map<UserModel>((e) => UserModel.fromJson(e))
+              .toList();
+
+          leaders.assignAll(allLeaders);
+
+          if (group != null) {
+            selectedLeaders.assignAll(
+              allLeaders
+                  .where((u) => group!.leaderIds!.any((l) => l.id == u.id))
+                  .toList(),
+            );
           }
         }
-      }
-    } catch (e) {
-      log(e.toString());
-    } finally {
-      isLeadersLoading.value = false;
-    }
+      },
+      errorMessage: "Failed to load leaders",
+    );
   }
 
-  void getBatches() async {
-    try {
-      isBatchesLoading.value = true;
-      final ResModel response = await apiService.get(ApiConstants.batches());
+  void getBatches() {
+    executeApi(
+      loadingState: isBatchesLoading,
+      apiCall: () async {
+        final ResModel response = await apiService.get(ApiConstants.batches());
 
-      if (response.status == 200) {
-        final batchList = response.data['batch'] ?? response.data['batches'] ?? response.data['data'] ?? [];
-        for (var element in batchList) {
-          final batch = BatchesModel.fromJson(element);
-          batches.add(batch);
-        }
-
-        if (group != null) {
-          // Preselect batches assigned to this group
-          final ResModel groupBatchesResponse = await apiService.get(
-            ApiConstants.batches(groupId: group!.id),
+        if (response.status == 200) {
+          final batchList =
+              response.data['batch'] ??
+              response.data['batches'] ??
+              response.data['data'] ??
+              [];
+          batches.assignAll(
+            (batchList as Iterable)
+                .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+                .toList(),
           );
-          if (groupBatchesResponse.status == 200) {
-            final groupBatchList = groupBatchesResponse.data['batch'] ?? groupBatchesResponse.data['batches'] ?? groupBatchesResponse.data['data'] ?? [];
-            for (var element in groupBatchList) {
-              final batch = BatchesModel.fromJson(element);
-              if (!selectedBatches.any((b) => b.id == batch.id)) {
-                selectedBatches.add(batch);
-              }
+
+          if (group != null) {
+            final ResModel groupBatchesResponse = await apiService.get(
+              ApiConstants.batches(groupId: group!.id),
+            );
+            if (groupBatchesResponse.status == 200) {
+              final groupBatchList =
+                  groupBatchesResponse.data['batch'] ??
+                  groupBatchesResponse.data['batches'] ??
+                  groupBatchesResponse.data['data'] ??
+                  [];
+              selectedBatches.assignAll(
+                (groupBatchList as Iterable)
+                    .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+                    .toList(),
+              );
             }
           }
         }
-      }
-    } catch (e) {
-      log(e.toString());
-    } finally {
-      isBatchesLoading.value = false;
-    }
+      },
+      errorMessage: "Failed to load batches",
+    );
   }
 
-  void updateGroup() async {
+  void updateGroup() {
     if (group == null) return;
-    try {
-      isLoading.value = true;
-      final ResModel response = await apiService.put(
-        ApiConstants.updateGroup,
-        body: {
-          'groupId': group!.id,
-          'name': nameController.text,
-          'leaders': selectedLeaders.map((e) => e.id).toList(),
-          'batches': selectedBatches.map((e) => e.id).toList(),
-        },
-      );
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.put(
+          ApiConstants.updateGroup,
+          body: {
+            'groupId': group!.id,
+            'name': nameController.text,
+            'leaders': selectedLeaders.map((e) => e.id).toList(),
+            'batches': selectedBatches.map((e) => e.id).toList(),
+          },
+        );
 
-      if (response.status == 200) {
-        Get.back(result: true);
-      }
-    } catch (e) {
-      log(e.toString());
-      AppSnackBar.show(
-        title: "Error",
-        message: "Failed to update group.",
-        type: AppSnackBarType.error,
-      );
-    } finally {
-      isLoading.value = false;
-    }
+        if (response.status == 200) {
+          Get.back(result: true);
+        }
+      },
+      errorMessage: "Failed to update group",
+    );
   }
 }

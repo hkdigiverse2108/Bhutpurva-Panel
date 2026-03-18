@@ -66,7 +66,9 @@ class BatchListDesktop extends StatelessWidget {
             AppTableColumn(title: "Actions", width: 140),
           ],
           rows: controller.batches,
-          onPageChanged: (page) {},
+          totalRows: controller.total,
+          rowsPerPage: controller.rowsPerPage,
+          onPageChanged: controller.onPageChange,
           rowBuilder: (item, index) {
             return DataRow(
               cells: [
@@ -96,7 +98,6 @@ class BatchListDesktop extends StatelessWidget {
               color: TableHelpers.rowHoverColor(),
             );
           },
-          rowsPerPage: 10,
         );
       }),
     );

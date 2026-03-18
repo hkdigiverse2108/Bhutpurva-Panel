@@ -101,8 +101,9 @@ class GroupListMobile extends StatelessWidget {
               AppTableColumn(title: "Actions", width: 140),
             ],
             rows: controller.groups,
-            rowsPerPage: 10,
-            onPageChanged: (page) {},
+            totalRows: controller.total,
+            rowsPerPage: controller.rowsPerPage,
+            onPageChanged: controller.onPageChange,
             rowBuilder: (group, index) {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),

@@ -1,17 +1,20 @@
-import 'dart:developer';
-
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BatchListController extends GetxController {
+class BatchListController extends BaseController {
   static BatchListController get instance => Get.find();
 
-  var batches = <BatchesModel>[].obs;
-  var isLoading = false.obs;
+  final apiService = ApiService();
 
-  int page = 0;
+  var batches = <BatchesModel>[].obs;
+
+  int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
@@ -23,7 +26,7 @@ class BatchListController extends GetxController {
   @override
   void onInit() {
     _searchWorker = debounce(query, (_) {
-      page = 0;
+      page = 1;
       fetchBatches();
     }, time: const Duration(milliseconds: 400));
 
@@ -32,27 +35,30 @@ class BatchListController extends GetxController {
     super.onInit();
   }
 
-  void fetchBatches() async {
-    try {
-      isLoading.value = true;
+  void fetchBatches() {
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.get(ApiConstants.batches(
+          page: page,
+          limit: rowsPerPage,
+          query: query.value,
+        ));
 
-      await Future.delayed(const Duration(seconds: 1));
-
-      batches.value = List.generate(
-        10,
-        (index) => BatchesModel(
-          id: index.toString(),
-          name: 'Batch $index ${query.value}',
-          monitorIds: [],
-          isActive: true,
-          createdAt: DateTime.now(),
-        ),
-      );
-    } catch (e) {
-      log(e.toString());
-    } finally {
-      isLoading.value = false;
-    }
+        if (response.status == 200) {
+          final batchList = response.data['batch'] ??
+              response.data['batches'] ??
+              response.data['data'] ??
+              [];
+          batches.assignAll(
+            (batchList as Iterable)
+                .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+                .toList(),
+          );
+          total = response.data['totalData'] ?? response.data['total'] ?? 0;
+        }
+      },
+      errorMessage: "Failed to fetch batches",
+    );
   }
 
   void onSearchChanged(String value) {
@@ -60,7 +66,7 @@ class BatchListController extends GetxController {
   }
 
   void onPageChange(int value) {
-    page = value ~/ rowsPerPage;
+    page = (value ~/ rowsPerPage) + 1;
     fetchBatches();
   }
 

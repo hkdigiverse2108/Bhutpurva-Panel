@@ -86,9 +86,10 @@ class BatchDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Actions', width: 140),
                 ],
                 rows: controller.students,
-                rowsPerPage: 10,
+                totalRows: controller.totalStudents,
+                rowsPerPage: controller.rowsPerPage,
+                onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
-                onPageChanged: (page) {},
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
@@ -132,9 +133,10 @@ class BatchDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Actions', width: 160),
                 ],
                 rows: controller.monitors,
-                rowsPerPage: 10,
+                totalRows: controller.totalMonitors,
+                rowsPerPage: controller.rowsPerPage,
+                onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
-                onPageChanged: (page) {},
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),

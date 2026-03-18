@@ -85,7 +85,12 @@ class AppPaginatedTable<T> extends StatelessWidget {
               ),
             )
             .toList(),
-        source: _TableSource<T>(data: rows, rowBuilder: rowBuilder),
+        source: _TableSource<T>(
+          data: rows,
+          rowBuilder: rowBuilder,
+          totalCount: totalRows ?? rows.length,
+          rowsPerPage: rowsPerPage,
+        ),
         onPageChanged: onPageChanged,
       ),
     );
@@ -95,19 +100,32 @@ class AppPaginatedTable<T> extends StatelessWidget {
 class _TableSource<T> extends DataTableSource {
   final List<T> data;
   final DataRow Function(T item, int index) rowBuilder;
+  final int totalCount;
+  final int rowsPerPage;
 
-  _TableSource({required this.data, required this.rowBuilder});
+  _TableSource({
+    required this.data,
+    required this.rowBuilder,
+    required this.totalCount,
+    required this.rowsPerPage,
+  });
 
   @override
-  DataRow getRow(int index) {
-    return rowBuilder(data[index], index);
+  DataRow? getRow(int index) {
+    if (data.isEmpty) return null;
+    // For server-side pagination, the 'data' list usually only contains the current page.
+    // DataTableSource expects index to be global (0 to totalCount - 1).
+    // We map it to local index (0 to data.length - 1).
+    final localIndex = index % rowsPerPage;
+    if (localIndex >= data.length) return null;
+    return rowBuilder(data[localIndex], index);
   }
 
   @override
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => data.length;
+  int get rowCount => totalCount;
 
   @override
   int get selectedRowCount => 0;

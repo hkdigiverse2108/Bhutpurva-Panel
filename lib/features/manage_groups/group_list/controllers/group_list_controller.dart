@@ -1,21 +1,17 @@
-import 'dart:developer';
-
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/menu/menu_item.dart';
-import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class GroupListController extends GetxController {
+class GroupListController extends BaseController {
   static GroupListController get instance => Get.find();
 
   var groups = <GroupModel>[].obs;
-  var isLoading = true.obs;
   var statusFilterLabel = 'Status'.obs;
 
   final apiService = ApiService();
@@ -45,37 +41,31 @@ class GroupListController extends GetxController {
     fetchGroups();
   }
 
-  void fetchGroups() async {
-    try {
-      isLoading.value = true;
-      final ResModel response = await apiService.get(
-        ApiConstants.groups(
-          page: page,
-          limit: rowsPerPage,
-          query: query.value,
-          status: statusFilter,
-        ),
-      );
+  void fetchGroups() {
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.get(
+          ApiConstants.groups(
+            page: page,
+            limit: rowsPerPage,
+            query: query.value,
+            status: statusFilter,
+          ),
+        );
 
-      if (response.status == 200) {
-        final dataList = response.data['groups'] ?? response.data['data'] ?? [];
-        groups.value = (dataList as List<dynamic>)
-            .map((e) => GroupModel.fromJson(e))
-            .toList();
-        total = response.data['totalData'] ?? response.data['total'] ?? 0;
-      }
-    } catch (e) {
-      log(e.toString());
-      AppSnackBar.show(
-        title: "Error",
-        message: "Failed to fetch groups",
-        type: AppSnackBarType.error,
-      );
-      groups.value = [];
-      total = 0;
-    } finally {
-      isLoading.value = false;
-    }
+        if (response.status == 200) {
+          final dataList =
+              response.data['groups'] ?? response.data['data'] ?? [];
+          groups.assignAll(
+            (dataList as Iterable)
+                .map<GroupModel>((e) => GroupModel.fromJson(e))
+                .toList(),
+          );
+          total = response.data['totalData'] ?? response.data['total'] ?? 0;
+        }
+      },
+      errorMessage: "Failed to fetch groups",
+    );
   }
 
   void onSearchChanged(String value) {
@@ -83,19 +73,19 @@ class GroupListController extends GetxController {
   }
 
   void onPageChange(int value) {
-    page = value ~/ rowsPerPage;
+    page = (value ~/ rowsPerPage) + 1;
     fetchGroups();
   }
 
   void setStatusFilter(bool? value) {
     statusFilter = value;
-    page = 0;
+    page = 1;
     fetchGroups();
   }
 
   void clearFilters() {
     statusFilter = null;
-    page = 0;
+    page = 1;
     fetchGroups();
   }
 

@@ -13,7 +13,7 @@ class LifeLightController extends BaseController {
 
   var lifeLight = <LifeLightModel>[].obs;
 
-  int page = 0;
+  int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
@@ -26,7 +26,7 @@ class LifeLightController extends BaseController {
   void onInit() {
     super.onInit();
     _searchWorker = debounce(query, (_) {
-      page = 0;
+      page = 1;
       fetchLifeLight();
     }, time: const Duration(milliseconds: 400));
     fetchLifeLight();
@@ -46,7 +46,9 @@ class LifeLightController extends BaseController {
         if (res.status == 200) {
           final dataList = res.data['lifeLight'] ?? res.data['data'] ?? [];
           lifeLight.assignAll(
-            (dataList as List).map((e) => LifeLightModel.fromJson(e)).toList(),
+            (dataList as Iterable)
+                .map<LifeLightModel>((e) => LifeLightModel.fromJson(e))
+                .toList(),
           );
           total = res.data['totalData'] ?? res.data['total'] ?? 0;
         }
@@ -60,7 +62,7 @@ class LifeLightController extends BaseController {
   }
 
   void onPageChange(int value) {
-    page = value ~/ rowsPerPage;
+    page = (value ~/ rowsPerPage) + 1;
     fetchLifeLight();
   }
 

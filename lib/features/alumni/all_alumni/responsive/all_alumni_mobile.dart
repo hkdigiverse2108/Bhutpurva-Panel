@@ -107,8 +107,9 @@ class AllAlumniMobile extends StatelessWidget {
               AppTableColumn(title: 'Actions', width: 140),
             ],
             rows: controller.allAlumni,
-            rowsPerPage: 10,
-            onPageChanged: (page) {},
+            totalRows: controller.total,
+            rowsPerPage: controller.rowsPerPage,
+            onPageChanged: controller.onPageChange,
             rowBuilder: (item, index) {
               return DataRow(
                 color: TableHelpers.rowHoverColor(),

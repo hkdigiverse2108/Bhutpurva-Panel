@@ -18,8 +18,8 @@ class EditGroupController extends BaseController {
   final isBatchesLoading = false.obs;
   final nameController = TextEditingController();
 
-  final leaders = <UserModel>[].obs;
-  final selectedLeaders = <UserModel>[].obs;
+  final leaders = <UsersDropdownModel>[].obs;
+  final selectedLeaders = <UsersDropdownModel>[].obs;
 
   final batches = <BatchesModel>[].obs;
   final selectedBatches = <BatchesModel>[].obs;
@@ -48,9 +48,9 @@ class EditGroupController extends BaseController {
         );
 
         if (response.status == 200) {
-          final usersList = response.data['data'] ?? [];
+          final usersList = response.data ?? [];
           final allLeaders = (usersList as Iterable)
-              .map<UserModel>((e) => UserModel.fromJson(e))
+              .map<UsersDropdownModel>((e) => UsersDropdownModel.fromJson(e))
               .toList();
 
           leaders.assignAll(allLeaders);
@@ -87,21 +87,11 @@ class EditGroupController extends BaseController {
           );
 
           if (group != null) {
-            final ResModel groupBatchesResponse = await apiService.get(
-              ApiConstants.batches(groupId: group!.id),
+            selectedBatches.assignAll(
+              batches
+                  .where((b) => group!.batches.any((gb) => gb.id == b.id))
+                  .toList(),
             );
-            if (groupBatchesResponse.status == 200) {
-              final groupBatchList =
-                  groupBatchesResponse.data['batch'] ??
-                  groupBatchesResponse.data['batches'] ??
-                  groupBatchesResponse.data['data'] ??
-                  [];
-              selectedBatches.assignAll(
-                (groupBatchList as Iterable)
-                    .map<BatchesModel>((e) => BatchesModel.fromJson(e))
-                    .toList(),
-              );
-            }
           }
         }
       },

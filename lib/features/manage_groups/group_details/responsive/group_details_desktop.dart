@@ -157,14 +157,16 @@ class GroupDetailsDesktop extends StatelessWidget {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
-                      DataCell(Text(item.id)),
+                      DataCell(Text((index + 1).toString())),
                       DataCell(Text(item.name ?? 'N/A')),
                       DataCell(Text(item.phoneNumber ?? 'N/A')),
-                      DataCell(Text(
-                        (item is StudentModel && item.addressIds.isNotEmpty)
-                            ? item.addressIds.first.city
-                            : 'N/A',
-                      )),
+                      DataCell(
+                        Text(
+                          (item is StudentModel && item.addressIds.isNotEmpty)
+                              ? item.addressIds.first.city
+                              : 'N/A',
+                        ),
+                      ),
                       DataCell(
                         Text(
                           (item is StudentModel && item.isVerified)

@@ -4,7 +4,7 @@ import 'package:bhutpurva_penal/features/manage_groups/group_list/controllers/gr
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_Icon_button.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_filter_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';

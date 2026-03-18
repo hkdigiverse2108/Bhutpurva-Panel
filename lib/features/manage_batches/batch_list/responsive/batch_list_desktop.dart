@@ -4,7 +4,7 @@ import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_list/controllers/batch_list_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
-import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_Icon_button.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';

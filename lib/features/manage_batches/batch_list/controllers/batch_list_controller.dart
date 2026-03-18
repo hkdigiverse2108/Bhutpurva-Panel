@@ -38,14 +38,17 @@ class BatchListController extends BaseController {
   void fetchBatches() {
     executeApi(
       apiCall: () async {
-        final ResModel response = await apiService.get(ApiConstants.batches(
-          page: page,
-          limit: rowsPerPage,
-          query: query.value,
-        ));
+        final ResModel response = await apiService.get(
+          ApiConstants.batches(
+            page: page,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
+        );
 
         if (response.status == 200) {
-          final batchList = response.data['batch'] ??
+          final batchList =
+              response.data['batch'] ??
               response.data['batches'] ??
               response.data['data'] ??
               [];

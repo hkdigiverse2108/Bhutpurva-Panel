@@ -14,29 +14,29 @@ class CreateBatchController extends GetxController {
 
   final nameController = TextEditingController();
 
-  final devotees = <DevoteeModel>[
-    DevoteeModel(
+  final devotees = <MoniterModel>[
+    MoniterModel(
       name: 'John Doe',
       address: '123 Main St',
       phone: '123-456-7890',
       email: 'john.doe@example.com',
       id: '1',
-    ),
-    DevoteeModel(
+    ),  
+    MoniterModel(
       name: 'Jane Smith',
       address: '456 Maple St',
       phone: '456-789-0123',
       email: 'jane.smith@example.com',
       id: '2',
     ),
-    DevoteeModel(
+    MoniterModel(
       name: 'Alice Johnson',
       address: '789 Elm St',
       phone: '789-012-3456',
       email: 'alice.johnson@example.com',
       id: '3',
     ),
-    DevoteeModel(
+    MoniterModel(
       name: 'Bob Wilson',
       address: '101 Oak St',
       phone: '101-234-5678',
@@ -45,11 +45,9 @@ class CreateBatchController extends GetxController {
     ),
   ].obs;
 
-  final selectedDevotees = <DevoteeModel>[].obs;
+  final selectedDevotees = <MoniterModel>[].obs;
 
-  final students = <StudentModel>[
-    
-  ].obs;
+  final students = <StudentModel>[].obs;
 
   final selectedStudents = <StudentModel>[].obs;
 

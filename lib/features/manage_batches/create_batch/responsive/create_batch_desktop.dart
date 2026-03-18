@@ -61,7 +61,7 @@ class CreateBatchDesktop extends StatelessWidget {
                       },
                     ),
                     Obx(
-                      () => AdminSearchSelectField<DevoteeModel>(
+                      () => AdminSearchSelectField<MoniterModel>(
                         label: 'Select Devotees',
                         items: controller.devotees
                             .map(

@@ -1,11 +1,11 @@
-class DevoteeModel {
+class MoniterModel {
   final String id;
   final String name;
   final String email;
   final String phone;
   final String address;
 
-  DevoteeModel({
+  MoniterModel({
     required this.id,
     required this.name,
     required this.email,
@@ -13,7 +13,7 @@ class DevoteeModel {
     required this.address,
   });
 
-  factory DevoteeModel.empty() {
-    return DevoteeModel(id: '', name: '', email: '', phone: '', address: '');
+  factory MoniterModel.empty() {
+    return MoniterModel(id: '', name: '', email: '', phone: '', address: '');
   }
 }

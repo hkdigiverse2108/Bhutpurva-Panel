@@ -2,7 +2,6 @@ import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_details/controllers/group_details_controller.dart';
-import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
@@ -25,13 +24,15 @@ class GroupDetailsDesktop extends StatelessWidget {
     final controller = GroupDetailsController.instance;
     return Scaffold(
       body: AdminTablePageLayout(
-        header: BreadcrumbWithHeading(
-          heading: 'Group Details',
-          breadcrumbsItems: [
-            BreadcrumbItem(title: 'Groups', route: AppPages.manageGroups),
-            BreadcrumbItem(title: 'Group Details'),
-          ],
-          returnToPreviousScreen: true,
+        header: Obx(
+          () => BreadcrumbWithHeading(
+            heading: controller.group?.name ?? 'Group Details',
+            breadcrumbsItems: [
+              BreadcrumbItem(title: 'Groups', route: AppPages.manageGroups),
+              BreadcrumbItem(title: controller.group?.name ?? 'Group Details'),
+            ],
+            returnToPreviousScreen: true,
+          ),
         ),
         toolbar: AdminTableToolbar(
           search: TableSearchField(
@@ -40,11 +41,19 @@ class GroupDetailsDesktop extends StatelessWidget {
             onSearchChanged: controller.onSearchChanged,
           ),
           filters: [
-            TableActionButton(
-              onTap: () {},
-              label: 'Add Devotee',
-              icon: Icons.add,
-              color: ColorConst.primary,
+            Obx(
+              () => TableActionButton(
+                onTap: () {
+                  if (controller.tab.value == 0) {
+                    controller.onAddDevoteeTap();
+                  } else {
+                    controller.onAddLeaderTap();
+                  }
+                },
+                label: controller.tab.value == 0 ? 'Add Devotee' : 'Add Leader',
+                icon: Icons.add,
+                color: ColorConst.primary,
+              ),
             ),
           ],
           actions: [
@@ -52,7 +61,7 @@ class GroupDetailsDesktop extends StatelessWidget {
               () => (controller.tab.value == 0)
                   ? TableActionButton(
                       onTap: () {
-                        controller.tab.value = 1;
+                        controller.onTabChanged(1);
                       },
                       label: 'Switch To Leaders',
                       icon: PhosphorIconsBold.userSwitch,
@@ -60,7 +69,7 @@ class GroupDetailsDesktop extends StatelessWidget {
                     )
                   : TableActionButton(
                       onTap: () {
-                        controller.tab.value = 0;
+                        controller.onTabChanged(0);
                       },
                       label: 'Switch To Batches',
                       icon: PhosphorIconsBold.swatches,
@@ -73,7 +82,7 @@ class GroupDetailsDesktop extends StatelessWidget {
           Widget child;
 
           if (controller.tab.value == 0) {
-            if (controller.isBatchesLoading.value) {
+            if (controller.isGroupLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('batches_shimmer'),
                 columnWidths: [60, null, null, 120, 140],
@@ -88,15 +97,15 @@ class GroupDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: "Students", width: 120),
                   AppTableColumn(title: "Actions", width: 140),
                 ],
-                rows: controller.batches,
-                totalRows: controller.totalBatches,
+                rows: controller.group?.batches ?? [],
+                totalRows: controller.group?.batches.length ?? 0,
                 rowsPerPage: controller.rowsPerPage,
-                onPageChanged: controller.onPageChange,
+                onPageChanged: (value) {},
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
-                      DataCell(Text(item.id)),
+                      DataCell(Text((index + 1).toString())),
                       DataCell(
                         Text(
                           item.name,
@@ -105,17 +114,20 @@ class GroupDetailsDesktop extends StatelessWidget {
                           style: TextStyle(color: ColorConst.primary),
                         ),
                         onTap: () {
-                          controller.onBatchTap(item);
+                          Get.toNamed(AppPages.batchDetails, arguments: item);
                         },
                       ),
-                      DataCell(Text(item.monitorIds.length.toString())),
+                      DataCell(Text('0')),
                       DataCell(Text('0')),
                       DataCell(
                         Row(
                           children: [
                             tableActionIconButton(
                               icon: Icons.edit,
-                              onTap: () {},
+                              onTap: () => Get.toNamed(
+                                AppPages.editBatch,
+                                arguments: item.id,
+                              ),
                             ),
                             const SizedBox(width: 6),
                             tableActionIconButton(
@@ -132,7 +144,7 @@ class GroupDetailsDesktop extends StatelessWidget {
               );
             }
           } else {
-            if (controller.isLeadersLoading.value) {
+            if (controller.isGroupLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('leaders_shimmer'),
                 columnWidths: [60, null, null, null, 120, 140],
@@ -148,39 +160,38 @@ class GroupDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Status', width: 120),
                   AppTableColumn(title: 'Actions', width: 140),
                 ],
-                rows: controller.leaders,
-                totalRows: controller.totalLeaders,
+                rows: controller.group?.leaderIds ?? [],
+                totalRows: controller.group?.leaderIds.length ?? 0,
                 rowsPerPage: controller.rowsPerPage,
-                onPageChanged: controller.onPageChange,
+                onPageChanged: (value) {},
                 checkboxColumn: true,
                 rowBuilder: (item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
                       DataCell(Text((index + 1).toString())),
-                      DataCell(Text(item.name ?? 'N/A')),
-                      DataCell(Text(item.phoneNumber ?? 'N/A')),
+                      DataCell(Text(item.name)),
+                      DataCell(Text(item.phoneNumber)),
                       DataCell(
-                        Text(
-                          (item is StudentModel && item.addressIds.isNotEmpty)
-                              ? item.addressIds.first.city
-                              : 'N/A',
-                        ),
+                        Text('N/A'),
                       ),
                       DataCell(
-                        Text(
-                          (item is StudentModel && item.isVerified)
-                              ? 'Verified'
-                              : 'Not Verified',
-                        ),
+                        Text('Verified'),
                       ),
                       DataCell(
-                        TableActionButton(
-                          onTap: () {
-                            controller.onEditStudent(item);
-                          },
-                          label: 'Edit Profile',
-                          icon: Icons.edit,
+                        Row(
+                          children: [
+                            tableActionIconButton(
+                              icon: Icons.edit,
+                              onTap: () => controller.onEditStudent(item),
+                            ),
+                            const SizedBox(width: 6),
+                            tableActionIconButton(
+                              icon: Icons.delete,
+                              color: Colors.red,
+                              onTap: () {},
+                            ),
+                          ],
                         ),
                       ),
                     ],

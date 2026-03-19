@@ -4,6 +4,7 @@ class ApiConstants {
   static const login = 'auth/login';
 
   // groups
+  static String groupsDropdown(String query) => 'group/dropdown?search=$query';
   static const createGroup = 'group/create';
   static const updateGroup = 'group/update';
   static String groupDetails(String id) => 'group/get/$id';
@@ -43,6 +44,7 @@ class ApiConstants {
     bool? isVerified,
     bool? isDeleted,
     String? roleFilter,
+    String? groupFilter,
   }) {
     String url = 'user/get?page=$page';
     if (limit != null && limit.toString().isNotEmpty) {
@@ -59,6 +61,9 @@ class ApiConstants {
     }
     if (roleFilter != null && roleFilter.isNotEmpty) {
       url += '&roleFilter=$roleFilter';
+    }
+    if (groupFilter != null && groupFilter.isNotEmpty) {
+      url += '&groupFilter=$groupFilter';
     }
     return url;
   }
@@ -82,6 +87,12 @@ class ApiConstants {
     }
     return url;
   }
+
+  static String createBatch() => 'batch/create';
+  static String batchDetails(String id) => 'batch/get/$id';
+  static String batchStudents(String id) => 'batch/get/$id/students';
+  static String batchLeaders(String id) => 'batch/get/$id/leaders';
+  static String batchDevotees(String id) => 'batch/get/$id/devotees';
 
   // life-light
   static String lifeLight({int page = 1, int? limit, String? query}) {
@@ -130,4 +141,8 @@ class ApiConstants {
     }
     return url;
   }
+
+  // delete
+  static String deleteBatch(String id) => 'batch/delete/$id';
+  static String deleteUser(String id) => 'user/delete/$id';
 }

@@ -127,3 +127,33 @@ class LeaderId {
     "whatsappNumber": whatsappNumber,
   };
 }
+
+class GroupDropdownModel {
+  final String id;
+  final String name;
+  final bool isActive;
+
+  GroupDropdownModel({
+    required this.id,
+    required this.name,
+    required this.isActive,
+  });
+
+  factory GroupDropdownModel.fromRawJson(String str) =>
+      GroupDropdownModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory GroupDropdownModel.fromJson(Map<String, dynamic> json) =>
+      GroupDropdownModel(
+        id: json["_id"],
+        name: json["name"],
+        isActive: json["isActive"],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "isActive": isActive,
+  };
+}

@@ -6,6 +6,7 @@ import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_sect
 import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class PrimaryDetails extends StatelessWidget {
@@ -141,7 +142,7 @@ class PrimaryDetails extends StatelessWidget {
                 },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Father name is required';
+                    return 'Date of birth is required';
                   }
                   return null;
                 },
@@ -153,8 +154,8 @@ class PrimaryDetails extends StatelessWidget {
           children: [
             Expanded(
               child: TextFormField(
-                keyboardType: TextInputType.name,
-                controller: controller.nameController,
+                keyboardType: TextInputType.phone,
+                controller: controller.phoneController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
                   hintText: "Enter Phone Number",
@@ -171,8 +172,8 @@ class PrimaryDetails extends StatelessWidget {
             const Gap(16),
             Expanded(
               child: TextFormField(
-                keyboardType: TextInputType.name,
-                controller: controller.fatherNameController,
+                keyboardType: TextInputType.phone,
+                controller: controller.whatsappNumberController,
                 decoration: InputDecoration(
                   labelText: 'WhatsApp Number',
                   hintText: "Enter WhatsApp Number",
@@ -194,25 +195,30 @@ class PrimaryDetails extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: AdminSearchSelectField(
-                label: 'Gender',
-                prefixIcon: PhosphorIconsBold.genderIntersex,
-                onChanged: (value) {},
-                items: [
-                  AdminDropdownItem(value: 'Male', label: 'Male'),
-                  AdminDropdownItem(value: 'Female', label: 'Female'),
-                  AdminDropdownItem(value: 'Other', label: 'Other'),
-                ],
+              child: Obx(
+                () => AdminSearchSelectField(
+                  label: 'Gender',
+                  prefixIcon: PhosphorIconsBold.genderIntersex,
+                  value: controller.gender.value,
+                  onChanged: (value) {
+                    if (value != null) controller.gender.value = value;
+                  },
+                  items: [
+                    AdminDropdownItem(value: 'male', label: 'Male'),
+                    AdminDropdownItem(value: 'female', label: 'Female'),
+                    AdminDropdownItem(value: 'other', label: 'Other'),
+                  ],
+                ),
               ),
             ),
             const Gap(16),
             Expanded(
               child: TextFormField(
-                keyboardType: TextInputType.name,
-                controller: controller.fatherNameController,
+                keyboardType: TextInputType.emailAddress,
+                controller: controller.emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  hintText: "Enter WhatsApp Number",
+                  hintText: "Enter Email Address",
                   prefixIcon: const Icon(
                     PhosphorIconsBold.paperPlaneRight,
                     fill: 0.0,
@@ -220,7 +226,7 @@ class PrimaryDetails extends StatelessWidget {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'WhatsApp Number is required';
+                    return 'Email Address is required';
                   }
                   return null;
                 },
@@ -232,8 +238,8 @@ class PrimaryDetails extends StatelessWidget {
           children: [
             Expanded(
               child: TextFormField(
-                keyboardType: TextInputType.name,
-                controller: controller.nameController,
+                keyboardType: TextInputType.text,
+                controller: controller.hrNumberController,
                 decoration: InputDecoration(
                   labelText: 'HR Number',
                   hintText: "Enter HR Number",
@@ -252,28 +258,43 @@ class PrimaryDetails extends StatelessWidget {
             ),
             const Gap(16),
             Expanded(
-              child: AdminSearchSelectField(
-                label: 'Current City',
-                prefixIcon: PhosphorIconsBold.city,
-                onChanged: (value) {},
-                items: [
-                  AdminDropdownItem(value: 'surat', label: 'Surat'),
-                  AdminDropdownItem(value: 'other', label: 'Other'),
-                ],
+              child: Obx(
+                () => AdminSearchSelectField(
+                  label: 'Current City',
+                  prefixIcon: PhosphorIconsBold.city,
+                  value: controller.currentCity.value,
+                  onChanged: (value) {
+                    if (value != null) controller.currentCity.value;
+                  },
+                  items: [
+                    AdminDropdownItem(
+                      value: controller.currentCity.value,
+                      label: controller.currentCity.value,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         // add only role dropdown
-        AdminSearchSelectField(
-          label: 'Role',
-          prefixIcon: PhosphorIconsBold.user,
-          onChanged: (value) {},
-          items: [
-            AdminDropdownItem(value: AlumniRole.leader.name, label: 'Leader'),
-            AdminDropdownItem(value: AlumniRole.monitor.name, label: 'Monitor'),
-            AdminDropdownItem(value: AlumniRole.user.name, label: 'User'),
-          ],
+        Obx(
+          () => AdminSearchSelectField(
+            label: 'Role',
+            prefixIcon: PhosphorIconsBold.user,
+            value: controller.role.value,
+            onChanged: (value) {
+              if (value != null) controller.role.value = value;
+            },
+            items: [
+              AdminDropdownItem(value: AlumniRole.leader.name, label: 'Leader'),
+              AdminDropdownItem(
+                value: AlumniRole.monitor.name,
+                label: 'Monitor',
+              ),
+              AdminDropdownItem(value: AlumniRole.user.name, label: 'User'),
+            ],
+          ),
         ),
       ],
     );

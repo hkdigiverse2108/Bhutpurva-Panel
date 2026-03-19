@@ -84,7 +84,12 @@ class BatchListDesktop extends StatelessWidget {
                 DataCell(
                   Row(
                     children: [
-                      tableActionIconButton(icon: Icons.edit, onTap: () {}),
+                      tableActionIconButton(
+                        icon: Icons.edit,
+                        onTap: () {
+                          Get.toNamed(AppPages.editBatch);
+                        },
+                      ),
                       const SizedBox(width: 6),
                       tableActionIconButton(
                         icon: Icons.delete,

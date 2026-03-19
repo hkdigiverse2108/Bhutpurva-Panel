@@ -19,6 +19,7 @@ import 'package:bhutpurva_penal/features/manage_batches/batch_details/batch_deta
 import 'package:bhutpurva_penal/features/manage_batches/batch_list/batch_list.dart';
 import 'package:bhutpurva_penal/features/manage_batches/bindings/manage_batch_bindings.dart';
 import 'package:bhutpurva_penal/features/manage_batches/create_batch/create_batch.dart';
+import 'package:bhutpurva_penal/features/manage_batches/edit_batches/edit_batch.dart';
 import 'package:bhutpurva_penal/features/manage_groups/bindings/manage_group_binding.dart';
 import 'package:bhutpurva_penal/features/manage_groups/create_group/create_group.dart';
 import 'package:bhutpurva_penal/features/manage_groups/edit_group/edit_group.dart';
@@ -81,6 +82,12 @@ class AppRoutes {
     GetPage(
       name: AppPages.createBatch,
       page: () => const CreateBatch(),
+      binding: ManageBatchBindings(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editBatch,
+      page: () => const EditBatch(),
       binding: ManageBatchBindings(),
       middlewares: [AppMiddleware()],
     ),

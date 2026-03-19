@@ -30,6 +30,7 @@ class UserModel {
   DateTime createdAt;
   DateTime updatedAt;
   String? image;
+  String? birthDate;
 
   UserModel({
     required this.id,
@@ -61,6 +62,7 @@ class UserModel {
     required this.createdAt,
     required this.updatedAt,
     this.image,
+    this.birthDate,
   });
 
   factory UserModel.fromRawJson(String str) =>
@@ -92,14 +94,23 @@ class UserModel {
     class12: Class12Class.fromJson(json["class12"]),
     studyId: json["studyId"] == null ? null : StudyId.fromJson(json["studyId"]),
     skill: json["skill"],
-    talents: List<String>.from(json["talents"].map((x) => x)),
-    awards: List<String>.from(json["awards"].map((x) => x)),
-    isDeleted: json["isDeleted"],
-    otp: json["otp"],
-    isVerified: json["isVerified"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    talents: json["talents"] == null
+        ? []
+        : List<String>.from(json["talents"].map((x) => x)),
+    awards: json["awards"] == null
+        ? []
+        : List<String>.from(json["awards"].map((x) => x)),
+    isDeleted: json["isDeleted"] ?? false,
+    otp: json["otp"] ?? "",
+    isVerified: json["isVerified"] ?? false,
+    createdAt: json["createdAt"] != null
+        ? DateTime.parse(json["createdAt"])
+        : DateTime.now(),
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.parse(json["updatedAt"])
+        : DateTime.now(),
     image: json["image"],
+    birthDate: json["birthDate"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -132,6 +143,7 @@ class UserModel {
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
     "image": image,
+    "birthDate": birthDate,
   };
 }
 
@@ -168,17 +180,21 @@ class AddressId {
   String toRawJson() => json.encode(toJson());
 
   factory AddressId.fromJson(Map<String, dynamic> json) => AddressId(
-    id: json["_id"],
-    address: json["address"],
-    type: json["type"],
-    city: json["city"],
-    district: json["district"],
-    state: json["state"],
-    country: json["country"],
-    pincode: json["pincode"],
-    isDeleted: json["isDeleted"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    id: json["_id"] ?? "",
+    address: json["address"] ?? "",
+    type: json["type"] ?? "",
+    city: json["city"] ?? "",
+    district: json["district"] ?? "",
+    state: json["state"] ?? "",
+    country: json["country"] ?? "",
+    pincode: json["pincode"] ?? "",
+    isDeleted: json["isDeleted"] ?? false,
+    createdAt: json["createdAt"] != null
+        ? DateTime.parse(json["createdAt"])
+        : DateTime.now(),
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.parse(json["updatedAt"])
+        : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -221,13 +237,13 @@ class Class12Class {
   String toRawJson() => json.encode(toJson());
 
   factory Class12Class.fromJson(Map<String, dynamic> json) => Class12Class(
-    class1Class: json["class"],
-    isStudded: json["isStudded"],
+    class1Class: json["class"] ?? "",
+    isStudded: json["isStudded"] ?? false,
     branch: json["branch"],
     passingYear: json["passingYear"],
     medium: json["medium"],
-    hostel: json["hostel"],
-    id: json["_id"],
+    hostel: json["hostel"] ?? false,
+    id: json["_id"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -305,8 +321,10 @@ class Class1Class {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Class1Class.fromJson(Map<String, dynamic> json) =>
-      Class1Class(isStudied: json["isStudied"], branch: json["branch"]);
+  factory Class1Class.fromJson(Map<String, dynamic> json) => Class1Class(
+    isStudied: json["isStudied"] ?? false,
+    branch: json["branch"] ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"isStudied": isStudied, "branch": branch};
 }

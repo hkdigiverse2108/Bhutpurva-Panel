@@ -2,9 +2,8 @@ import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
-import 'package:bhutpurva_penal/features/manage_batches/create_batch/controllers/create_batch_controller.dart';
+import 'package:bhutpurva_penal/features/manage_batches/edit_batches/controllers/EditBatchController.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
-import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
@@ -17,20 +16,20 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-class CreateBatchDesktop extends StatelessWidget {
-  const CreateBatchDesktop({super.key});
+class EditBatchDesktop extends StatelessWidget {
+  const EditBatchDesktop({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = CreateBatchController.instance;
+    final controller = EditBatchController.instance;
     return Scaffold(
       body: AdminFormPageLayout(
         header: const BreadcrumbWithHeading(
-          heading: 'Create Batch',
+          heading: 'Edit Batch',
           returnToPreviousScreen: true,
           breadcrumbsItems: [
             BreadcrumbItem(title: 'Batches', route: AppPages.manageBatches),
-            BreadcrumbItem(title: 'Create Batch'),
+            BreadcrumbItem(title: 'Edit Batch'),
           ],
         ),
         body: Form(
@@ -212,9 +211,9 @@ class CreateBatchDesktop extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           AdminFormButton(
-                            label: 'Create Batch',
-                            isLoading: controller.isLoading.value,
-                            onPressed: controller.createBatch,
+                            label: 'Update Batch',
+                            isLoading: controller.isSaving.value,
+                            onPressed: controller.updateBatch,
                           ),
                         ],
                       );
@@ -236,9 +235,9 @@ class CreateBatchDesktop extends StatelessWidget {
                         SizedBox(
                           width: 150,
                           child: AdminFormButton(
-                            label: 'Create Batch',
-                            isLoading: controller.isLoading.value,
-                            onPressed: controller.createBatch,
+                            label: 'Update Batch',
+                            isLoading: controller.isSaving.value,
+                            onPressed: controller.updateBatch,
                           ),
                         ),
                       ],

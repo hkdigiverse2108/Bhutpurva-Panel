@@ -258,28 +258,38 @@ class SecondaryDetails extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: AdminSearchSelectField(
-                    label: 'Select Marital Status',
-                    items: controller.meritStatusList
-                        .map(
-                          (e) => AdminDropdownItem<String>(value: e, label: e),
-                        )
-                        .toList(),
-                    value: controller.maritalStatus.value,
-                    onChanged: (value) {},
+                  child: Obx(
+                    () => AdminSearchSelectField(
+                      label: 'Select Marital Status',
+                      items: controller.meritStatusList
+                          .map(
+                            (e) =>
+                                AdminDropdownItem<String>(value: e, label: e),
+                          )
+                          .toList(),
+                      value: controller.maritalStatus.value,
+                      onChanged: (value) {
+                        if (value != null) controller.maritalStatus.value = value;
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: AdminSearchSelectField(
-                    label: 'Select Blood Group',
-                    items: controller.bloodGroupsList
-                        .map(
-                          (e) => AdminDropdownItem<String>(value: e, label: e),
-                        )
-                        .toList(),
-                    value: controller.bloodGroup.value,
-                    onChanged: (value) {},
+                  child: Obx(
+                    () => AdminSearchSelectField(
+                      label: 'Select Blood Group',
+                      items: controller.bloodGroupsList
+                          .map(
+                            (e) =>
+                                AdminDropdownItem<String>(value: e, label: e),
+                          )
+                          .toList(),
+                      value: controller.bloodGroup.value,
+                      onChanged: (value) {
+                        if (value != null) controller.bloodGroup.value = value;
+                      },
+                    ),
                   ),
                 ),
               ],

@@ -12,7 +12,6 @@ class MoniterModel {
     required this.phone,
     required this.address,
   });
-
   factory MoniterModel.empty() {
     return MoniterModel(id: '', name: '', email: '', phone: '', address: '');
   }

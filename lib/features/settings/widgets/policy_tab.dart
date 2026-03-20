@@ -51,9 +51,7 @@ class PolicyTab extends StatelessWidget {
               ),
             ),
           ),
-
           const Gap(8),
-
           Obx(
             () => Padding(
               padding: const EdgeInsets.all(10),
@@ -89,7 +87,6 @@ class PolicyTab extends StatelessWidget {
                   : Colors.transparent,
               width: isActive ? 2 : 0,
             ),
-            // bottom: BorderSide(color: Colors.white),
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -110,7 +107,6 @@ class PolicyTab extends StatelessWidget {
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         const Gap(8),
-
         Container(
           height: 400,
           decoration: BoxDecoration(
@@ -142,16 +138,11 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
         Align(
-          alignment: AlignmentGeometry.centerRight,
+          alignment: Alignment.centerRight,
           child: SizedBox(
             width: 200,
             child: ElevatedButton(
-              onPressed: () async {
-                final htmlText = await controller.privacyPolicyController
-                    .getText();
-                // TODO: Send htmlText to your server
-                debugPrint('Privacy Policy HTML: $htmlText');
-              },
+              onPressed: controller.updatePolicy,
               child: const Text('Update'),
             ),
           ),
@@ -171,7 +162,6 @@ class PolicyTab extends StatelessWidget {
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         const Gap(8),
-
         Container(
           height: 400,
           decoration: BoxDecoration(
@@ -184,16 +174,14 @@ class PolicyTab extends StatelessWidget {
               ToolBar(
                 toolBarColor: Colors.white,
                 activeIconColor: ColorConst.primary,
-                controller: controller
-                    .activistPolicyController, // corrected controller here
+                controller: controller.activistPolicyController,
               ),
               const Divider(height: 1, thickness: 1, color: Colors.grey),
               Expanded(
                 child: QuillHtmlEditor(
                   text: '',
                   hintText: 'Enter activist policy details here...',
-                  controller: controller
-                      .activistPolicyController, // corrected controller here
+                  controller: controller.activistPolicyController,
                   isEnabled: true,
                   minHeight: 300,
                   padding: const EdgeInsets.all(12),
@@ -205,16 +193,11 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
         Align(
-          alignment: AlignmentGeometry.centerRight,
+          alignment: Alignment.centerRight,
           child: SizedBox(
             width: 200,
             child: ElevatedButton(
-              onPressed: () async {
-                final htmlText = await controller.activistPolicyController
-                    .getText();
-                // TODO: Send htmlText to your server
-                debugPrint('Activist Policy HTML: $htmlText');
-              },
+              onPressed: controller.updatePolicy,
               child: const Text('Update'),
             ),
           ),

@@ -14,41 +14,85 @@ class OtherTab extends StatelessWidget {
     final controller = SettingsController.instance;
     return Form(
       key: controller.otherFormKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 550,
-            child: AdminFormSectionCard(
-              title: "Support Settings",
-              fields: [
-                OuterLabelTextField(
-                  label: 'Support Phone',
-                  controller: controller.appUrlController,
-                  prefixIcon: const Icon(Iconsax.call),
-                  keyboardType: TextInputType.number,
-                  hint: '9876543210',
-                ),
-                OuterLabelTextField(
-                  label: 'Support WhatsApp',
-                  controller: controller.playStoreUrlController,
-                  prefixIcon: const Icon(PhosphorIconsBold.whatsappLogo),
-                  keyboardType: TextInputType.number,
-                  hint: '9876543210',
-                ),
-                OuterLabelTextField(
-                  label: 'Support Email',
-                  controller: controller.playStoreUrlController,
-                  prefixIcon: const Icon(PhosphorIconsBold.paperPlaneRight),
-                  keyboardType: TextInputType.emailAddress,
-                  hint: 'Support@domain.com',
-                ),
-                Gap(1),
-                ElevatedButton(onPressed: () {}, child: const Text('Update')),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 550,
+              child: AdminFormSectionCard(
+                title: "Support Settings",
+                fields: [
+                  OuterLabelTextField(
+                    label: 'Support Phone',
+                    controller: controller.supportPhoneController,
+                    prefixIcon: const Icon(Iconsax.call),
+                    keyboardType: TextInputType.number,
+                    hint: '9876543210',
+                  ),
+                  OuterLabelTextField(
+                    label: 'Support WhatsApp',
+                    controller: controller.supportWhatsAppController,
+                    prefixIcon: const Icon(PhosphorIconsBold.whatsappLogo),
+                    keyboardType: TextInputType.number,
+                    hint: '9876543210',
+                  ),
+                  OuterLabelTextField(
+                    label: 'Support Email',
+                    controller: controller.supportEmailController,
+                    prefixIcon: const Icon(PhosphorIconsBold.paperPlaneRight),
+                    keyboardType: TextInputType.emailAddress,
+                    hint: 'Support@domain.com',
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const Gap(16),
+            SizedBox(
+              width: 550,
+              child: AdminFormSectionCard(
+                title: "Social Links",
+                fields: [
+                  OuterLabelTextField(
+                    label: 'Facebook',
+                    controller: controller.facebookController,
+                    prefixIcon: const Icon(PhosphorIconsBold.facebookLogo),
+                    hint: 'https://facebook.com/example',
+                  ),
+                  OuterLabelTextField(
+                    label: 'Instagram',
+                    controller: controller.instagramController,
+                    prefixIcon: const Icon(PhosphorIconsBold.instagramLogo),
+                    hint: 'https://instagram.com/example',
+                  ),
+                  OuterLabelTextField(
+                    label: 'Twitter',
+                    controller: controller.twitterController,
+                    prefixIcon: const Icon(PhosphorIconsBold.twitterLogo),
+                    hint: 'https://twitter.com/example',
+                  ),
+                  OuterLabelTextField(
+                    label: 'LinkedIn',
+                    controller: controller.linkedinController,
+                    prefixIcon: const Icon(PhosphorIconsBold.linkedinLogo),
+                    hint: 'https://linkedin.com/company/example',
+                  ),
+                  OuterLabelTextField(
+                    label: 'YouTube',
+                    controller: controller.youtubeController,
+                    prefixIcon: const Icon(PhosphorIconsBold.youtubeLogo),
+                    hint: 'https://youtube.com/example',
+                  ),
+                  const Gap(16),
+                  ElevatedButton(
+                    onPressed: controller.updateOther,
+                    child: const Text('Update Settings'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

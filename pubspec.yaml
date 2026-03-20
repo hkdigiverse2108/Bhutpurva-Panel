@@ -42,6 +42,8 @@ dependencies:
   shimmer: ^3.0.0
   connectivity_plus: ^7.0.0
   syncfusion_flutter_pdfviewer: ^32.1.21
+  # file_picker: ^8.1.7
+  # image_picker: ^1.1.2
 
   # Web Specific
   web: ^1.1.1

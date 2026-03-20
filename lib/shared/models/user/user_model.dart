@@ -71,27 +71,33 @@ class UserModel {
   String toRawJson() => json.encode(toJson());
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    id: json["_id"],
-    email: json["email"],
-    name: json["name"],
-    fatherName: json["fatherName"],
-    surname: json["surname"],
-    phoneNumber: json["phoneNumber"],
-    whatsappNumber: json["whatsappNumber"],
-    gender: json["gender"],
-    hrNo: json["hrNo"],
-    role: json["role"],
-    currentCity: json["currentCity"],
-    addressIds: List<AddressId>.from(
-      json["addressIds"].map((x) => AddressId.fromJson(x)),
-    ),
-    occupation: json["occupation"],
-    professions: List<String>.from(json["professions"].map((x) => x)),
-    educations: List<dynamic>.from(json["educations"].map((x) => x)),
-    maritalStatus: json["maritalStatus"],
-    bloodGroup: json["bloodGroup"],
-    class10: Class12Class.fromJson(json["class10"]),
-    class12: Class12Class.fromJson(json["class12"]),
+    id: json["_id"] ?? "",
+    email: json["email"] ?? "",
+    name: json["name"] ?? "",
+    fatherName: json["fatherName"] ?? "",
+    surname: json["surname"] ?? "",
+    phoneNumber: json["phoneNumber"] ?? "",
+    whatsappNumber: json["whatsappNumber"] ?? "",
+    gender: json["gender"] ?? "male",
+    hrNo: json["hrNo"] ?? "",
+    role: json["role"] ?? "user",
+    currentCity: json["currentCity"] ?? "",
+    addressIds: json["addressIds"] != null
+        ? List<AddressId>.from(
+            json["addressIds"].map((x) => AddressId.fromJson(x)),
+          )
+        : [],
+    occupation: json["occupation"] ?? "",
+    professions: json["professions"] != null
+        ? List<String>.from(json["professions"].map((x) => x))
+        : [],
+    educations: json["educations"] != null
+        ? List<dynamic>.from(json["educations"].map((x) => x))
+        : [],
+    maritalStatus: json["maritalStatus"] ?? "",
+    bloodGroup: json["bloodGroup"] ?? "",
+    class10: Class12Class.fromJson(json["class10"] ?? {}),
+    class12: Class12Class.fromJson(json["class12"] ?? {}),
     studyId: json["studyId"] == null ? null : StudyId.fromJson(json["studyId"]),
     skill: json["skill"],
     talents: json["talents"] == null

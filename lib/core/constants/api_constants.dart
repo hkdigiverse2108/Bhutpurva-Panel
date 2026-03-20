@@ -175,4 +175,8 @@ class ApiConstants {
   // delete
   static String deleteBatch(String id) => 'batch/delete/$id';
   static String deleteUser(String id) => 'user/delete/$id';
+
+  // settings
+  static String settings = 'setting/get';
+  static String updateSettings = 'setting/add-update';
 }

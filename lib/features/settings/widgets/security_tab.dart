@@ -77,7 +77,7 @@ class SecurityTab extends StatelessWidget {
                   ),
                   Gap(1),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: controller.updatePassword,
                     child: const Text('Change Password'),
                   ),
                 ],

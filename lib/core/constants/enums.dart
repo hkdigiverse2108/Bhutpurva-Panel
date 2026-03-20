@@ -7,3 +7,11 @@ enum AppSnackBarType { success, error, warning, info }
 enum PolicyType { privacy, activist }
 
 enum AlumniRole { leader, monitor, user }
+
+enum SupportType { phone, whatsapp, email }
+
+enum NotificationType { push, email, sms }
+
+enum AppType { android, ios, web }
+
+enum UserType { admin, user }

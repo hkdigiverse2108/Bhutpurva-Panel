@@ -77,7 +77,7 @@ class BatchListController extends BaseController {
     Get.toNamed(AppPages.createBatch);
   }
 
-  void onEditBatch(BatchesModel batch) {
-    Get.toNamed(AppPages.editBatch, arguments: batch);
+  void onEditBatch(String batchId) {
+    Get.toNamed(AppPages.editBatch, arguments: batchId);
   }
 }

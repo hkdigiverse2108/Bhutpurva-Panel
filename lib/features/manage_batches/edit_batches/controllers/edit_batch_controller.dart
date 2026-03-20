@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
@@ -18,6 +21,8 @@ class EditBatchController extends BaseController {
 
   final nameController = TextEditingController();
 
+  final batchDetails = Rxn<BatchesModel>();
+
   final groups = <GroupDropdownModel>[].obs;
   final selectedGroup = Rxn<GroupDropdownModel>();
 
@@ -30,15 +35,18 @@ class EditBatchController extends BaseController {
   void onInit() {
     super.onInit();
     batchId = Get.arguments;
-    getGroups();
-    getStudents();
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    await Future.wait([getGroups(), getStudents()]);
     if (batchId != null) {
-      fetchBatchDetails();
+      await fetchBatchDetails();
     }
   }
 
-  void getGroups() {
-    executeApi(
+  Future<void> getGroups() {
+    return executeApi(
       apiCall: () async {
         final ResModel response = await apiService.get(
           ApiConstants.groupsDropdown(""),
@@ -55,8 +63,8 @@ class EditBatchController extends BaseController {
     );
   }
 
-  void getStudents() {
-    executeApi(
+  Future<void> getStudents() {
+    return executeApi(
       apiCall: () async {
         final ResModel response = await apiService.get(
           ApiConstants.usersDropdown(roleFilter: AlumniRole.user.name),
@@ -73,18 +81,35 @@ class EditBatchController extends BaseController {
     );
   }
 
-  void fetchBatchDetails() {
-    executeApi(
+  Future<void> fetchBatchDetails() {
+    return executeApi(
       loadingState: isBatchLoading,
       apiCall: () async {
         final ResModel response = await apiService.get(
           ApiConstants.batchDetails(batchId!),
         );
         if (response.status == 200) {
-          final data = response.data;
-          nameController.text = data['name'] ?? '';
-          // Handle setting selected group and students based on response data
-          // Assuming data['group'] and data['students'] are present
+          batchDetails.value = BatchesModel.fromJson(response.data);
+          nameController.text = batchDetails.value!.name;
+          // Match group by ID from the loaded groups list
+          if (batchDetails.value!.groupId != null) {
+            log(batchDetails.value!.groupId!.id);
+            final matchedGroup = groups.where(
+              (e) => e.id == batchDetails.value!.groupId!.id,
+            );
+            if (matchedGroup.isNotEmpty) {
+              selectedGroup.value = matchedGroup.first;
+            }
+          }
+
+          // Match students by ID from the loaded students list
+          final batchStudentIds = batchDetails.value!.students
+              .map((e) => e.id)
+              .toSet();
+          final matchedStudents = students
+              .where((e) => batchStudentIds.contains(e.id))
+              .toList();
+          selectedStudents.assignAll(matchedStudents);
         }
       },
       errorMessage: "Failed to load batch details",

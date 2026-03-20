@@ -82,14 +82,14 @@ class BatchListDesktop extends StatelessWidget {
                 ),
                 DataCell(Text(item.groupId?.name ?? "-")),
                 DataCell(Text(item.monitorIds.length.toString())),
-                DataCell(Text('0')),
+                DataCell(Text(item.studentCount.toString())),
                 DataCell(
                   Row(
                     children: [
                       tableActionIconButton(
                         icon: Icons.edit,
                         onTap: () {
-                          Get.toNamed(AppPages.editBatch);
+                          controller.onEditBatch(item.id);
                         },
                       ),
                       const SizedBox(width: 6),

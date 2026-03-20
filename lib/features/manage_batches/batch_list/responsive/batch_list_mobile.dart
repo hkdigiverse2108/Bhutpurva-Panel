@@ -69,6 +69,7 @@ class BatchListMobile extends StatelessWidget {
           columns: const [
             AppTableColumn(title: "No", width: 60),
             AppTableColumn(title: "Name"),
+            AppTableColumn(title: "Group"),
             AppTableColumn(title: "Monitors"),
             AppTableColumn(title: "Students", width: 120),
             AppTableColumn(title: "Actions", width: 140),
@@ -80,19 +81,25 @@ class BatchListMobile extends StatelessWidget {
           rowBuilder: (item, index) {
             return DataRow(
               cells: [
-                DataCell(Text(item.id)),
+                DataCell(Text((index + 1).toString())),
                 DataCell(
                   Text(item.name, style: TextStyle(color: ColorConst.primary)),
                   onTap: () {
                     Get.toNamed(AppPages.batchDetails);
                   },
                 ),
+                DataCell(Text(item.groupId?.name ?? "-")),
                 DataCell(Text(item.monitorIds.length.toString())),
-                DataCell(Text('0')),
+                DataCell(Text(item.studentCount.toString())),
                 DataCell(
                   Row(
                     children: [
-                      tableActionIconButton(icon: Icons.edit, onTap: () {}),
+                      tableActionIconButton(
+                        icon: Icons.edit,
+                        onTap: () {
+                          controller.onEditBatch(item.id);
+                        },
+                      ),
                       const SizedBox(width: 6),
                       tableActionIconButton(
                         icon: Icons.delete,

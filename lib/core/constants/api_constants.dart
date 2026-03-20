@@ -34,6 +34,7 @@ class ApiConstants {
     if (roleFilter != null && roleFilter.isNotEmpty) {
       url += '?roleFilter=$roleFilter';
     }
+
     return url;
   }
 

@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 class BatchesModel {
-  String id;
-  String name;
-  GroupId? groupId;
-  List<dynamic> monitorIds;
-  bool isActive;
-  DateTime createdAt;
+  final String id;
+  final String name;
+  final GroupId? groupId;
+  final List<dynamic> monitorIds;
+  final bool isActive;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<Student> students;
+  final int studentCount;
 
   BatchesModel({
     required this.id,
@@ -14,7 +18,11 @@ class BatchesModel {
     this.groupId,
     required this.monitorIds,
     required this.isActive,
+    required this.isDeleted,
     required this.createdAt,
+    required this.updatedAt,
+    required this.students,
+    required this.studentCount,
   });
 
   factory BatchesModel.fromRawJson(String str) =>
@@ -25,10 +33,16 @@ class BatchesModel {
   factory BatchesModel.fromJson(Map<String, dynamic> json) => BatchesModel(
     id: json["_id"],
     name: json["name"],
-    groupId: json["groupId"] != null ? GroupId.fromJson(json["groupId"]) : null,
+    groupId: json["groupId"] == null ? null : GroupId.fromJson(json["groupId"]),
     monitorIds: List<dynamic>.from(json["monitorIds"].map((x) => x)),
     isActive: json["isActive"],
+    isDeleted: json["isDeleted"],
     createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    students: List<Student>.from(
+      json["students"].map((x) => Student.fromJson(x)),
+    ),
+    studentCount: json["studentCount"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -37,22 +51,98 @@ class BatchesModel {
     "groupId": groupId?.toJson(),
     "monitorIds": List<dynamic>.from(monitorIds.map((x) => x)),
     "isActive": isActive,
+    "isDeleted": isDeleted,
     "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "students": List<dynamic>.from(students.map((x) => x.toJson())),
+    "studentCount": studentCount,
   };
 }
 
 class GroupId {
-  String id;
-  String name;
+  final String id;
+  final String name;
+  final List<String> leaderIds;
+  final bool isActive;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  GroupId({required this.id, required this.name});
+  GroupId({
+    required this.id,
+    required this.name,
+    required this.leaderIds,
+    required this.isActive,
+    required this.isDeleted,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory GroupId.fromJson(dynamic json) {
-    if (json is String) {
-      return GroupId(id: json, name: "");
-    }
-    return GroupId(id: json["_id"] ?? "", name: json["name"] ?? "");
-  }
+  factory GroupId.fromRawJson(String str) => GroupId.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  String toRawJson() => json.encode(toJson());
+
+  factory GroupId.fromJson(Map<String, dynamic> json) => GroupId(
+    id: json["_id"],
+    name: json["name"],
+    leaderIds: List<String>.from(json["leaderIds"].map((x) => x)),
+    isActive: json["isActive"],
+    isDeleted: json["isDeleted"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "leaderIds": List<dynamic>.from(leaderIds.map((x) => x)),
+    "isActive": isActive,
+    "isDeleted": isDeleted,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
+}
+
+class Student {
+  final String id;
+  final String email;
+  final String name;
+  final String surname;
+  final String phoneNumber;
+  final String currentCity;
+  final bool isVerified;
+
+  Student({
+    required this.id,
+    required this.email,
+    required this.name,
+    required this.surname,
+    required this.phoneNumber,
+    required this.currentCity,
+    required this.isVerified,
+  });
+
+  factory Student.fromRawJson(String str) => Student.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Student.fromJson(Map<String, dynamic> json) => Student(
+    id: json["_id"],
+    email: json["email"],
+    name: json["name"],
+    surname: json["surname"],
+    phoneNumber: json["phoneNumber"],
+    currentCity: json["currentCity"],
+    isVerified: json["isVerified"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "email": email,
+    "name": name,
+    "surname": surname,
+    "phoneNumber": phoneNumber,
+    "currentCity": currentCity,
+    "isVerified": isVerified,
+  };
 }

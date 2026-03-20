@@ -1,8 +1,7 @@
 import 'package:bhutpurva_penal/app/app_pages.dart';
-import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
-import 'package:bhutpurva_penal/features/manage_batches/edit_batches/controllers/EditBatchController.dart';
+import 'package:bhutpurva_penal/features/manage_batches/edit_batches/controllers/edit_batch_controller.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
@@ -11,6 +10,7 @@ import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_from_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
+import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_multi_search_select_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -71,52 +71,9 @@ class EditBatchDesktop extends StatelessWidget {
                           if (group == null) return;
                           controller.selectedGroup.value = group;
                         },
+                        value: controller.selectedGroup.value,
                       ),
                     ),
-                    // Obx(
-                    //   () => controller.selectedGroup.value != null
-                    //       ? Padding(
-                    //           padding: const EdgeInsets.only(bottom: 8),
-                    //           child: Container(
-                    //             height: 40,
-                    //             padding: const EdgeInsets.symmetric(
-                    //               horizontal: 12,
-                    //             ),
-                    //             decoration: BoxDecoration(
-                    //               color: ColorConst.white,
-                    //               borderRadius: BorderRadius.circular(8),
-                    //               border:
-                    //                   Border.all(color: Colors.grey.shade200),
-                    //             ),
-                    //             child: Row(
-                    //               children: [
-                    //                 Expanded(
-                    //                   child: Text(
-                    //                     controller.selectedGroup.value!.name,
-                    //                     maxLines: 1,
-                    //                     overflow: TextOverflow.ellipsis,
-                    //                   ),
-                    //                 ),
-                    //                 InkWell(
-                    //                   onTap: () {
-                    //                     controller.selectedGroup.value = null;
-                    //                   },
-                    //                   borderRadius: BorderRadius.circular(6),
-                    //                   child: Padding(
-                    //                     padding: const EdgeInsets.all(6),
-                    //                     child: Icon(
-                    //                       PhosphorIconsBold.trash,
-                    //                       size: 16,
-                    //                       color: ColorConst.error,
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ),
-                    //         )
-                    //       : const SizedBox.shrink(),
-                    // ),
                   ],
                 ),
               ),
@@ -127,67 +84,23 @@ class EditBatchDesktop extends StatelessWidget {
                   title: 'Batch Students',
                   fields: [
                     Obx(
-                      () => AdminSearchSelectField<UsersDropdownModel>(
+                      () => AdminMultiSearchSelectField<UsersDropdownModel>(
                         label: 'Select Students',
                         items: controller.students
                             .map(
                               (e) => AdminDropdownItem(value: e, label: e.name),
                             )
                             .toList(),
-                        onChanged: (student) {
-                          if (student == null) return;
-
+                        selectedItems: controller.selectedStudents,
+                        onAdded: (student) {
                           if (!controller.selectedStudents.contains(student)) {
                             controller.selectedStudents.add(student);
                           }
                         },
-                      ),
-                    ),
-                    Obx(
-                      () => Column(
-                        children: controller.selectedStudents.map((student) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Container(
-                              height: 40,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: ColorConst.white,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade200),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      student.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      controller.selectedStudents.remove(
-                                        student,
-                                      );
-                                    },
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6),
-                                      child: Icon(
-                                        PhosphorIconsBold.trash,
-                                        size: 16,
-                                        color: ColorConst.error,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                        onRemoved: (student) {
+                          controller.selectedStudents.remove(student);
+                        },
+                        itemLabelBuilder: (student) => student.name,
                       ),
                     ),
                   ],

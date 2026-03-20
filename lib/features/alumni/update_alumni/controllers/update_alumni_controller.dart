@@ -215,6 +215,16 @@ class UpdateAlumniController extends BaseController {
     executeApi(
       apiCall: () async {
         // Prepare address list
+        // Todo: change type accordeing to the ui. and if extra added then the type will be one of this
+        /*
+        export const ADDRESS_TYPE = {
+    CURRENT: "current",
+    VILLAGE: "village",
+    SHOP: "shop",
+    OFFICE: "office",
+    BUSINESS: "business",
+};
+        */
 
         final List<Map<String, dynamic>> addressList = [
           {

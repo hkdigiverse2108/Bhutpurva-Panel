@@ -69,7 +69,7 @@ class BatchDetailsDesktop extends StatelessWidget {
           Widget child;
 
           if (controller.tab.value == 0) {
-            if (controller.isStudentsLoading.value) {
+            if (controller.isDevoteeLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('student_shimmer'),
                 columnWidths: [60, null, null, null, 120, 140],
@@ -80,13 +80,14 @@ class BatchDetailsDesktop extends StatelessWidget {
                 columns: const [
                   AppTableColumn(title: 'No', width: 60),
                   AppTableColumn(title: 'Name'),
+                  // AppTableColumn(title: 'Group'),
                   AppTableColumn(title: 'Mobile Number'),
                   AppTableColumn(title: 'City'),
                   AppTableColumn(title: 'Status', width: 120),
                   AppTableColumn(title: 'Actions', width: 140),
                 ],
-                rows: controller.students,
-                totalRows: controller.totalStudents,
+                rows: controller.devotees,
+                totalRows: controller.totalDevotees,
                 rowsPerPage: controller.rowsPerPage,
                 onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
@@ -94,10 +95,17 @@ class BatchDetailsDesktop extends StatelessWidget {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
-                      DataCell(Text(item.id)),
+                      DataCell(Text((index + 1).toString())),
                       DataCell(Text(item.name)),
+                      // DataCell(Text(item.groupId?.name ?? "-")),
                       DataCell(Text(item.phoneNumber)),
-                      DataCell(Text(item.addressIds.isNotEmpty ? item.addressIds.first.city : 'N/A')),
+                      DataCell(
+                        Text(
+                          item.addressIds.isNotEmpty
+                              ? item.addressIds.first.city
+                              : 'N/A',
+                        ),
+                      ),
                       DataCell(
                         Text(item.isVerified ? 'Verified' : 'Not Verified'),
                       ),
@@ -116,7 +124,7 @@ class BatchDetailsDesktop extends StatelessWidget {
               );
             }
           } else {
-            if (controller.isMonitorsLoading.value) {
+            if (controller.isLeaderLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('monitor_shimmer'),
                 columnWidths: [60, null, null, null, 120, 160],
@@ -132,8 +140,8 @@ class BatchDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Status', width: 120),
                   AppTableColumn(title: 'Actions', width: 160),
                 ],
-                rows: controller.monitors,
-                totalRows: controller.totalMonitors,
+                rows: controller.leaders,
+                totalRows: controller.totalLeaders,
                 rowsPerPage: controller.rowsPerPage,
                 onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
@@ -141,10 +149,16 @@ class BatchDetailsDesktop extends StatelessWidget {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
-                      DataCell(Text(item.id)),
+                      DataCell(Text((index + 1).toString())),
                       DataCell(Text(item.name)),
                       DataCell(Text(item.phoneNumber)),
-                      DataCell(Text(item.addressIds.isNotEmpty ? item.addressIds.first.city : 'N/A')),
+                      DataCell(
+                        Text(
+                          item.addressIds.isNotEmpty
+                              ? item.addressIds.first.city
+                              : 'N/A',
+                        ),
+                      ),
                       DataCell(
                         Text(item.isVerified ? 'Verified' : 'Not Verified'),
                       ),
@@ -173,16 +187,15 @@ class BatchDetailsDesktop extends StatelessWidget {
                                             onChanged: (value) {
                                               if (value == null) return;
 
-                                              if (!controller.selectedStudent
-                                                  .contains(value)) {
-                                                controller.selectedStudent.add(
-                                                  value,
-                                                );
+                                              if (!controller.students.contains(
+                                                value,
+                                              )) {
+                                                controller.students.add(value);
                                               }
                                             },
                                           ),
                                       onRemove: (item) {
-                                        controller.removeSelected(item);
+                                        controller.students.remove(item);
                                       },
                                       itemBuilder:
                                           (context, StudentModel item) {
@@ -239,7 +252,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                      selectedItems: controller.selectedStudent,
+                                      selectedItems: controller.students,
                                     );
                                   },
                                 );

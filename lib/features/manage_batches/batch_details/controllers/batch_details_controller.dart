@@ -1,104 +1,177 @@
+import 'dart:async';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
+import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
+import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
+import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
+import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:developer';
 
 class BatchDetailsController extends BaseController {
   static BatchDetailsController get instance => Get.find();
 
   final apiService = ApiService();
-  BatchesModel? batch;
 
-  var isStudentsLoading = false.obs;
-  var isMonitorsLoading = false.obs;
+  Rxn<BatchesModel> batchDetail = Rxn<BatchesModel>();
+  BatchesModel? get batch => batchDetail.value;
 
-  var normalRoute = true.obs;
+  RxList<StudentModel> students = RxList<StudentModel>();
+  RxList<StudentModel> devotees = RxList<StudentModel>();
+  RxList<StudentModel> leaders = RxList<StudentModel>();
 
   var tab = 0.obs;
 
-  var students = <StudentModel>[].obs;
-  var monitors = <StudentModel>[].obs;
-  var selectedStudent = <StudentModel>[].obs;
+  var isBatchLoading = false.obs;
+  var isDevoteeLoading = false.obs;
+  var isLeaderLoading = false.obs;
+  var isGroupLoading = false.obs;
 
+  //
   int rowsPerPage = 10;
-
-  int studentsPage = 1;
-  int monitorsPage = 1;
-  int totalStudents = 0;
-  int totalMonitors = 0;
+  int devoteePage = 1;
+  int leaderPage = 1;
+  int totalDevotees = 0;
+  int totalLeaders = 0;
 
   final searchController = TextEditingController();
-  var query = ''.obs;
+  var query = "".obs;
+  var groupId = "".obs;
 
-  late Worker _searchWorker;
+  Timer? _debounce;
 
   @override
   void onInit() {
     super.onInit();
-    batch = Get.arguments as BatchesModel?;
-    normalRoute.value = false;
-    _searchWorker = debounce(query, (_) {
-      if (tab.value == 0) {
-        studentsPage = 1;
-        fetchStudents();
-      } else {
-        monitorsPage = 1;
-        fetchMonitors();
-      }
-    }, time: const Duration(milliseconds: 400));
+    final args = Get.arguments;
+    final id = Get.parameters['id'];
 
-    fetchStudents();
-    fetchMonitors();
+    if (args != null && args is BatchesModel) {
+      batchDetail.value = args;
+      _initAndFetch();
+    } else if (id != null) {
+      fetchBatchDetailsById(id);
+    }
   }
 
-  void fetchStudents() {
+  void fetchBatchDetailsById(String id) {
     executeApi(
-      loadingState: isStudentsLoading,
+      loadingState: isBatchLoading,
       apiCall: () async {
-        // Placeholder for batch-specific students if endpoint exists
-        // For now, keeping it as is but prepared for real integration
-        await Future.delayed(const Duration(milliseconds: 500));
-        students.clear();
-        totalStudents = 0;
+        final ResModel response = await apiService.get(
+          ApiConstants.batchDetails(id),
+        );
+        if (response.status == 200) {
+          batchDetail.value = BatchesModel.fromJson(response.data);
+          _initAndFetch();
+        }
+      },
+      errorMessage: "Failed to load batch details",
+    );
+  }
+
+  void _initAndFetch() {
+    log("BatchDetailsController: Loading data for batch ${batch?.name}");
+    fetchDevotees();
+    fetchLeaders();
+  }
+
+  void fetchDevotees() {
+    if (batch == null) return;
+    executeApi(
+      loadingState: isDevoteeLoading,
+      apiCall: () async {
+        final res = await apiService.get(
+          ApiConstants.batchStudents(
+            batch!.id,
+            page: devoteePage,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
+        );
+        if (res.status == 200) {
+          final data = res.data['students'] ?? res.data['data'] ?? [];
+          devotees.assignAll(
+            (data as Iterable).map((e) => StudentModel.fromJson(e)).toList(),
+          );
+          totalDevotees = res.data['totalData'] ?? res.data['total'] ?? 0;
+        }
       },
     );
   }
 
-  void fetchMonitors() {
+  void fetchLeaders() {
+    if (batch == null) return;
     executeApi(
-      loadingState: isMonitorsLoading,
+      loadingState: isLeaderLoading,
       apiCall: () async {
-        await Future.delayed(const Duration(milliseconds: 500));
-        monitors.clear();
-        totalMonitors = 0;
+        final res = await apiService.get(
+          ApiConstants.batchLeaders(
+            batch!.id,
+            page: leaderPage,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
+        );
+        if (res.status == 200) {
+          final data = res.data['leaders'] ?? res.data['data'] ?? [];
+          leaders.assignAll(
+            (data as Iterable).map((e) => StudentModel.fromJson(e)).toList(),
+          );
+          totalLeaders = res.data['totalData'] ?? res.data['total'] ?? 0;
+        }
       },
     );
-  }
-
-  void onTabChange(int value) {
-    tab.value = value;
   }
 
   void onSearchChanged(String value) {
     query.value = value;
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      devoteePage = 1;
+      leaderPage = 1;
+      fetchDevotees();
+      fetchLeaders();
+    });
   }
 
   void onPageChange(int value) {
     if (tab.value == 0) {
-      studentsPage = (value ~/ rowsPerPage) + 1;
-      fetchStudents();
+      devoteePage = (value ~/ rowsPerPage) + 1;
+      fetchDevotees();
     } else {
-      monitorsPage = (value ~/ rowsPerPage) + 1;
-      fetchMonitors();
+      leaderPage = (value ~/ rowsPerPage) + 1;
+      fetchLeaders();
     }
   }
 
-  void removeSelected(StudentModel item) {
-    selectedStudent.remove(item);
-    selectedStudent.refresh();
+  @override
+  void onClose() {
+    _debounce?.cancel();
+    searchController.dispose();
+    super.onClose();
   }
 
-  void onEditStudent(StudentModel student) {}
+  void onAddDevoteeTap() {
+    Get.toNamed(AppPages.allAlumni);
+  }
+
+  void onAddLeaderTap() {
+    Get.toNamed(AppPages.allAlumni);
+  }
+
+  void onTabChanged(int value) {
+    tab.value = value;
+  }
+
+  void onEditBatchTap(dynamic batch) {
+    Get.toNamed(AppPages.editBatch, arguments: batch.id);
+  }
+
+  void onEditStudent(dynamic student) {
+    Get.toNamed(AppPages.editAlumni, arguments: student.id);
+  }
 }

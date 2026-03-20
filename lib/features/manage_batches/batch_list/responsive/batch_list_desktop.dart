@@ -61,6 +61,7 @@ class BatchListDesktop extends StatelessWidget {
           columns: const [
             AppTableColumn(title: "No", width: 60),
             AppTableColumn(title: "Name"),
+            AppTableColumn(title: "Group"),
             AppTableColumn(title: "Monitors"),
             AppTableColumn(title: "Students", width: 120),
             AppTableColumn(title: "Actions", width: 140),
@@ -79,6 +80,7 @@ class BatchListDesktop extends StatelessWidget {
                     Get.toNamed(AppPages.batchDetails);
                   },
                 ),
+                DataCell(Text(item.groupId?.name ?? "-")),
                 DataCell(Text(item.monitorIds.length.toString())),
                 DataCell(Text('0')),
                 DataCell(

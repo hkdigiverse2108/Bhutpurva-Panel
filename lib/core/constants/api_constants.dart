@@ -90,8 +90,38 @@ class ApiConstants {
 
   static String createBatch() => 'batch/create';
   static String batchDetails(String id) => 'batch/get/$id';
-  static String batchStudents(String id) => 'batch/get/$id/students';
-  static String batchLeaders(String id) => 'batch/get/$id/leaders';
+  static String batchStudents(
+    String id, {
+    int page = 1,
+    int? limit,
+    String? query,
+  }) {
+    String url = 'batch/get/$id/students?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
+  static String batchLeaders(
+    String id, {
+    int page = 1,
+    int? limit,
+    String? query,
+  }) {
+    String url = 'batch/get/$id/leaders?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
   static String batchDevotees(String id) => 'batch/get/$id/devotees';
 
   // life-light

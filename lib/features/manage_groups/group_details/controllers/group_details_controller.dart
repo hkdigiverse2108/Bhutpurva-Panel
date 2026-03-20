@@ -20,7 +20,7 @@ class GroupDetailsController extends BaseController {
   var tab = 0.obs;
 
   var isGroupLoading = false.obs;
-
+  //
   int rowsPerPage = 10;
   int batchesPage = 1;
   int leadersPage = 1;

@@ -223,7 +223,7 @@ class UpdateAlumniController extends BaseController {
     SHOP: "shop",
     OFFICE: "office",
     BUSINESS: "business",
-};
+    }
         */
 
         final List<Map<String, dynamic>> addressList = [

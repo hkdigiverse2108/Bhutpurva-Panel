@@ -176,7 +176,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                                       searchWidget:
                                           AdminSearchSelectField<StudentModel>(
                                             label: 'Student',
-                                            items: controller.students
+                                            items: controller.allAlumni
                                                 .map(
                                                   (e) => AdminDropdownItem(
                                                     value: e,
@@ -187,15 +187,16 @@ class BatchDetailsDesktop extends StatelessWidget {
                                             onChanged: (value) {
                                               if (value == null) return;
 
-                                              if (!controller.students.contains(
-                                                value,
-                                              )) {
-                                                controller.students.add(value);
+                                              if (!controller.selectedAlumni
+                                                  .contains(value)) {
+                                                controller.selectedAlumni.add(
+                                                  value,
+                                                );
                                               }
                                             },
                                           ),
                                       onRemove: (item) {
-                                        controller.students.remove(item);
+                                        controller.selectedAlumni.remove(item);
                                       },
                                       itemBuilder:
                                           (context, StudentModel item) {
@@ -252,7 +253,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                      selectedItems: controller.students,
+                                      selectedItems: controller.selectedAlumni,
                                     );
                                   },
                                 );

@@ -56,45 +56,44 @@ class AccountTab extends StatelessWidget {
                     ),
                   ),
                   const Gap(16),
-                  Expanded(
-                    flex: isMobile ? 0 : 1,
-                    child: Column(
-                      crossAxisAlignment: isMobile
-                          ? CrossAxisAlignment.center
-                          : CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: isMobile
-                              ? MainAxisAlignment.center
-                              : MainAxisAlignment.start,
-                          children: [
-                            TableActionButton(
-                              onTap: () {},
-                              label: 'Update Image',
-                              icon: PhosphorIconsRegular.pencil,
-                              color: ColorConst.primary,
-                            ),
-                            const Gap(16),
-                            TableActionButton(
-                              onTap: () {},
-                              label: 'Remove',
-                              icon: PhosphorIconsRegular.trash,
-                              color: ColorConst.error,
-                            ),
-                          ],
-                        ),
-                        const Gap(10),
-                        Text(
+                  Column(
+                    crossAxisAlignment: isMobile
+                        ? CrossAxisAlignment.center
+                        : CrossAxisAlignment.start,
+                    children: [
+                      Flex(
+                        direction: isMobile ? Axis.vertical : Axis.horizontal,
+                        children: [
+                          TableActionButton(
+                            onTap: () =>
+                                controller.usersProfileImage.value = '',
+                            label: 'Update Image',
+                            icon: PhosphorIconsRegular.pencil,
+                            color: ColorConst.primary,
+                          ),
+                          Gap(isMobile ? 10 : 16),
+                          TableActionButton(
+                            onTap: () {
+                              controller.usersProfileImage.value = '';
+                            },
+                            label: 'Remove',
+                            icon: PhosphorIconsRegular.trash,
+                            color: ColorConst.error,
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
                           "Images should be at least 400 x 400px as a png or jpeg file.",
                           textAlign: isMobile
                               ? TextAlign.center
                               : TextAlign.start,
                           style: const TextStyle(fontSize: 12),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),

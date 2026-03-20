@@ -3,7 +3,6 @@ import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
-import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
@@ -19,9 +18,10 @@ class BatchDetailsController extends BaseController {
   Rxn<BatchesModel> batchDetail = Rxn<BatchesModel>();
   BatchesModel? get batch => batchDetail.value;
 
-  RxList<StudentModel> students = RxList<StudentModel>();
   RxList<StudentModel> devotees = RxList<StudentModel>();
   RxList<StudentModel> leaders = RxList<StudentModel>();
+  RxList<StudentModel> allAlumni = RxList<StudentModel>();
+  RxList<StudentModel> selectedAlumni = RxList<StudentModel>();
 
   var tab = 0.obs;
 
@@ -49,9 +49,13 @@ class BatchDetailsController extends BaseController {
     final args = Get.arguments;
     final id = Get.parameters['id'];
 
-    if (args != null && args is BatchesModel) {
-      batchDetail.value = args;
-      _initAndFetch();
+    if (args != null) {
+      if (args is BatchesModel) {
+        batchDetail.value = args;
+        _initAndFetch();
+      } else if (args is String) {
+        fetchBatchDetailsById(args);
+      }
     } else if (id != null) {
       fetchBatchDetailsById(id);
     }
@@ -77,6 +81,7 @@ class BatchDetailsController extends BaseController {
     log("BatchDetailsController: Loading data for batch ${batch?.name}");
     fetchDevotees();
     fetchLeaders();
+    fetchAllAlumni();
   }
 
   void fetchDevotees() {
@@ -135,7 +140,22 @@ class BatchDetailsController extends BaseController {
       leaderPage = 1;
       fetchDevotees();
       fetchLeaders();
+      fetchAllAlumni();
     });
+  }
+
+  void fetchAllAlumni() {
+    executeApi(
+      apiCall: () async {
+        final res = await apiService.get(ApiConstants.batchStudents(batch!.id));
+        if (res.status == 200) {
+          final data = res.data['users'] ?? res.data['data'] ?? [];
+          allAlumni.assignAll(
+            (data as Iterable).map((e) => StudentModel.fromJson(e)).toList(),
+          );
+        }
+      },
+    );
   }
 
   void onPageChange(int value) {

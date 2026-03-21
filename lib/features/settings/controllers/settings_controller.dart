@@ -25,12 +25,12 @@ class SettingsController extends BaseController {
   final legalityData = Rxn<LegalityModel>();
   final legalityId = ''.obs;
 
-  final usersData = Rxn<UserModel>();
+  final usersData = <UserModel>[].obs;
   final usersId = ''.obs;
   final usersName = ''.obs;
   final usersEmail = ''.obs;
   final usersPhone = ''.obs;
-  final usersAddress = ''.obs;
+  final usersCurrentCity = ''.obs;
   final usersProfileImage = ''.obs;
 
   // Profile fields (linked to UserModel)
@@ -150,14 +150,11 @@ class SettingsController extends BaseController {
         log("User Details API Response: ${res.data}");
         if (res.status == 200) {
           final model = UserModel.fromJson(res.data);
-          usersData.value = model;
           usersId.value = model.id;
           usersName.value = model.name;
           usersEmail.value = model.email;
           usersPhone.value = model.phoneNumber;
-          usersAddress.value = model.addressIds.isNotEmpty
-              ? model.addressIds.first.address
-              : '';
+          usersCurrentCity.value = model.currentCity;
           usersProfileImage.value = model.image ?? '';
 
           _populateUserControllers(model);
@@ -336,16 +333,13 @@ class SettingsController extends BaseController {
       loadingState: isSettingsUpdateLoading,
       apiCall: () async {
         final body = {
-          'id': settingId.value,
           'appName': appNameController.text,
           'webSiteUrl': webSiteUrlController.text,
-          'appUrl': appUrlController.text,
           'playStoreUrl': playStoreUrlController.text,
           'appStoreUrl': appStoreUrlController.text,
           'playStoreId': playStoreIdController.text,
           'appStoreId': appStoreIdController.text,
           'sgsiPdf': sgsiPdfController.text,
-          'aboutApp': aboutAppController.text,
           'address': organizationAddressController.text,
         };
         log("Updating App Settings with body: $body");
@@ -377,7 +371,7 @@ class SettingsController extends BaseController {
         log("Updating Policies with body: $body");
 
         final res = await apiService.post(
-          ApiConstants.updateSettings,
+          ApiConstants.updateLegality,
           body: body,
         );
         log("Update Policy Response: ${res.data}");
@@ -396,17 +390,14 @@ class SettingsController extends BaseController {
       loadingState: isSettingsUpdateLoading,
       apiCall: () async {
         final body = {
-          "image": usersProfileImage.value,
+          "userId": userId,
           "name": nameController.text,
           "phoneNumber": phoneController.text,
           "email": emailController.text,
         };
         log("Updating Account with body: $body");
 
-        final res = await apiService.put(
-          ApiConstants.userDetails(userId),
-          body: body,
-        );
+        final res = await apiService.put(ApiConstants.updateUser, body: body);
         log("Update Account Response: ${res.data}");
 
         if (res.status == 200) {

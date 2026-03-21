@@ -29,6 +29,7 @@ class ApiConstants {
 
   // users
   static String userDetails(String id) => 'user/get/$id';
+  static const updateUser = 'user/update';
   static String usersDropdown({String? roleFilter}) {
     String url = 'user/dropdown';
     if (roleFilter != null && roleFilter.isNotEmpty) {
@@ -180,4 +181,8 @@ class ApiConstants {
   // settings
   static String settings = 'setting/get';
   static String updateSettings = 'setting/add-update';
+
+  // legality
+  static String legality = 'legality/get';
+  static String updateLegality = 'legality/add-update';
 }

@@ -1,5 +1,6 @@
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/device/device_utility.dart';
 import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -56,8 +57,8 @@ class PolicyTab extends StatelessWidget {
             () => Padding(
               padding: const EdgeInsets.all(10),
               child: controller.selectedPolicy.value == PolicyType.privacy
-                  ? _privacyPolicy()
-                  : _activistPolicy(),
+                  ? _privacyPolicy(context)
+                  : _activistPolicy(context),
             ),
           ),
         ],
@@ -96,7 +97,7 @@ class PolicyTab extends StatelessWidget {
     );
   }
 
-  Widget _privacyPolicy() {
+  Widget _privacyPolicy(BuildContext context) {
     final controller = SettingsController.instance;
 
     return Column(
@@ -138,9 +139,12 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
         Align(
-          alignment: Alignment.centerRight,
+          alignment:
+              DeviceUtility.isMobileScreen(context)
+                  ? Alignment.center
+                  : Alignment.centerRight,
           child: SizedBox(
-            width: 200,
+            width: DeviceUtility.isMobileScreen(context) ? double.infinity : 200,
             child: ElevatedButton(
               onPressed: controller.updatePolicy,
               child: const Text('Update'),
@@ -151,7 +155,7 @@ class PolicyTab extends StatelessWidget {
     );
   }
 
-  Widget _activistPolicy() {
+  Widget _activistPolicy(BuildContext context) {
     final controller = SettingsController.instance;
 
     return Column(
@@ -193,9 +197,12 @@ class PolicyTab extends StatelessWidget {
         ),
         const Gap(8),
         Align(
-          alignment: Alignment.centerRight,
+          alignment:
+              DeviceUtility.isMobileScreen(context)
+                  ? Alignment.center
+                  : Alignment.centerRight,
           child: SizedBox(
-            width: 200,
+            width: DeviceUtility.isMobileScreen(context) ? double.infinity : 200,
             child: ElevatedButton(
               onPressed: controller.updatePolicy,
               child: const Text('Update'),

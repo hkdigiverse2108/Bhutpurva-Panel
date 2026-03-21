@@ -101,7 +101,7 @@ class Sidebar extends StatelessWidget {
               AdminMenuItem(
                 route: AppPages.branches,
                 title: 'Branches',
-                icon: Iconsax.location,
+                icon: Iconsax.building,
               ),
               AdminMenuItem(
                 route: AppPages.location,

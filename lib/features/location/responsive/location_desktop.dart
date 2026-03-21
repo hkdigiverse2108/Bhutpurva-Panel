@@ -63,6 +63,13 @@ class LocationDesktop extends GetView<LocationController> {
                   Row(
                     children: [
                       tableActionIconButton(
+                        icon: Iconsax.edit,
+                        onTap: () {
+                          // controller.editLocation(item.id);
+                        },
+                        color: Colors.blue,
+                      ),
+                      tableActionIconButton(
                         icon: Iconsax.trash,
                         onTap: () {
                           controller.deleteLocation(item.id);

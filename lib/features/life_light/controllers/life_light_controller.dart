@@ -66,6 +66,22 @@ class LifeLightController extends BaseController {
     fetchLifeLight();
   }
 
+  void deleteLifeLight(String id) {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.delete(
+          ApiConstants.deleteLifeLight(id),
+          body: {"id": id},
+        );
+        if (res.status == 200) {
+          lifeLight.removeWhere((element) => element.id == id);
+          total--;
+        }
+      },
+      errorMessage: "Failed to delete life light data",
+    );
+  }
+
   @override
   void onClose() {
     super.onClose();

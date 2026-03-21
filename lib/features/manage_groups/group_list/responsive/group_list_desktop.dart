@@ -15,6 +15,7 @@ import 'package:bhutpurva_penal/shared/widgets/tables/app_table_shimmer.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class GroupListDesktop extends StatelessWidget {
   const GroupListDesktop({super.key});
@@ -157,9 +158,11 @@ class GroupListDesktop extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         tableActionIconButton(
-                          icon: Icons.delete,
+                          icon: Iconsax.trash,
                           color: Colors.red,
-                          onTap: () {},
+                          onTap: () {
+                            controller.deleteGroup(group.id);
+                          },
                         ),
                       ],
                     ),

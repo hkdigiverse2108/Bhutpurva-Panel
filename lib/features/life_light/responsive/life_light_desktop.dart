@@ -73,7 +73,9 @@ class LifeLightDesktop extends GetView<LifeLightController> {
                     children: [
                       tableActionIconButton(
                         icon: Iconsax.trash,
-                        onTap: () {},
+                        onTap: () {
+                          controller.deleteLifeLight(item.id);
+                        },
                         color: Colors.red,
                       ),
                     ],

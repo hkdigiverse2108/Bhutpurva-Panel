@@ -64,6 +64,21 @@ class BatchListController extends BaseController {
     );
   }
 
+  void deleteBatch(String batchId) {
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.delete(
+          ApiConstants.deleteBatch(batchId),
+        );
+        if (response.status == 200) {
+          batches.removeWhere((element) => element.id == batchId);
+          batches.refresh();
+        }
+      },
+      errorMessage: "Failed to delete batch",
+    );
+  }
+
   void onSearchChanged(String value) {
     query.value = value;
   }

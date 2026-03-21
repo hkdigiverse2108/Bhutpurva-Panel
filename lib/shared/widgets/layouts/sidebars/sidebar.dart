@@ -99,6 +99,16 @@ class Sidebar extends StatelessWidget {
                 icon: Iconsax.path,
               ),
               AdminMenuItem(
+                route: AppPages.branches,
+                title: 'Branches',
+                icon: Iconsax.location,
+              ),
+              AdminMenuItem(
+                route: AppPages.location,
+                title: 'Location',
+                icon: Iconsax.location,
+              ),
+              AdminMenuItem(
                 route: AppPages.calender,
                 title: 'Calender',
                 icon: Iconsax.calendar,

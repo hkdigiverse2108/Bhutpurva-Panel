@@ -105,7 +105,9 @@ class BatchListMobile extends StatelessWidget {
                       tableActionIconButton(
                         icon: Iconsax.trash,
                         color: Colors.red,
-                        onTap: () {},
+                        onTap: () {
+                          controller.deleteBatch(item.id);
+                        },
                       ),
                     ],
                   ),

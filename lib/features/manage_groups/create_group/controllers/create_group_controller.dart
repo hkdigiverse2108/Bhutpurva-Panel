@@ -54,7 +54,9 @@ class CreateGroupController extends BaseController {
     executeApi(
       loadingState: isBatchesLoading,
       apiCall: () async {
-        final ResModel response = await apiService.get(ApiConstants.batches());
+        final ResModel response = await apiService.get(
+          ApiConstants.dropdownBatches(),
+        );
         if (response.status == 200) {
           final batchList =
               response.data['batch'] ??

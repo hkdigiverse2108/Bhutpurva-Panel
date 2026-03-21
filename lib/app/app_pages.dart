@@ -24,6 +24,12 @@ class AppPages {
   // anubhuti
   static const String anubhuti = '/anubhuti';
 
+  // branches
+  static const String branches = '/branches';
+
+  // location
+  static const String location = '/location';
+
   // calender
   static const String calender = '/calender';
 

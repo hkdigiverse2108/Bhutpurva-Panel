@@ -92,6 +92,14 @@ class ApiConstants {
     return url;
   }
 
+  static String dropdownBatches({String? query}) {
+    String url = 'batch/dropdown';
+    if (query != null && query.isNotEmpty) {
+      url += '?search=$query';
+    }
+    return url;
+  }
+
   static String createBatch() => 'batch/create';
   static String updateBatch() => 'batch/update';
   static String batchDetails(String id) => 'batch/get/$id';
@@ -157,4 +165,50 @@ class ApiConstants {
   // legality
   static String legality = 'legality/get';
   static String updateLegality = 'legality/add-update';
+
+  //location
+  static String locations({int page = 1, int? limit, String? query}) {
+    String url = 'location/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
+  static String deleteLocation(String id) => 'location/delete/$id';
+  static String updateLocation() => 'location/update';
+  static String createLocation() => 'location/add';
+  static String dropdownLocation({String? query}) {
+    String url = 'location/dropdown';
+    if (query != null && query.isNotEmpty) {
+      url += '?search=$query';
+    }
+    return url;
+  }
+
+  //branches
+  static String branches({int page = 1, int? limit, String? query}) {
+    String url = 'branch/get?page=$page';
+    if (limit != null && limit.toString().isNotEmpty) {
+      url += '&limit=$limit';
+    }
+    if (query != null && query.isNotEmpty) {
+      url += '&search=$query';
+    }
+    return url;
+  }
+
+  static String deleteBranch(String id) => 'branch/delete/$id';
+  static String updateBranch() => 'branch/update';
+  static String createBranch() => 'branch/add';
+  static String dropdownBranch({String? query}) {
+    String url = 'branch/dropdown';
+    if (query != null && query.isNotEmpty) {
+      url += '?search=$query';
+    }
+    return url;
+  }
 }

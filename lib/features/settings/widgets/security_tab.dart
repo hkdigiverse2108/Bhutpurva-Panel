@@ -1,3 +1,4 @@
+import 'package:bhutpurva_penal/core/device/device_utility.dart';
 import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/outer_label_text_field.dart';
@@ -13,13 +14,15 @@ class SecurityTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = SettingsController.instance;
+    final bool isMobile = DeviceUtility.isMobileScreen(context);
+
     return Form(
       key: controller.securityFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 550,
+            width: isMobile ? double.infinity : 550,
             child: Obx(
               () => AdminFormSectionCard(
                 title: "Change Password",
@@ -75,10 +78,13 @@ class SecurityTab extends StatelessWidget {
                       },
                     ),
                   ),
-                  Gap(1),
-                  ElevatedButton(
-                    onPressed: controller.updatePassword,
-                    child: const Text('Change Password'),
+                  const Gap(16),
+                  SizedBox(
+                    width: isMobile ? double.infinity : 150,
+                    child: ElevatedButton(
+                      onPressed: controller.updatePassword,
+                      child: const Text('Change Password'),
+                    ),
                   ),
                 ],
               ),

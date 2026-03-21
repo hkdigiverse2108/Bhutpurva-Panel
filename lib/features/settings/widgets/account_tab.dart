@@ -126,9 +126,11 @@ class AccountTab extends StatelessWidget {
                   keyboardType: TextInputType.emailAddress,
                 ),
                 _buildTextField(
-                  label: 'Address',
-                  hint: 'Enter Address',
-                  controller: controller.addressController,
+                  label: 'City',
+                  hint: 'Enter City',
+                  controller: TextEditingController(
+                    text: controller.usersCurrentCity.value,
+                  ),
                   icon: PhosphorIconsBold.mapPin,
                 ),
               ]),

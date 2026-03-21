@@ -204,9 +204,7 @@ class SettingsController extends BaseController {
     nameController.text = model.name;
     phoneController.text = model.phoneNumber;
     emailController.text = model.email;
-    addressController.text = model.addressIds.isNotEmpty
-        ? model.addressIds.first.address
-        : '';
+    usersCurrentCity.value = model.currentCity;
   }
 
   void updateSettings() {
@@ -421,7 +419,6 @@ class SettingsController extends BaseController {
     nameController.dispose();
     phoneController.dispose();
     emailController.dispose();
-    addressController.dispose();
     appNameController.dispose();
     webSiteUrlController.dispose();
     appUrlController.dispose();

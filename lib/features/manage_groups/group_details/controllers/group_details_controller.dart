@@ -61,6 +61,24 @@ class GroupDetailsController extends BaseController {
     );
   }
 
+  void deleteGroup() {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.delete(
+          ApiConstants.deleteGroup(group?.id ?? ""),
+          body: {"id": group?.id},
+        );
+        if (res.status == 200) {
+          groupDetail.value?.batches.removeWhere(
+            (element) => element.id == group?.id,
+          );
+          groupDetail.refresh();
+        }
+      },
+      errorMessage: "Failed to delete group",
+    );
+  }
+
   void _initAndFetch() {
     log("GroupDetailsController: Loading data for group ${group?.name}");
   }

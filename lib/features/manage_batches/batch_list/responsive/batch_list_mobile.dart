@@ -15,6 +15,7 @@ import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.da
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class BatchListMobile extends StatelessWidget {
   const BatchListMobile({super.key});
@@ -102,7 +103,7 @@ class BatchListMobile extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       tableActionIconButton(
-                        icon: Icons.delete,
+                        icon: Iconsax.trash,
                         color: Colors.red,
                         onTap: () {},
                       ),

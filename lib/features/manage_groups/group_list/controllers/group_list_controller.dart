@@ -68,6 +68,22 @@ class GroupListController extends BaseController {
     );
   }
 
+  void deleteGroup(String id) {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.delete(
+          ApiConstants.deleteGroup(id),
+          body: {"id": id},
+        );
+        if (res.status == 200) {
+          groups.removeWhere((element) => element.id == id);
+          total--;
+        }
+      },
+      errorMessage: "Failed to delete group",
+    );
+  }
+
   void onSearchChanged(String value) {
     query.value = value;
   }

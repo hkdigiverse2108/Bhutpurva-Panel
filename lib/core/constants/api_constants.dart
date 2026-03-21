@@ -27,6 +27,8 @@ class ApiConstants {
     return url;
   }
 
+  static String deleteGroup(String id) => 'group/delete/$id';
+
   // users
   static String userDetails(String id) => 'user/get/$id';
   static const updateUser = 'user/update';
@@ -105,6 +107,8 @@ class ApiConstants {
     }
     return url;
   }
+
+  static String deleteLifeLight(String id) => 'lifeLight/delete/$id';
 
   // anubhuti
   static String anubhuti({int page = 1, int? limit, String? query}) {

@@ -16,6 +16,7 @@ import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.da
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class GroupListMobile extends StatelessWidget {
   const GroupListMobile({super.key});
@@ -147,9 +148,11 @@ class GroupListMobile extends StatelessWidget {
                         tableActionIconButton(icon: Icons.edit, onTap: () {}),
                         const SizedBox(width: 6),
                         tableActionIconButton(
-                          icon: Icons.delete,
+                          icon: Iconsax.trash,
                           color: Colors.red,
-                          onTap: () {},
+                          onTap: () {
+                            controller.deleteGroup(group.id);
+                          },
                         ),
                       ],
                     ),

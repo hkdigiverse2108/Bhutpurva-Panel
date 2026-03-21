@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/features/alumni/all_alumni/controllers/all_alumni_controller.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:flutter/material.dart';
@@ -243,11 +244,12 @@ class UpdateAlumniController extends BaseController {
             "state": villageStateController.text,
             "country": villageCountry.value,
             "pincode": villagePincodeController.text,
-            "type": "permanent",
+            "type": "village",
           },
         ];
 
         final body = {
+          "userId": id,
           "name": nameController.text,
           "fatherName": fatherNameController.text,
           "surname": surnameController.text,
@@ -259,12 +261,11 @@ class UpdateAlumniController extends BaseController {
           "role": role.value,
           "currentCity": currentCity.value,
           "professions": professions.toList(),
-          "educations": educations.toList(),
+          "education": educations.toList(),
           "maritalStatus": maritalStatus.value,
           "bloodGroup": bloodGroup.value,
           "occupation": occupationController.text,
           "class10": {
-            "_id": class10Id,
             "isStudded": isClass10StudiedInGurukul.value,
             "branch": class10Branch.value,
             "passingYear": class10PassingYear.value,
@@ -273,7 +274,6 @@ class UpdateAlumniController extends BaseController {
             "class": "10",
           },
           "class12": {
-            "_id": class12Id,
             "isStudded": isClass12StudiedInGurukul.value,
             "branch": class12Branch.value,
             "passingYear": class12PassingYear.value,
@@ -281,7 +281,7 @@ class UpdateAlumniController extends BaseController {
             "hostel": isClass12Hostel.value,
             "class": "12",
           },
-          "addressIds": addressList,
+          // "addresses": addressList,
         };
 
         if (birthDateController.text.isNotEmpty) {
@@ -296,11 +296,12 @@ class UpdateAlumniController extends BaseController {
         }
 
         final ResModel res = await apiService.put(
-          ApiConstants.userDetails(id),
+          ApiConstants.updateUser,
           body: body,
         );
 
         if (res.status == 200) {
+          AllAlumniController.instance.fetchAlumni();
           Get.back();
           Get.snackbar("Success", "Profile updated successfully");
         }

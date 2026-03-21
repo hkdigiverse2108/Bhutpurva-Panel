@@ -50,6 +50,7 @@ class BatchDetailsController extends BaseController {
     batchDetail.value = Get.arguments;
     id = batchDetail.value!.id;
     fetchBatchDetailsById(id);
+    // fetchAllAlumni();
   }
 
   void fetchBatchDetailsById(String id) {
@@ -60,7 +61,19 @@ class BatchDetailsController extends BaseController {
           ApiConstants.batchDetails(id),
         );
         if (response.status == 200) {
-          batchDetail.value = BatchesModel.fromJson(response.data);
+          final model = BatchesModel.fromJson(response.data);
+          batchDetail.value = model;
+
+          // Populate lists
+          devotees.assignAll(
+            model.students.map((e) => StudentModel.fromJson(e.toJson())),
+          );
+
+          if (model.monitorIds.isNotEmpty && model.monitorIds.first is Map) {
+            monitors.assignAll(
+              model.monitorIds.map((e) => StudentModel.fromJson(e)),
+            );
+          }
         }
       },
       errorMessage: "Failed to load batch details",
@@ -122,5 +135,21 @@ class BatchDetailsController extends BaseController {
 
   void onEditStudent(dynamic student) {
     Get.toNamed(AppPages.editAlumni, arguments: student.id);
+  }
+
+  void fetchAllAlumni() {
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.get(
+          ApiConstants.alumni(limit: 100),
+        );
+        if (response.status == 200) {
+          final List<dynamic> data =
+              response.data['users'] ?? response.data['data'] ?? [];
+          allAlumni.assignAll(data.map((e) => StudentModel.fromJson(e)));
+        }
+      },
+      showSnackbarOnError: false,
+    );
   }
 }

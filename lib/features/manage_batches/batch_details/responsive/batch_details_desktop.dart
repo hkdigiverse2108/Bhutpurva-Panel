@@ -29,13 +29,15 @@ class BatchDetailsDesktop extends StatelessWidget {
     final controller = BatchDetailsController.instance;
     return Scaffold(
       body: AdminTablePageLayout(
-        header: BreadcrumbWithHeading(
-          heading: '${controller.batch?.name ?? "Batch"} Details',
-          returnToPreviousScreen: true,
-          breadcrumbsItems: [
-            BreadcrumbItem(title: 'Batches', route: AppPages.manageBatches),
-            BreadcrumbItem(title: 'Batch Details'),
-          ],
+        header: Obx(
+          () => BreadcrumbWithHeading(
+            heading: '${controller.batch?.name ?? "Batch"} Details',
+            returnToPreviousScreen: true,
+            breadcrumbsItems: [
+              BreadcrumbItem(title: 'Batches', route: AppPages.manageBatches),
+              BreadcrumbItem(title: 'Batch Details'),
+            ],
+          ),
         ),
         toolbar: AdminTableToolbar(
           search: TableSearchField(
@@ -57,7 +59,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                   : TableActionButton(
                       onTap: () {
                         controller.tab.value = 0;
-                      },  
+                      },
                       label: 'All Students',
                       icon: PhosphorIconsBold.users,
                       color: ColorConst.primary,
@@ -69,7 +71,7 @@ class BatchDetailsDesktop extends StatelessWidget {
           Widget child;
 
           if (controller.tab.value == 0) {
-            if (controller.isDevoteeLoading.value) {
+            if (controller.isBatchLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('student_shimmer'),
                 columnWidths: [60, null, null, null, 120, 140],
@@ -124,7 +126,7 @@ class BatchDetailsDesktop extends StatelessWidget {
               );
             }
           } else {
-            if (controller.isLeaderLoading.value) {
+            if (controller.isBatchLoading.value) {
               child = const AppTableShimmer(
                 key: ValueKey('monitor_shimmer'),
                 columnWidths: [60, null, null, null, 120, 160],
@@ -173,28 +175,32 @@ class BatchDetailsDesktop extends StatelessWidget {
                                   builder: (_) {
                                     return SmartSelectionDialog<StudentModel>(
                                       title: 'Assign Members',
-                                      searchWidget:
-                                          AdminSearchSelectField<StudentModel>(
-                                            label: 'Student',
-                                            items: controller.allAlumni
-                                                .map(
-                                                  (e) => AdminDropdownItem(
-                                                    value: e,
-                                                    label: e.name,
-                                                  ),
-                                                )
-                                                .toList(),
-                                            onChanged: (value) {
-                                              if (value == null) return;
+                                      searchWidget: Obx(
+                                        () =>
+                                            AdminSearchSelectField<
+                                              StudentModel
+                                            >(
+                                              label: 'Student',
+                                              items: controller.allAlumni
+                                                  .map(
+                                                    (e) => AdminDropdownItem(
+                                                      value: e,
+                                                      label: e.name,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                if (value == null) return;
 
-                                              if (!controller.selectedAlumni
-                                                  .contains(value)) {
-                                                controller.selectedAlumni.add(
-                                                  value,
-                                                );
-                                              }
-                                            },
-                                          ),
+                                                if (!controller.selectedAlumni
+                                                    .contains(value)) {
+                                                  controller.selectedAlumni.add(
+                                                    value,
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                      ),
                                       onRemove: (item) {
                                         controller.selectedAlumni.remove(item);
                                       },

@@ -41,57 +41,86 @@ class AppPaginatedTable<T> extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: PaginatedDataTable2(
-        empty: !isLoading
-            ? AppTableEmpty(
-                message: "No records found",
-                onAdd: onAdd,
-                onRefresh: onRefresh,
-              )
-            : null,
-        minWidth: 900,
-        columnSpacing: 20,
-        horizontalMargin: 16,
-        dataRowHeight: 56,
-        headingRowHeight: 50,
-        dividerThickness: 0.1,
-        renderEmptyRowsInTheEnd: false,
-        rowsPerPage: rowsPerPage,
-        autoRowsToHeight: true,
-        showCheckboxColumn: checkboxColumn,
-        headingRowColor: WidgetStateProperty.all(Colors.grey.shade50),
-        headingTextStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-          color: Colors.black87,
-        ),
-        columns: columns
-            .map(
-              (c) => DataColumn2(
-                fixedWidth: c.width,
-                label: Text(
-                  c.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
-                  ),
+      clipBehavior: Clip.antiAlias, // Ensure content respects border radius
+      child: Column(
+        children: [
+          // Loading Indicator at the top
+          if (isLoading)
+            const LinearProgressIndicator(
+              minHeight: 2,
+              backgroundColor: Colors.transparent,
+            )
+          else
+            const SizedBox(height: 2),
+
+          Expanded(
+            child: PaginatedDataTable2(
+              empty: !isLoading
+                  ? AppTableEmpty(
+                      message: "No records found",
+                      onAdd: onAdd,
+                      onRefresh: onRefresh,
+                    )
+                  : null,
+              minWidth: 900,
+              columnSpacing: 20,
+              horizontalMargin: 16,
+              dataRowHeight: 56,
+              headingRowHeight: 50,
+              dividerThickness: 0.1,
+              renderEmptyRowsInTheEnd: false,
+              rowsPerPage: rowsPerPage,
+              autoRowsToHeight: true,
+              showCheckboxColumn: checkboxColumn,
+              headingRowColor: WidgetStateProperty.all(Colors.grey.shade50),
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                color: Colors.black87,
+              ),
+              headingRowDecoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                border: Border.all(color: Colors.grey.shade200),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
               ),
-            )
-            .toList(),
-        source: _TableSource<T>(
-          data: rows,
-          rowBuilder: rowBuilder,
-          totalCount: totalRows ?? rows.length,
-          rowsPerPage: rowsPerPage,
-        ),
-        onPageChanged: onPageChanged,
+              columns: columns
+                  .map(
+                    (c) => DataColumn2(
+                      fixedWidth: c.width,
+                      onSort: c.sortable ? (i, a) {} : null,
+                      label: SizedBox(
+                        width: c.width,
+                        child: Text(
+                          c.title,
+                          textAlign: c.textAlign,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              source: _TableSource<T>(
+                data: rows,
+                rowBuilder: rowBuilder,
+                totalCount: totalRows ?? rows.length,
+                rowsPerPage: rowsPerPage,
+              ),
+              onPageChanged: onPageChanged,
+            ),
+          ),
+        ],
       ),
     );
   }

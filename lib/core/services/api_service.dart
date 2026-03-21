@@ -10,21 +10,47 @@ import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:logger/logger.dart';
 
 class ApiService extends GetxService {
+  final http.Client _client;
+  final Connectivity _connectivity;
+  final GetStorage _storage;
+  final String? Function() _tokenProvider;
+  final VoidCallback? onUnauthorized;
+
+  ApiService({
+    http.Client? client,
+    Connectivity? connectivity,
+    GetStorage? storage,
+    String? Function()? tokenProvider,
+    this.onUnauthorized,
+  }) : _client = client ?? http.Client(),
+       _connectivity = connectivity ?? Connectivity(),
+       _storage = storage ?? GetStorage(),
+       _tokenProvider = tokenProvider ?? (() => StorageService.instance.token);
+
   // Singleton
   static ApiService get to => Get.find<ApiService>();
 
-  String? _getToken() => StorageService.instance.token;
+  final Logger _logger = Logger(
+    printer: PrettyPrinter(
+      methodCount: 0,
+      errorMethodCount: 5,
+      lineLength: 80,
+      colors: true,
+      printEmojis: true,
+    ),
+  );
 
-  final GetStorage _storage = GetStorage();
+  String? _getToken() => _tokenProvider();
 
   // BASE URL
   final String baseUrl = ApiConstants.baseUrl; // set your API base here
 
   // Check internet connectivity
   Future<bool> hasConnection() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
+    var connectivityResult = await _connectivity.checkConnectivity();
     if (connectivityResult.contains(ConnectivityResult.none)) {
       return false;
     }
@@ -45,17 +71,19 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    log(token.toString());
+    _logger.d("Token: $token");
     if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
+    _logger.i("GET Request: $url");
 
     try {
-      final response = await http.get(url, headers: headers);
+      final response = await _client.get(url, headers: headers);
       return _handleResponse(response);
     } on ApiException {
       rethrow;
     } catch (e) {
+      _logger.e("GET error: $e");
       throw Exception("GET error: $e");
     }
   }
@@ -74,10 +102,12 @@ class ApiService extends GetxService {
 
     Uri url = Uri.parse('$baseUrl$endpoint');
 
+    _logger.i("POST Request: $url");
     log(url.toString());
+    _logger.d("Body: $body");
 
     try {
-      final response = await http
+      final response = await _client
           .post(
             url,
             headers: {'Content-Type': 'application/json', ...headers},
@@ -94,7 +124,7 @@ class ApiService extends GetxService {
     } on ApiException {
       rethrow;
     } catch (e) {
-      log(e.toString());
+      _logger.e("POST error: $e");
       throw Exception("Something went wrong");
     }
   }
@@ -112,8 +142,10 @@ class ApiService extends GetxService {
     if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
+    _logger.i("PUT Request: $url");
+    _logger.d("Body: $body");
     try {
-      final response = await http.put(
+      final response = await _client.put(
         url,
         headers: {'Content-Type': 'application/json', ...headers},
         body: jsonEncode(body),
@@ -122,6 +154,7 @@ class ApiService extends GetxService {
     } on ApiException {
       rethrow;
     } catch (e) {
+      _logger.e("PUT error: $e");
       throw Exception("PUT error: $e");
     }
   }
@@ -174,8 +207,9 @@ class ApiService extends GetxService {
     if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
+    _logger.i("DELETE Request: $url");
     try {
-      final response = await http.delete(
+      final response = await _client.delete(
         url,
         headers: {'Content-Type': 'application/json', ...headers},
         body: jsonEncode(body),
@@ -184,21 +218,32 @@ class ApiService extends GetxService {
     } on ApiException {
       rethrow;
     } catch (e) {
+      _logger.e("DELETE error: $e");
       throw Exception("Please try again later");
     }
   }
 
   // Response handler
   dynamic _handleResponse(http.Response response) {
-    log(response.body);
+    _logger.d(
+      "Response [${response.statusCode}] from ${response.request?.url}",
+    );
+    _logger.v("Response Body: ${response.body}");
+
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final body = jsonDecode(response.body);
       return ResModel.fromJson(body);
     } else if (response.statusCode == 410) {
-      StorageService.instance.clearSession();
-      Get.offAllNamed(AppPages.login);
+      _logger.w("Token expired. Clearing session.");
+      if (onUnauthorized != null) {
+        onUnauthorized!();
+      } else {
+        StorageService.instance.clearSession();
+        Get.offAllNamed(AppPages.login);
+      }
       throw Exception("Token expired");
     } else {
+      _logger.e("API Error: ${response.statusCode} - ${response.body}");
       final body = jsonDecode(response.body);
       final resModel = ResModel.fromJson(body);
       throw ApiException(resModel.message ?? 'Unknown error');

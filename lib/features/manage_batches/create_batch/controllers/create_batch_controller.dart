@@ -4,6 +4,7 @@ import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/features/manage_batches/batch_list/controllers/batch_list_controller.dart';
 import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
@@ -88,6 +89,7 @@ class CreateBatchController extends BaseController {
         );
 
         if (response.status == 200) {
+          BatchListController.instance.fetchBatches();
           Get.back();
         }
       },

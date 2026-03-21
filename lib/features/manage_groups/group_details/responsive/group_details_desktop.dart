@@ -172,12 +172,8 @@ class GroupDetailsDesktop extends StatelessWidget {
                       DataCell(Text((index + 1).toString())),
                       DataCell(Text(item.name)),
                       DataCell(Text(item.phoneNumber)),
-                      DataCell(
-                        Text('N/A'),
-                      ),
-                      DataCell(
-                        Text('Verified'),
-                      ),
+                      DataCell(Text('N/A')),
+                      DataCell(Text('Verified')),
                       DataCell(
                         Row(
                           children: [

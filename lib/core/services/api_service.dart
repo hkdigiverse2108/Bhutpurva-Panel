@@ -46,7 +46,7 @@ class ApiService extends GetxService {
     headers ??= {};
     final token = _getToken();
     log(token.toString());
-    if (token != null && token.isNotEmpty) headers['authorization'] = token;
+    if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
 
@@ -70,7 +70,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token != null && token.isNotEmpty) headers['authorization'] = token;
+    if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
 
@@ -109,7 +109,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token != null && token.isNotEmpty) headers['authorization'] = token;
+    if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     try {
@@ -136,7 +136,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token != null && token.isNotEmpty) headers['authorization'] = token;
+    if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     // IMPORTANT: Flutter MultipartRequest does NOT set these by default
     headers['Accept'] = 'application/json';
@@ -171,7 +171,7 @@ class ApiService extends GetxService {
 
     headers ??= {};
     final token = _getToken();
-    if (token != null && token.isNotEmpty) headers['authorization'] = token;
+    if (token != null && token.isNotEmpty) headers['Authorization'] = token;
 
     Uri url = Uri.parse('$baseUrl$endpoint');
     try {

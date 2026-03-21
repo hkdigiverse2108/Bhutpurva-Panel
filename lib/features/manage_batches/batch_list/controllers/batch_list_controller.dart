@@ -80,4 +80,8 @@ class BatchListController extends BaseController {
   void onEditBatch(String batchId) {
     Get.toNamed(AppPages.editBatch, arguments: batchId);
   }
+
+  void onBatchTap(BatchesModel batch) {
+    Get.toNamed(AppPages.batchDetails, arguments: batch);
+  }
 }

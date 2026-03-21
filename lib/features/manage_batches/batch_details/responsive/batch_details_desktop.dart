@@ -30,7 +30,7 @@ class BatchDetailsDesktop extends StatelessWidget {
     return Scaffold(
       body: AdminTablePageLayout(
         header: BreadcrumbWithHeading(
-          heading: 'Batch Details',
+          heading: '${controller.batch?.name ?? "Batch"} Details',
           returnToPreviousScreen: true,
           breadcrumbsItems: [
             BreadcrumbItem(title: 'Batches', route: AppPages.manageBatches),
@@ -57,7 +57,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                   : TableActionButton(
                       onTap: () {
                         controller.tab.value = 0;
-                      },
+                      },  
                       label: 'All Students',
                       icon: PhosphorIconsBold.users,
                       color: ColorConst.primary,
@@ -79,7 +79,7 @@ class BatchDetailsDesktop extends StatelessWidget {
                 key: const ValueKey('students_table'),
                 columns: const [
                   AppTableColumn(title: 'No', width: 60),
-                  AppTableColumn(title: 'Name'),
+                  AppTableColumn(title: 'Student Name'),
                   // AppTableColumn(title: 'Group'),
                   AppTableColumn(title: 'Mobile Number'),
                   AppTableColumn(title: 'City'),
@@ -134,13 +134,13 @@ class BatchDetailsDesktop extends StatelessWidget {
                 key: const ValueKey('monitor_table'),
                 columns: const [
                   AppTableColumn(title: 'No', width: 60),
-                  AppTableColumn(title: 'Name'),
+                  AppTableColumn(title: 'Monitor Name'),
                   AppTableColumn(title: 'Mobile Number'),
                   AppTableColumn(title: 'City'),
                   AppTableColumn(title: 'Status', width: 120),
                   AppTableColumn(title: 'Actions', width: 160),
                 ],
-                rows: controller.leaders,
+                rows: controller.monitors,
                 totalRows: controller.totalLeaders,
                 rowsPerPage: controller.rowsPerPage,
                 onPageChanged: controller.onPageChange,

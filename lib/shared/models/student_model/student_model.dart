@@ -69,36 +69,44 @@ class StudentModel {
   String toRawJson() => json.encode(toJson());
 
   factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
-    id: json["_id"],
-    email: json["email"],
-    name: json["name"],
-    fatherName: json["fatherName"],
-    surname: json["surname"],
-    phoneNumber: json["phoneNumber"],
-    whatsappNumber: json["whatsappNumber"],
-    gender: json["gender"],
-    hrNo: json["hrNo"],
-    role: json["role"],
-    currentCity: json["currentCity"],
+    id: json["_id"] ?? "",
+    email: json["email"] ?? "",
+    name: json["name"] ?? "",
+    fatherName: json["fatherName"] ?? "",
+    surname: json["surname"] ?? "",
+    phoneNumber: json["phoneNumber"] ?? "",
+    whatsappNumber: json["whatsappNumber"] ?? "",
+    gender: json["gender"] ?? "",
+    hrNo: json["hrNo"] ?? "",
+    role: json["role"] ?? "",
+    currentCity: json["currentCity"] ?? "",
     addressIds: List<AddressId>.from(
-      json["addressIds"].map((x) => AddressId.fromJson(x)),
+      (json["addressIds"] as List? ?? []).map((x) => AddressId.fromJson(x)),
     ),
-    occupation: json["occupation"],
-    professions: List<String>.from(json["professions"].map((x) => x)),
-    educations: List<dynamic>.from(json["educations"].map((x) => x)),
-    maritalStatus: json["maritalStatus"],
-    bloodGroup: json["bloodGroup"],
-    class10: Class12Class.fromJson(json["class10"]),
-    class12: Class12Class.fromJson(json["class12"]),
+    occupation: json["occupation"] ?? "",
+    professions: List<String>.from(
+      (json["professions"] as List? ?? []).map((x) => x as String),
+    ),
+    educations: List<dynamic>.from(
+      (json["educations"] as List? ?? []).map((x) => x),
+    ),
+    maritalStatus: json["maritalStatus"] ?? "",
+    bloodGroup: json["bloodGroup"] ?? "",
+    class10: Class12Class.fromJson(json["class10"] ?? {}),
+    class12: Class12Class.fromJson(json["class12"] ?? {}),
     studyId: json["studyId"] == null ? null : StudyId.fromJson(json["studyId"]),
     skill: json["skill"],
-    talents: List<String>.from(json["talents"].map((x) => x)),
-    awards: List<String>.from(json["awards"].map((x) => x)),
-    isDeleted: json["isDeleted"],
-    otp: json["otp"],
-    isVerified: json["isVerified"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    talents: List<String>.from(
+      (json["talents"] as List? ?? []).map((x) => x as String),
+    ),
+    awards: List<String>.from(
+      (json["awards"] as List? ?? []).map((x) => x as String),
+    ),
+    isDeleted: json["isDeleted"] ?? false,
+    otp: json["otp"] ?? "",
+    isVerified: json["isVerified"] ?? false,
+    createdAt: DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json["updatedAt"] ?? "") ?? DateTime.now(),
     image: json["image"],
   );
 
@@ -168,17 +176,17 @@ class AddressId {
   String toRawJson() => json.encode(toJson());
 
   factory AddressId.fromJson(Map<String, dynamic> json) => AddressId(
-    id: json["_id"],
-    address: json["address"],
-    type: json["type"],
-    city: json["city"],
-    district: json["district"],
-    state: json["state"],
-    country: json["country"],
-    pincode: json["pincode"],
-    isDeleted: json["isDeleted"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    id: json["_id"] ?? "",
+    address: json["address"] ?? "",
+    type: json["type"] ?? "",
+    city: json["city"] ?? "",
+    district: json["district"] ?? "",
+    state: json["state"] ?? "",
+    country: json["country"] ?? "",
+    pincode: json["pincode"] ?? "",
+    isDeleted: json["isDeleted"] ?? false,
+    createdAt: DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json["updatedAt"] ?? "") ?? DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -221,13 +229,13 @@ class Class12Class {
   String toRawJson() => json.encode(toJson());
 
   factory Class12Class.fromJson(Map<String, dynamic> json) => Class12Class(
-    class1Class: json["class"],
-    isStudded: json["isStudded"],
+    class1Class: json["class"] ?? "",
+    isStudded: json["isStudded"] ?? false,
     branch: json["branch"],
     passingYear: json["passingYear"],
     medium: json["medium"],
-    hostel: json["hostel"],
-    id: json["_id"],
+    hostel: json["hostel"] ?? false,
+    id: json["_id"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {
@@ -259,10 +267,10 @@ class StudyId {
   String toRawJson() => json.encode(toJson());
 
   factory StudyId.fromJson(Map<String, dynamic> json) => StudyId(
-    id: json["_id"],
-    classes: Classes.fromJson(json["classes"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    id: json["_id"] ?? "",
+    classes: Classes.fromJson(json["classes"] ?? {}),
+    createdAt: DateTime.tryParse(json["createdAt"] ?? "") ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json["updatedAt"] ?? "") ?? DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -284,8 +292,8 @@ class Classes {
   String toRawJson() => json.encode(toJson());
 
   factory Classes.fromJson(Map<String, dynamic> json) => Classes(
-    class1: Class1Class.fromJson(json["class1"]),
-    class10: Class1Class.fromJson(json["class10"]),
+    class1: Class1Class.fromJson(json["class1"] ?? {}),
+    class10: Class1Class.fromJson(json["class10"] ?? {}),
   );
 
   Map<String, dynamic> toJson() => {
@@ -305,8 +313,10 @@ class Class1Class {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Class1Class.fromJson(Map<String, dynamic> json) =>
-      Class1Class(isStudied: json["isStudied"], branch: json["branch"]);
+  factory Class1Class.fromJson(Map<String, dynamic> json) => Class1Class(
+    isStudied: json["isStudied"] ?? false,
+    branch: json["branch"] ?? "",
+  );
 
   Map<String, dynamic> toJson() => {"isStudied": isStudied, "branch": branch};
 }

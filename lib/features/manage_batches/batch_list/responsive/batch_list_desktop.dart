@@ -77,7 +77,7 @@ class BatchListDesktop extends StatelessWidget {
                 DataCell(
                   Text(item.name, style: TextStyle(color: ColorConst.primary)),
                   onTap: () {
-                    Get.toNamed(AppPages.batchDetails, arguments: item);
+                    controller.onBatchTap(item);
                   },
                 ),
                 DataCell(Text(item.groupId?.name ?? "-")),

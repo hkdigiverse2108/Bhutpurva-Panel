@@ -6,6 +6,7 @@ import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/core/services/storage_service.dart';
 import 'package:bhutpurva_penal/shared/models/setting_model/setting_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quill_html_editor/quill_html_editor.dart';
@@ -38,6 +39,7 @@ class SettingsController extends BaseController {
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
+  final cityController = TextEditingController();
 
   // App details fields (linked to Setting model)
   final appNameController = TextEditingController();
@@ -204,7 +206,7 @@ class SettingsController extends BaseController {
     nameController.text = model.name;
     phoneController.text = model.phoneNumber;
     emailController.text = model.email;
-    usersCurrentCity.value = model.currentCity;
+    cityController.text = model.currentCity;
   }
 
   void updateSettings() {
@@ -392,6 +394,7 @@ class SettingsController extends BaseController {
           "name": nameController.text,
           "phoneNumber": phoneController.text,
           "email": emailController.text,
+          "currentCity": cityController.text,
         };
         log("Updating Account with body: $body");
 
@@ -400,7 +403,11 @@ class SettingsController extends BaseController {
 
         if (res.status == 200) {
           fetchUserDetails();
-          Get.snackbar("Success", "Profile updated");
+          AppSnackBar.show(
+            type: AppSnackBarType.success,
+            title: "Success",
+            message: "Profile updated",
+          );
         }
       },
     );
@@ -421,6 +428,7 @@ class SettingsController extends BaseController {
     emailController.dispose();
     appNameController.dispose();
     webSiteUrlController.dispose();
+    cityController.dispose();
     appUrlController.dispose();
     playStoreUrlController.dispose();
     appStoreUrlController.dispose();

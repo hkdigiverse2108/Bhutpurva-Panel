@@ -14,8 +14,11 @@ class LoginController extends GetxController {
   static LoginController get instance => Get.find();
 
   final loginFormKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+
+  final emailController = TextEditingController(
+    text: "kenilkenil425@gmail.com",
+  );
+  final passwordController = TextEditingController(text: "kenil@123");
 
   final storageService = StorageService.instance;
   final apiService = ApiService();

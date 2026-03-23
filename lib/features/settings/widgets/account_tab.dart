@@ -128,9 +128,7 @@ class AccountTab extends StatelessWidget {
                 _buildTextField(
                   label: 'City',
                   hint: 'Enter City',
-                  controller: TextEditingController(
-                    text: controller.usersCurrentCity.value,
-                  ),
+                  controller: controller.cityController,
                   icon: PhosphorIconsBold.mapPin,
                 ),
               ]),

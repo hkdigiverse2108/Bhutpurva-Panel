@@ -15,22 +15,6 @@ class AllAlumniController extends BaseController {
   var allAlumni = <StudentModel>[].obs;
 
   var ageFilter = ''.obs;
-  // var ages = [
-  //   'All',
-  //   '18',
-  //   '19',
-  //   '20',
-  //   '21',
-  //   '22',
-  //   '23',
-  //   '24',
-  //   '25',
-  //   '26',
-  //   '27',
-  //   '28',
-  //   '29',
-  //   '30',
-  // ].obs;
 
   var roleFilter = ''.obs;
   var batchFilter = ''.obs;

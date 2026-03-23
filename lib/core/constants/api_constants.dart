@@ -167,13 +167,25 @@ class ApiConstants {
   static String updateLegality = 'legality/add-update';
 
   //location
-  static String locations({int page = 1, int? limit, String? query}) {
+  static String locations({
+    int page = 1,
+    int? limit,
+    String? query,
+    String? type,
+    String? status,
+  }) {
     String url = 'location/get?page=$page';
     if (limit != null && limit.toString().isNotEmpty) {
       url += '&limit=$limit';
     }
     if (query != null && query.isNotEmpty) {
       url += '&search=$query';
+    }
+    if (type != null && type.isNotEmpty) {
+      url += '&type=$type';
+    }
+    if (status != null && status.isNotEmpty) {
+      url += '&status=$status';
     }
     return url;
   }

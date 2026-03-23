@@ -12,6 +12,13 @@ class LocationController extends BaseController {
 
   var locations = <LocationModel>[].obs;
 
+  var typeFilter = ''.obs;
+  var statusFilter = ''.obs;
+  var showFilter = false.obs;
+
+  var locationTypes = <String>['City', 'District', 'State', 'Country'].obs;
+  var statusTypes = <String>['Active', 'Inactive'].obs;
+
   int page = 1;
   int rowsPerPage = 10;
   int total = 0;

@@ -20,8 +20,8 @@ class CreateGroupController extends BaseController {
   final leaders = <UsersDropdownModel>[].obs;
   final selectedLeaders = <UsersDropdownModel>[].obs;
 
-  final batches = <BatchesModel>[].obs;
-  final selectedBatches = <BatchesModel>[].obs;
+  final batches = <BatchDropdownModel>[].obs;
+  final selectedBatches = <BatchDropdownModel>[].obs;
 
   @override
   void onInit() {
@@ -58,14 +58,10 @@ class CreateGroupController extends BaseController {
           ApiConstants.dropdownBatches(),
         );
         if (response.status == 200) {
-          final batchList =
-              response.data['batch'] ??
-              response.data['batches'] ??
-              response.data['data'] ??
-              [];
+          final batchList = response.data ?? [];
           batches.assignAll(
             (batchList as Iterable)
-                .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+                .map<BatchDropdownModel>((e) => BatchDropdownModel.fromJson(e))
                 .toList(),
           );
         }

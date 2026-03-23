@@ -145,7 +145,7 @@ class CreateGroupDesktop extends StatelessWidget {
                       title: 'Batches',
                       fields: [
                         Obx(
-                          () => AdminSearchSelectField<BatchesModel>(
+                          () => AdminSearchSelectField<BatchDropdownModel>(
                             label: 'Select Batches',
                             hint: 'Search Batches',
                             prefixIcon: PhosphorIconsBold.user,

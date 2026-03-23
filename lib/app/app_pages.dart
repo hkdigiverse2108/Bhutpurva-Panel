@@ -26,9 +26,13 @@ class AppPages {
 
   // branches
   static const String branches = '/branches';
+  static const String createBranch = '/create-branch';
+  static const String editBranch = '/edit-branch';
 
   // location
   static const String location = '/location';
+  static const String createLocation = '/create-location';
+  static const String editLocation = '/edit-location';
 
   // calender
   static const String calender = '/calender';

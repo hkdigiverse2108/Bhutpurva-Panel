@@ -1,9 +1,12 @@
+import 'package:bhutpurva_penal/app/app_pages.dart';
+import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
-import 'package:bhutpurva_penal/features/location/controllers/location_controller.dart';
+import 'package:bhutpurva_penal/features/location/location_list/controllers/location_controller.dart';
 import 'package:bhutpurva_penal/shared/models/location_models/location_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_Icon_button.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_paginated_table.dart';
@@ -30,7 +33,16 @@ class LocationDesktop extends GetView<LocationController> {
           hint: 'Search Location...',
           onSearchChanged: controller.onSearchChanged,
         ),
-        actions: [SizedBox()],
+        actions: [
+          TableActionButton(
+            color: ColorConst.primary,
+            label: 'Add Location',
+            icon: Icons.add,
+            onTap: () {
+              controller.onCreateLocation();
+            },
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -65,7 +77,10 @@ class LocationDesktop extends GetView<LocationController> {
                       tableActionIconButton(
                         icon: Iconsax.edit,
                         onTap: () {
-                          // controller.editLocation(item.id);
+                          Get.toNamed(
+                            AppPages.editLocation,
+                            arguments: {'id': item.id},
+                          );
                         },
                         color: Colors.blue,
                       ),

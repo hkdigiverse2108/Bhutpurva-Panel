@@ -7,8 +7,10 @@ import 'package:bhutpurva_penal/features/anubhuti/anubhuti.dart';
 import 'package:bhutpurva_penal/features/anubhuti/bindings/anubhuti_binding.dart';
 import 'package:bhutpurva_penal/features/auth/bindings/auth_binding.dart';
 import 'package:bhutpurva_penal/features/auth/login/login.dart';
+import 'package:bhutpurva_penal/features/branches/Create_branch/create_branch.dart';
 import 'package:bhutpurva_penal/features/branches/bindings/branches_binding.dart';
 import 'package:bhutpurva_penal/features/branches/branches.dart';
+import 'package:bhutpurva_penal/features/branches/edit_branch/edit_branch.dart';
 import 'package:bhutpurva_penal/features/calender/bindings/calender_binding.dart';
 import 'package:bhutpurva_penal/features/calender/calender.dart';
 import 'package:bhutpurva_penal/features/dashboard/bindings/dashboard_binding.dart';
@@ -18,6 +20,8 @@ import 'package:bhutpurva_penal/features/feedback/feedback.dart';
 import 'package:bhutpurva_penal/features/life_light/bindings/life_light_binding.dart';
 import 'package:bhutpurva_penal/features/life_light/life_light.dart';
 import 'package:bhutpurva_penal/features/location/bindings/location_binding.dart';
+import 'package:bhutpurva_penal/features/location/create_location/create_location.dart';
+import 'package:bhutpurva_penal/features/location/edit_location/edit_location.dart';
 import 'package:bhutpurva_penal/features/location/location.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_details/batch_details.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_list/batch_list.dart';
@@ -139,11 +143,35 @@ class AppRoutes {
       binding: BranchesBinding(),
       middlewares: [AppMiddleware()],
     ),
+    GetPage(
+      name: AppPages.createBranch,
+      page: () => const CreateBranch(),
+      binding: BranchesBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editBranch,
+      page: () => const EditBranch(),
+      binding: BranchesBinding(),
+      middlewares: [AppMiddleware()],
+    ),
 
     // location
     GetPage(
       name: AppPages.location,
       page: () => Location(),
+      binding: LocationBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.createLocation,
+      page: () => const CreateLocation(),
+      binding: LocationBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editLocation,
+      page: () => const EditLocation(),
       binding: LocationBinding(),
       middlewares: [AppMiddleware()],
     ),

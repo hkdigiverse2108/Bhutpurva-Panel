@@ -124,7 +124,7 @@ class GroupDetailsDesktop extends StatelessWidget {
                         Row(
                           children: [
                             tableActionIconButton(
-                              icon: Icons.edit,
+                              icon: Iconsax.edit,
                               onTap: () => Get.toNamed(
                                 AppPages.editBatch,
                                 arguments: item.id,
@@ -179,7 +179,7 @@ class GroupDetailsDesktop extends StatelessWidget {
                         Row(
                           children: [
                             tableActionIconButton(
-                              icon: Icons.edit,
+                              icon: Iconsax.edit,
                               onTap: () => controller.onEditStudent(item),
                             ),
                             const SizedBox(width: 6),

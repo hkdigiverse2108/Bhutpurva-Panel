@@ -178,6 +178,7 @@ class ApiConstants {
     return url;
   }
 
+  static String locationDetails(String id) => 'location/get/$id';
   static String deleteLocation(String id) => 'location/delete/$id';
   static String updateLocation() => 'location/update';
   static String createLocation() => 'location/add';
@@ -201,6 +202,7 @@ class ApiConstants {
     return url;
   }
 
+  static String branchDetails(String id) => 'branch/get/$id';
   static String deleteBranch(String id) => 'branch/delete/$id';
   static String updateBranch() => 'branch/update';
   static String createBranch() => 'branch/add';

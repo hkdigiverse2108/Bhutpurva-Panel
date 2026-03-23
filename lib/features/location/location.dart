@@ -1,4 +1,4 @@
-import 'package:bhutpurva_penal/features/location/responsive/location_desktop.dart';
+import 'package:bhutpurva_penal/features/location/location_list/responsive/location_desktop.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/site_layouts.dart';
 import 'package:flutter/material.dart';
 

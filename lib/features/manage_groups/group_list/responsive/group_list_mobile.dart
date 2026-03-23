@@ -145,7 +145,7 @@ class GroupListMobile extends StatelessWidget {
                   DataCell(
                     Row(
                       children: [
-                        tableActionIconButton(icon: Icons.edit, onTap: () {}),
+                        tableActionIconButton(icon: Iconsax.edit, onTap: () {}),
                         const SizedBox(width: 6),
                         tableActionIconButton(
                           icon: Iconsax.trash,

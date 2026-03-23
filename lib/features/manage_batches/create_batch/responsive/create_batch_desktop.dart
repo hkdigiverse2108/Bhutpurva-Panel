@@ -74,50 +74,6 @@ class CreateBatchDesktop extends StatelessWidget {
                         },
                       ),
                     ),
-                    // Obx(
-                    //   () => controller.selectedGroup.value != null
-                    //       ? Padding(
-                    //           padding: const EdgeInsets.only(bottom: 8),
-                    //           child: Container(
-                    //             height: 40,
-                    //             padding: const EdgeInsets.symmetric(
-                    //               horizontal: 12,
-                    //             ),
-                    //             decoration: BoxDecoration(
-                    //               color: ColorConst.white,
-                    //               borderRadius: BorderRadius.circular(8),
-                    //               border:
-                    //                   Border.all(color: Colors.grey.shade200),
-                    //             ),
-                    //             child: Row(
-                    //               children: [
-                    //                 Expanded(
-                    //                   child: Text(
-                    //                     controller.selectedGroup.value!.name,
-                    //                     maxLines: 1,
-                    //                     overflow: TextOverflow.ellipsis,
-                    //                   ),
-                    //                 ),
-                    //                 InkWell(
-                    //                   onTap: () {
-                    //                     controller.selectedGroup.value = null;
-                    //                   },
-                    //                   borderRadius: BorderRadius.circular(6),
-                    //                   child: Padding(
-                    //                     padding: const EdgeInsets.all(6),
-                    //                     child: Icon(
-                    //                       PhosphorIconsBold.trash,
-                    //                       size: 16,
-                    //                       color: ColorConst.error,
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ),
-                    //         )
-                    //       : const SizedBox.shrink(),
-                    // ),
                   ],
                 ),
               ),

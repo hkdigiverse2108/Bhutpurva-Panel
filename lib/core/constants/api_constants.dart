@@ -2,6 +2,7 @@ class ApiConstants {
   static const baseUrl = 'http://localhost:5000/';
 
   static const login = 'auth/login';
+  static const changePassword = 'auth/change-password';
 
   // groups
   static String groupsDropdown(String query) => 'group/dropdown?search=$query';
@@ -167,25 +168,13 @@ class ApiConstants {
   static String updateLegality = 'legality/add-update';
 
   //location
-  static String locations({
-    int page = 1,
-    int? limit,
-    String? query,
-    String? type,
-    String? status,
-  }) {
+  static String locations({int page = 1, int? limit, String? query}) {
     String url = 'location/get?page=$page';
     if (limit != null && limit.toString().isNotEmpty) {
       url += '&limit=$limit';
     }
     if (query != null && query.isNotEmpty) {
       url += '&search=$query';
-    }
-    if (type != null && type.isNotEmpty) {
-      url += '&type=$type';
-    }
-    if (status != null && status.isNotEmpty) {
-      url += '&status=$status';
     }
     return url;
   }
@@ -225,4 +214,7 @@ class ApiConstants {
     }
     return url;
   }
+
+  // forgot password
+  static String forgotPassword = '/auth/forgot-password';
 }

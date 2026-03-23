@@ -21,6 +21,8 @@ class SettingsController extends BaseController {
   var isUserLoading = false.obs;
   var isSettingsUpdateLoading = false.obs;
 
+  var readOnly = false.obs;
+
   final Map<String, bool> _policyLoaded = {};
   final Map<String, String> _policyContent = {};
   final Map<String, bool> _policyFetching = {};
@@ -108,7 +110,7 @@ class SettingsController extends BaseController {
     super.onInit();
     fetchSettings();
     fetchUserDetails();
-    
+
     // Reactively load policy whenever the selection changes
     ever(selectedPolicy, (PolicyType type) {
       log("Selected policy changed to: ${type.name}");
@@ -118,9 +120,12 @@ class SettingsController extends BaseController {
 
   String getPolicyTypeString(PolicyType type) {
     switch (type) {
-      case PolicyType.privacy: return 'privacy_policy';
-      case PolicyType.activist: return 'activist_policy';
-      case PolicyType.aboutApp: return 'about_app';
+      case PolicyType.privacy:
+        return 'privacy_policy';
+      case PolicyType.activist:
+        return 'activist_policy';
+      case PolicyType.aboutApp:
+        return 'about_app';
     }
   }
 
@@ -352,25 +357,44 @@ class SettingsController extends BaseController {
   }
 
   void updatePassword() {
+    if (!securityFormKey.currentState!.validate()) return;
+
+    if (newPasswordController.text != confirmPasswordController.text) {
+      AppSnackBar.show(
+        type: AppSnackBarType.error,
+        title: "Validation Error",
+        message: "New password and confirmation do not match.",
+      );
+      return;
+    }
+
     executeApi(
       loadingState: isSettingsUpdateLoading,
       apiCall: () async {
         final body = {
-          'currentPassword': currentPasswordController.text,
+          'oldPassword': currentPasswordController.text,
           'newPassword': newPasswordController.text,
           'confirmPassword': confirmPasswordController.text,
         };
         log("Updating Password with body: $body");
 
         final res = await apiService.post(
-          ApiConstants.updateSettings,
+          ApiConstants.changePassword,
           body: body,
         );
         log("Update Password Response: ${res.data}");
         if (res.status == 200) {
-          fetchSettings();
+          currentPasswordController.clear();
+          newPasswordController.clear();
+          confirmPasswordController.clear();
+          AppSnackBar.show(
+            type: AppSnackBarType.success,
+            title: "Success",
+            message: "Password changed successfully",
+          );
         }
       },
+      errorMessage: "Failed to change password",
     );
   }
 
@@ -458,10 +482,7 @@ class SettingsController extends BaseController {
       apiCall: () async {
         final html = await policyEditorController.getText();
 
-        final body = {
-          'type': type,
-          'content': html,
-        };
+        final body = {'type': type, 'content': html};
         log("Updating Policy $type with body: $body");
 
         final res = await apiService.post(

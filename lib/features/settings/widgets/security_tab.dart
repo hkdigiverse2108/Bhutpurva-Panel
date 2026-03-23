@@ -33,6 +33,8 @@ class SecurityTab extends StatelessWidget {
                     controller: controller.currentPasswordController,
                     prefixIcon: const Icon(Iconsax.lock),
                     obscureText: controller.currentPasswordHidden.value,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Current password is required' : null,
                     hint: 'Enter current password',
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -50,6 +52,8 @@ class SecurityTab extends StatelessWidget {
                     controller: controller.newPasswordController,
                     prefixIcon: const Icon(PhosphorIconsBold.password),
                     obscureText: controller.newPasswordHidden.value,
+                    validator: (value) =>
+                        value!.isEmpty ? 'New password is required' : null,
                     hint: 'Enter new password',
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -67,6 +71,12 @@ class SecurityTab extends StatelessWidget {
                     controller: controller.confirmPasswordController,
                     prefixIcon: const Icon(PhosphorIconsBold.password),
                     obscureText: controller.confirmPasswordHidden.value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Confirm password is required';
+                      }
+                      return null;
+                    },
                     hint: 'Confirm new password',
                     suffixIcon: IconButton(
                       icon: Icon(

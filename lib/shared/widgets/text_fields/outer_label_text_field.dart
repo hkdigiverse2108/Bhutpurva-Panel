@@ -14,6 +14,7 @@ class OuterLabelTextField extends StatelessWidget {
   final Color? enabledBorderColor;
   final List<String>? autofillHints;
   final TextInputAction? textInputAction;
+  final bool readOnly;
 
   const OuterLabelTextField({
     super.key,
@@ -30,6 +31,7 @@ class OuterLabelTextField extends StatelessWidget {
     this.enabledBorderColor,
     this.autofillHints,
     this.textInputAction,
+    this.readOnly = false,
   });
 
   @override
@@ -48,6 +50,7 @@ class OuterLabelTextField extends StatelessWidget {
 
         /// TEXT FIELD
         TextFormField(
+          readOnly: readOnly,
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,

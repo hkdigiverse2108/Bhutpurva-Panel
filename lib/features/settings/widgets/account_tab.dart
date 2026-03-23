@@ -3,6 +3,7 @@ import 'package:bhutpurva_penal/core/device/device_utility.dart';
 import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
+import 'package:bhutpurva_penal/shared/widgets/text_fields/outer_label_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -102,34 +103,35 @@ class AccountTab extends StatelessWidget {
 
               // Name & Phone
               _buildResponsiveRow(isMobile, [
-                _buildTextField(
+                OuterLabelTextField(
                   label: 'Name',
                   hint: 'Enter Name',
                   controller: controller.nameController,
-                  icon: PhosphorIconsBold.user,
+                  prefixIcon: Icon(PhosphorIconsBold.user),
                 ),
-                _buildTextField(
+                OuterLabelTextField(
                   label: 'Phone Number',
                   hint: 'Enter Phone Number',
                   controller: controller.phoneController,
-                  icon: PhosphorIconsBold.phone,
+                  prefixIcon: Icon(PhosphorIconsBold.phone),
                   keyboardType: TextInputType.phone,
                 ),
               ]),
               // Email & Address
               _buildResponsiveRow(isMobile, [
-                _buildTextField(
+                OuterLabelTextField(
+                  readOnly: true,
                   label: 'Email',
                   hint: 'Enter Email',
                   controller: controller.emailController,
-                  icon: PhosphorIconsBold.envelope,
+                  prefixIcon: Icon(PhosphorIconsBold.envelope),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                _buildTextField(
+                OuterLabelTextField(
                   label: 'City',
                   hint: 'Enter City',
                   controller: controller.cityController,
-                  icon: PhosphorIconsBold.mapPin,
+                  prefixIcon: Icon(PhosphorIconsBold.mapPin),
                 ),
               ]),
 
@@ -170,27 +172,27 @@ class AccountTab extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-    required TextEditingController controller,
-    required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: Icon(icon, fill: 0.0),
-      ),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return '$label is required';
-        }
-        return null;
-      },
-    );
-  }
+  // Widget _buildTextField({
+  //   required String label,
+  //   required String hint,
+  //   required TextEditingController controller,
+  //   required IconData icon,
+  //   TextInputType keyboardType = TextInputType.text,
+  // }) {
+  //   return TextFormField(
+  //     keyboardType: keyboardType,
+  //     controller: controller,
+  //     decoration: InputDecoration(
+  //       labelText: label,
+  //       hintText: hint,
+  //       prefixIcon: Icon(icon, fill: 0.0),
+  //     ),
+  //     validator: (value) {
+  //       if (value == null || value.trim().isEmpty) {
+  //         return '$label is required';
+  //       }
+  //       return null;
+  //     },
+  //   );
+  // }
 }

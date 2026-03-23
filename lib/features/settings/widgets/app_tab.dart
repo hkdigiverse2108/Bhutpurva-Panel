@@ -118,7 +118,7 @@ class AppTab extends StatelessWidget {
         ),
         child: controller.appLogo.value.isEmpty
             ? const Icon(
-                PhosphorIconsBold.appWindow,
+                PhosphorIconsBold.user,
                 size: 40,
                 color: ColorConst.grey,
               )

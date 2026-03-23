@@ -1,9 +1,11 @@
 import 'package:bhutpurva_penal/core/device/device_utility.dart';
 import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/outer_label_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -86,11 +88,11 @@ class OtherTab extends StatelessWidget {
                   hint: 'https://youtube.com/example',
                 ),
                 const Gap(16),
-                SizedBox(
-                  width: isMobile ? double.infinity : 150,
-                  child: ElevatedButton(
+                Obx(
+                  () => AdminFormButton(
                     onPressed: controller.updateOther,
-                    child: const Text('Update Settings'),
+                    isLoading: controller.isSettingsUpdateLoading.value,
+                    label: 'Update Settings',
                   ),
                 ),
               ],

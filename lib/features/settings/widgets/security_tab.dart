@@ -1,5 +1,6 @@
 import 'package:bhutpurva_penal/core/device/device_utility.dart';
 import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/outer_label_text_field.dart';
 import 'package:flutter/material.dart';
@@ -79,11 +80,11 @@ class SecurityTab extends StatelessWidget {
                     ),
                   ),
                   const Gap(16),
-                  SizedBox(
-                    width: isMobile ? double.infinity : 150,
-                    child: ElevatedButton(
+                  Obx(
+                    () => AdminFormButton(
                       onPressed: controller.updatePassword,
-                      child: const Text('Change Password'),
+                      isLoading: controller.isSettingsUpdateLoading.value,
+                      label: 'Change Password',
                     ),
                   ),
                 ],

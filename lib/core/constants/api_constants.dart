@@ -163,7 +163,7 @@ class ApiConstants {
   static String updateSettings = 'setting/add-update';
 
   // legality
-  static String legality = 'legality/get';
+  static String legality(String type) => 'legality/get?type=$type';
   static String updateLegality = 'legality/add-update';
 
   //location

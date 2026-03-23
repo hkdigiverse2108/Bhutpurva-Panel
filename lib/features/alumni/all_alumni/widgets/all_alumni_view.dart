@@ -18,6 +18,7 @@ import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.da
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class AllAlumniView extends StatelessWidget {
   const AllAlumniView({super.key});
@@ -184,7 +185,7 @@ class AllAlumniView extends StatelessWidget {
                                 onTap: () {
                                   controller.onEditStudent(item.id);
                                 },
-                                icon: Icons.edit,
+                                icon: Iconsax.edit,
                               ),
                             ],
                           ),

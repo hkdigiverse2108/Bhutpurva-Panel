@@ -151,7 +151,7 @@ class GroupListDesktop extends StatelessWidget {
                     Row(
                       children: [
                         tableActionIconButton(
-                          icon: Icons.edit,
+                          icon: Iconsax.edit,
                           onTap: () {
                             controller.onEditGroup(group);
                           },

@@ -6,7 +6,7 @@ import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CreateLocationController extends BaseController {
+class EditLocationController extends BaseController {
   final apiService = ApiService();
 
   final nameController = TextEditingController();
@@ -17,12 +17,52 @@ class CreateLocationController extends BaseController {
   final selectedType = RxnString();
   final isActive = true.obs;
 
-  void createLocation() {
+  final isFetching = false.obs;
+
+  final String id;
+
+  EditLocationController({required this.id});
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchLocation();
+  }
+
+  void fetchLocation() {
+    executeApi(
+      loadingState: isFetching,
+      apiCall: () async {
+        final ResModel response = await apiService.get(
+          ApiConstants.locationDetails(id),
+        );
+
+        if (response.status == 200) {
+          final data = response.data;
+          nameController.text = data['name'] ?? '';
+          isActive.value = data['isActive'] ?? true;
+
+          final type = data['type']?.toString() ?? '';
+          if (type.isNotEmpty) {
+            // Find the matching type in the list (ignoring case)
+            selectedType.value = locationTypes.firstWhere(
+              (element) => element.toLowerCase() == type.toLowerCase(),
+              orElse: () => locationTypes.first,
+            );
+          }
+        }
+      },
+      errorMessage: "Failed to load location details",
+    );
+  }
+
+  void updateLocation() {
     executeApi(
       apiCall: () async {
-        final ResModel response = await apiService.post(
-          ApiConstants.createLocation(),
+        final ResModel response = await apiService.put(
+          ApiConstants.updateLocation(),
           body: {
+            'locationId': id,
             'name': nameController.text.trim(),
             'type': selectedType.value?.toLowerCase(),
             'isActive': isActive.value,
@@ -36,7 +76,7 @@ class CreateLocationController extends BaseController {
           Get.back();
         }
       },
-      errorMessage: "Could not create location",
+      errorMessage: "Could not update location",
     );
   }
 

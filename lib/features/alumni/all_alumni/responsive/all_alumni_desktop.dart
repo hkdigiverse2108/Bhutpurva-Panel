@@ -17,6 +17,7 @@ import 'package:bhutpurva_penal/shared/widgets/text_fields/table_filter_field.da
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class AllAlumniDesktop extends StatelessWidget {
   const AllAlumniDesktop({super.key});
@@ -125,7 +126,7 @@ class AllAlumniDesktop extends StatelessWidget {
                           onTap: () {
                             controller.onEditStudent(item.id);
                           },
-                          icon: Icons.edit,
+                          icon: Iconsax.edit,
                         ),
                       ],
                     ),

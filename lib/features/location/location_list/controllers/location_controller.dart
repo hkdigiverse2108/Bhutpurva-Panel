@@ -1,3 +1,4 @@
+import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
@@ -53,6 +54,10 @@ class LocationController extends BaseController {
       },
       errorMessage: "Failed to fetch locations data",
     );
+  }
+
+  void onCreateLocation() {
+    Get.toNamed(AppPages.createLocation);
   }
 
   void onSearchChanged(String value) {

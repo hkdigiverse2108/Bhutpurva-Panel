@@ -1,5 +1,6 @@
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/shared/models/location_models/location_model.dart';
@@ -16,7 +17,12 @@ class LocationController extends BaseController {
   var statusFilter = ''.obs;
   var showFilter = false.obs;
 
-  var locationTypes = <String>['City', 'District', 'State', 'Country'].obs;
+  var locationTypes = <LocationType>[
+    LocationType.city,
+    LocationType.district,
+    LocationType.state,
+    LocationType.country,
+  ].obs;
   var statusTypes = <String>['Active', 'Inactive'].obs;
 
   int page = 1;
@@ -46,6 +52,8 @@ class LocationController extends BaseController {
             page: page,
             limit: rowsPerPage,
             query: query.value,
+            type: typeFilter.value,
+            status: statusFilter.value,
           ),
         );
 

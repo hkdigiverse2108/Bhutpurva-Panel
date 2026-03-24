@@ -7,6 +7,7 @@ import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model
 import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_from_page_layout.dart';
+import 'package:bhutpurva_penal/shared/widgets/switches/custom_switch.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -47,10 +48,7 @@ class CreateLocationDesktop extends StatelessWidget {
                       decoration: const InputDecoration(
                         labelText: 'Location Name',
                         hintText: "Enter Location Name",
-                        prefixIcon: Icon(
-                          PhosphorIconsBold.mapPin,
-                          fill: 0.0,
-                        ),
+                        prefixIcon: Icon(PhosphorIconsBold.mapPin, fill: 0.0),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -63,9 +61,7 @@ class CreateLocationDesktop extends StatelessWidget {
                       () => AdminSearchSelectField<String>(
                         label: 'Select Location Type',
                         items: controller.locationTypes
-                            .map(
-                              (e) => AdminDropdownItem(value: e, label: e),
-                            )
+                            .map((e) => AdminDropdownItem(value: e, label: e))
                             .toList(),
                         onChanged: (type) {
                           if (type == null) return;
@@ -74,12 +70,32 @@ class CreateLocationDesktop extends StatelessWidget {
                       ),
                     ),
                     Obx(
-                      () => SwitchListTile(
-                        title: const Text('Active Status'),
-                        value: controller.isActive.value,
-                        onChanged: (value) {
-                          controller.isActive.value = value;
+                      () => AdminSearchSelectField<String>(
+                        label: 'Select Parent Location',
+                        items: controller.parentLocationList
+                            .map(
+                              (e) =>
+                                  AdminDropdownItem(value: e.id, label: e.name),
+                            )
+                            .toList(),
+                        onChanged: (type) {
+                          if (type == null) return;
+                          controller.parentLocation.value = type;
                         },
+                      ),
+                    ),
+                    Obx(
+                      () => Row(
+                        children: [
+                          Text('Active Status'),
+                          Spacer(),
+                          CustomSwitch(
+                            value: controller.isActive.value,
+                            onChanged: (value) {
+                              controller.isActive.value = value;
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ],

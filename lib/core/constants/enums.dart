@@ -15,3 +15,5 @@ enum NotificationType { push, email, sms }
 enum AppType { android, ios, web }
 
 enum UserType { admin, user }
+
+enum LocationType { city, district, state, country }

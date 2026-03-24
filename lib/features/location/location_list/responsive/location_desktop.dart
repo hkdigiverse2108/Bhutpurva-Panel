@@ -66,9 +66,15 @@ class LocationDesktop extends GetView<LocationController> {
               hint: 'Select Location Type',
               value: controller.typeFilter.value,
               items: controller.locationTypes
-                  .map((type) => AdminDropdownItem(value: type, label: type))
+                  .map(
+                    (type) =>
+                        AdminDropdownItem(value: type.name, label: type.name),
+                  )
                   .toList(),
-              onChanged: (value) => controller.onSearchChanged(value),
+              onChanged: (value) {
+                controller.typeFilter.value = value;
+                controller.fetchLocations();
+              },
             ),
             TableFilterField(
               label: 'Status',
@@ -79,7 +85,10 @@ class LocationDesktop extends GetView<LocationController> {
                     (status) => AdminDropdownItem(value: status, label: status),
                   )
                   .toList(),
-              onChanged: (value) => controller.onSearchChanged(value),
+              onChanged: (value) {
+                controller.statusFilter.value = value;
+                controller.fetchLocations();
+              },
             ),
           ],
         ),

@@ -1,11 +1,25 @@
 class ApiConstants {
   static const baseUrl = 'http://localhost:5000/';
 
+  // Helper method to build URLs with query parameters
+  static String _buildUrl(String path, Map<String, dynamic> params) {
+    final List<String> queryParts = [];
+    params.forEach((key, value) {
+      if (value != null && value.toString().isNotEmpty) {
+        queryParts.add('$key=${Uri.encodeComponent(value.toString())}');
+      }
+    });
+
+    if (queryParts.isEmpty) return path;
+    return '$path?${queryParts.join('&')}';
+  }
+
   static const login = 'auth/login';
   static const changePassword = 'auth/change-password';
 
   // groups
-  static String groupsDropdown(String query) => 'group/dropdown?search=$query';
+  static String groupsDropdown(String query) =>
+      _buildUrl('group/dropdown', {'search': query});
   static const createGroup = 'group/create';
   static const updateGroup = 'group/update';
   static String groupDetails(String id) => 'group/get/$id';
@@ -15,17 +29,12 @@ class ApiConstants {
     String? query,
     bool? status,
   }) {
-    String url = 'group/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    if (status != null && status.toString().isNotEmpty) {
-      url += '&isActive=$status';
-    }
-    return url;
+    return _buildUrl('group/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'isActive': status,
+    });
   }
 
   static String deleteGroup(String id) => 'group/delete/$id';
@@ -33,14 +42,8 @@ class ApiConstants {
   // users
   static String userDetails(String id) => 'user/get/$id';
   static const updateUser = 'user/update';
-  static String usersDropdown({String? roleFilter}) {
-    String url = 'user/dropdown';
-    if (roleFilter != null && roleFilter.isNotEmpty) {
-      url += '?roleFilter=$roleFilter';
-    }
-
-    return url;
-  }
+  static String usersDropdown({String? roleFilter}) =>
+      _buildUrl('user/dropdown', {'roleFilter': roleFilter});
 
   static String users({
     int page = 1,
@@ -51,26 +54,15 @@ class ApiConstants {
     String? roleFilter,
     String? groupFilter,
   }) {
-    String url = 'user/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    if (isVerified != null && isVerified.toString().isNotEmpty) {
-      url += '&isVerified=$isVerified';
-    }
-    if (isDeleted != null && isDeleted.toString().isNotEmpty) {
-      url += '&isDeleted=$isDeleted';
-    }
-    if (roleFilter != null && roleFilter.isNotEmpty) {
-      url += '&roleFilter=$roleFilter';
-    }
-    if (groupFilter != null && groupFilter.isNotEmpty) {
-      url += '&groupFilter=$groupFilter';
-    }
-    return url;
+    return _buildUrl('user/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'isVerified': isVerified,
+      'isDeleted': isDeleted,
+      'roleFilter': roleFilter,
+      'groupFilter': groupFilter,
+    });
   }
 
   // Batches
@@ -80,26 +72,16 @@ class ApiConstants {
     String? query,
     String? groupId,
   }) {
-    String url = 'batch/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    if (groupId != null && groupId.isNotEmpty) {
-      url += '&groupFilter=$groupId';
-    }
-    return url;
+    return _buildUrl('batch/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'groupFilter': groupId,
+    });
   }
 
-  static String dropdownBatches({String? query}) {
-    String url = 'batch/dropdown';
-    if (query != null && query.isNotEmpty) {
-      url += '?search=$query';
-    }
-    return url;
-  }
+  static String dropdownBatches({String? query}) =>
+      _buildUrl('batch/dropdown', {'search': query});
 
   static String createBatch() => 'batch/create';
   static String updateBatch() => 'batch/update';
@@ -107,52 +89,40 @@ class ApiConstants {
 
   // life-light
   static String lifeLight({int page = 1, int? limit, String? query}) {
-    String url = 'lifeLight/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
+    return _buildUrl('lifeLight/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
   }
 
   static String deleteLifeLight(String id) => 'lifeLight/delete/$id';
 
   // anubhuti
   static String anubhuti({int page = 1, int? limit, String? query}) {
-    String url = 'anubhuti/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
+    return _buildUrl('anubhuti/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
   }
 
   // alumni
   static String alumni({int page = 1, int? limit, String? query}) {
-    String url = 'user/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
+    return _buildUrl('user/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
   }
 
   // feedback
   static String feedback({int page = 1, int? limit, String? query}) {
-    String url = 'feedback/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
+    return _buildUrl('feedback/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
   }
 
   // delete
@@ -164,10 +134,12 @@ class ApiConstants {
   static String updateSettings = 'setting/add-update';
 
   // legality
-  static String legality(String type) => 'legality/get?type=$type';
+  static String legality(String type) =>
+      _buildUrl('legality/get', {'type': type});
   static String updateLegality = 'legality/add-update';
 
   //location
+<<<<<<< HEAD
   static String locations({int page = 1, int? limit, String? query}) {
     String url = 'location/get?page=$page';
     if (limit != null && limit.toString().isNotEmpty) {
@@ -177,36 +149,57 @@ class ApiConstants {
       url += '&search=$query';
     }
     return url;
+=======
+  static String locations({
+    int page = 1,
+    int? limit,
+    String? query,
+    String? type,
+    String? status,
+  }) {
+    return _buildUrl('location/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'typeFilter': type,
+      'isActive': status == 'Active' ? true : (status == null ? null : false),
+    });
+  }
+
+  static String locationsDropdown({
+    String? query,
+    String? type,
+    String? status,
+  }) {
+    return _buildUrl('location/dropdown', {
+      'search': query,
+      'typeFilter': type,
+      'isActive': status == 'Active' ? true : (status == null ? null : false),
+    });
+>>>>>>> 80990bee564a990b857aba788c23b04b8d01bed9
   }
 
   static String locationDetails(String id) => 'location/get/$id';
   static String deleteLocation(String id) => 'location/delete/$id';
   static String updateLocation() => 'location/update';
   static String createLocation() => 'location/add';
-  static String dropdownLocation({String? query}) {
-    String url = 'location/dropdown';
-    if (query != null && query.isNotEmpty) {
-      url += '?search=$query';
-    }
-    return url;
-  }
+  static String dropdownLocation({String? query}) =>
+      _buildUrl('location/dropdown', {'search': query});
 
   //branches
   static String branches({int page = 1, int? limit, String? query}) {
-    String url = 'branch/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
+    return _buildUrl('branch/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
   }
 
   static String branchDetails(String id) => 'branch/get/$id';
   static String deleteBranch(String id) => 'branch/delete/$id';
   static String updateBranch() => 'branch/update';
   static String createBranch() => 'branch/add';
+<<<<<<< HEAD
   static String dropdownBranch({String? query}) {
     String url = 'branch/dropdown';
     if (query != null && query.isNotEmpty) {
@@ -217,4 +210,8 @@ class ApiConstants {
 
   // forgot password
   static String forgotPassword = '/auth/forgot-password';
+=======
+  static String dropdownBranch({String? query}) =>
+      _buildUrl('branch/dropdown', {'search': query});
+>>>>>>> 80990bee564a990b857aba788c23b04b8d01bed9
 }

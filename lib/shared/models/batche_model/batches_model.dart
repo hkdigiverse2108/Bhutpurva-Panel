@@ -146,3 +146,15 @@ class Student {
     "isVerified": isVerified,
   };
 }
+
+class BatchDropdownModel {
+  final String id;
+  final String name;
+
+  BatchDropdownModel({required this.id, required this.name});
+
+  factory BatchDropdownModel.fromJson(Map<String, dynamic> json) =>
+      BatchDropdownModel(id: json["_id"], name: json["name"]);
+
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+}

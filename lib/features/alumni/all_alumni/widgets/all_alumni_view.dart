@@ -95,13 +95,15 @@ class AllAlumniView extends StatelessWidget {
             filter: AdminTableFilter(
               children: [
                 TableFilterField(
-                  label: 'Age',
-                  hint: 'Select age',
+                  label: 'City',
+                  hint: 'Select City',
                   value: controller.ageFilter.value,
                   items: controller.batches
                       .map(
-                        (age) =>
-                            AdminDropdownItem(value: age.id, label: age.name),
+                        (batch) => AdminDropdownItem(
+                          value: batch.id,
+                          label: batch.students.first.currentCity,
+                        ),
                       )
                       .toList(),
                   onChanged: controller.onAgeChanged,
@@ -110,12 +112,10 @@ class AllAlumniView extends StatelessWidget {
                   label: 'Role',
                   hint: 'Select role',
                   value: controller.roleFilter.value,
-                  items: controller.batches
+                  items: controller.allAlumni
                       .map(
-                        (batch) => AdminDropdownItem(
-                          value: batch.id,
-                          label: batch.name,
-                        ),
+                        (role) =>
+                            AdminDropdownItem(value: role.id, label: role.role),
                       )
                       .toList(),
                   onChanged: controller.onRoleChanged,

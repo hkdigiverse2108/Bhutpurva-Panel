@@ -208,17 +208,11 @@ class ApiConstants {
   static String programDetails(String id) => 'program/$id';
 
   //attendence
-  static String attendances({
-    int page = 1,
-    int? limit,
-    String? query,
-    String? programId,
-  }) {
+  static String attendances({int page = 1, int? limit, String? query}) {
     return _buildUrl('attendance/get', {
       'page': page,
       'limit': limit,
       'search': query,
-      'programId': programId,
     });
   }
 

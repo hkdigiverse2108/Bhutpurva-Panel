@@ -139,17 +139,6 @@ class ApiConstants {
   static String updateLegality = 'legality/add-update';
 
   //location
-<<<<<<< HEAD
-  static String locations({int page = 1, int? limit, String? query}) {
-    String url = 'location/get?page=$page';
-    if (limit != null && limit.toString().isNotEmpty) {
-      url += '&limit=$limit';
-    }
-    if (query != null && query.isNotEmpty) {
-      url += '&search=$query';
-    }
-    return url;
-=======
   static String locations({
     int page = 1,
     int? limit,
@@ -176,7 +165,6 @@ class ApiConstants {
       'typeFilter': type,
       'isActive': status == 'Active' ? true : (status == null ? null : false),
     });
->>>>>>> 80990bee564a990b857aba788c23b04b8d01bed9
   }
 
   static String locationDetails(String id) => 'location/get/$id';
@@ -199,19 +187,40 @@ class ApiConstants {
   static String deleteBranch(String id) => 'branch/delete/$id';
   static String updateBranch() => 'branch/update';
   static String createBranch() => 'branch/add';
-<<<<<<< HEAD
-  static String dropdownBranch({String? query}) {
-    String url = 'branch/dropdown';
-    if (query != null && query.isNotEmpty) {
-      url += '?search=$query';
-    }
-    return url;
-  }
+  static String dropdownBranch({String? query}) =>
+      _buildUrl('branch/dropdown', {'search': query});
 
   // forgot password
   static String forgotPassword = '/auth/forgot-password';
-=======
-  static String dropdownBranch({String? query}) =>
-      _buildUrl('branch/dropdown', {'search': query});
->>>>>>> 80990bee564a990b857aba788c23b04b8d01bed9
+
+  // programs
+  static String programs({int page = 1, int? limit, String? query}) {
+    return _buildUrl('program/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+    });
+  }
+
+  static String deleteProgram(String id) => 'program/$id';
+  static String updateProgram() => 'program/update';
+  static String createProgram() => 'program/create';
+  static String programDetails(String id) => 'program/$id';
+
+  //attendence
+  static String attendances({
+    int page = 1,
+    int? limit,
+    String? query,
+    String? programId,
+  }) {
+    return _buildUrl('attendance/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'programId': programId,
+    });
+  }
+
+  static String updateAttendance(String id) => 'attendance/update/$id';
 }

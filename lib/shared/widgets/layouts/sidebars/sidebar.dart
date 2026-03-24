@@ -4,6 +4,7 @@ import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/image_const.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
 import 'package:bhutpurva_penal/core/helpers/helpers.dart';
+import 'package:bhutpurva_penal/shared/widgets/icons/icons.dart';
 import 'package:bhutpurva_penal/shared/widgets/images/rounded_image.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/sidebars/controllers/sidebar_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/sidebars/menu/menu_item.dart';
@@ -84,6 +85,11 @@ class Sidebar extends StatelessWidget {
                 icon: Iconsax.color_swatch,
               ),
               AdminMenuItem(
+                route: AppPages.managePrograms,
+                title: 'Programs',
+                icon: AppIcons.calendar,
+              ),
+              AdminMenuItem(
                 route: AppPages.allAlumni,
                 title: 'All Alumni',
                 icon: Iconsax.user,
@@ -98,6 +104,7 @@ class Sidebar extends StatelessWidget {
                 title: 'Anubhuti',
                 icon: Iconsax.path,
               ),
+
               AdminMenuItem(
                 route: AppPages.branches,
                 title: 'Branches',

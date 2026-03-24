@@ -43,10 +43,18 @@ class AppPages {
   // settings
   static const String settings = '/settings';
 
+  // programs
+  static const String managePrograms = '/manage-programs';
+  static const String createProgram = '/create-program';
+  static const String editProgram = '/edit-program';
+  static const String programDetails = '/program-details';
+  static const String editAttendance = '/edit-attendance';
+
   static const List<String> sidebarMenuItems = [
     dashboard,
     manageGroups,
     manageBatches,
+    managePrograms,
     allAlumni,
     lifeLight,
     anubhuti,

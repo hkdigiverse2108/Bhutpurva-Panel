@@ -150,11 +150,39 @@ class Student {
 class BatchDropdownModel {
   final String id;
   final String name;
+  final bool isActive;
 
-  BatchDropdownModel({required this.id, required this.name});
+  BatchDropdownModel({
+    required this.id,
+    required this.name,
+    required this.isActive,
+  });
+
+  factory BatchDropdownModel.fromRawJson(String str) =>
+      BatchDropdownModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory BatchDropdownModel.fromJson(Map<String, dynamic> json) =>
-      BatchDropdownModel(id: json["_id"], name: json["name"]);
+      BatchDropdownModel(
+        id: json["_id"],
+        name: json["name"],
+        isActive: json["isActive"],
+      );
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "isActive": isActive,
+  };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatchDropdownModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

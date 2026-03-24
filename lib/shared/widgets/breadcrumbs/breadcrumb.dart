@@ -8,25 +8,20 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class BreadcrumbWithHeading extends StatelessWidget {
+  final String heading;
+  final List<BreadcrumbItem> breadcrumbsItems;
+  final bool showDashboard;
+  final bool returnToPreviousScreen;
+  final List<Widget>? actions;
+
   const BreadcrumbWithHeading({
     super.key,
     required this.heading,
     required this.breadcrumbsItems,
     this.showDashboard = true,
     this.returnToPreviousScreen = false,
+    this.actions,
   });
-
-  /// Page heading
-  final String heading;
-
-  /// Explicit breadcrumb items
-  final List<BreadcrumbItem> breadcrumbsItems;
-
-  /// Whether to show Dashboard as root breadcrumb
-  final bool showDashboard;
-
-  /// Show back arrow before heading (detail pages)
-  final bool returnToPreviousScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -86,20 +81,31 @@ class BreadcrumbWithHeading extends StatelessWidget {
         const Gap(SizeConst.sm),
 
         /// HEADING
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (returnToPreviousScreen)
-                IconButton(
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Iconsax.arrow_left),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (returnToPreviousScreen)
+                      IconButton(
+                        onPressed: () => Get.back(),
+                        icon: const Icon(Iconsax.arrow_left),
+                      ),
+                    if (returnToPreviousScreen) const Gap(SizeConst.spaceBtwItems),
+                    PageHeadings(heading: heading),
+                  ],
                 ),
-              if (returnToPreviousScreen) const Gap(SizeConst.spaceBtwItems),
-              PageHeadings(heading: heading),
+              ),
+            ),
+            if (actions != null) ...[
+              const Gap(SizeConst.spaceBtwItems),
+              Row(children: actions!),
             ],
-          ),
+          ],
         ),
       ],
     );

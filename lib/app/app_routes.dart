@@ -33,6 +33,11 @@ import 'package:bhutpurva_penal/features/manage_groups/create_group/create_group
 import 'package:bhutpurva_penal/features/manage_groups/edit_group/edit_group.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_details/group_details.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_list/group_list.dart';
+import 'package:bhutpurva_penal/features/programs/bindings/program_binding.dart';
+import 'package:bhutpurva_penal/features/programs/create_program/create_program.dart';
+import 'package:bhutpurva_penal/features/programs/edit_program/edit_program.dart';
+import 'package:bhutpurva_penal/features/programs/program_details/program_detail.dart';
+import 'package:bhutpurva_penal/features/programs/program_list/program_list.dart';
 import 'package:bhutpurva_penal/features/settings/bindings/settings_binding.dart';
 import 'package:bhutpurva_penal/features/settings/settings.dart';
 import 'package:get/get.dart';
@@ -197,6 +202,30 @@ class AppRoutes {
       name: AppPages.settings,
       page: () => const Settings(),
       binding: SettingsBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.managePrograms,
+      page: () => const ProgramList(),
+      binding: ProgramBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.createProgram,
+      page: () => const CreateProgram(),
+      binding: ProgramBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editProgram,
+      page: () => const EditProgram(),
+      binding: ProgramBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.programDetails,
+      page: () => const ProgramDetail(),
+      binding: ProgramBinding(),
       middlewares: [AppMiddleware()],
     ),
   ];

@@ -7,6 +7,7 @@ import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_filter_button.dart';
+import 'package:bhutpurva_penal/shared/widgets/icons/icons.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_paginated_table.dart';
@@ -151,14 +152,14 @@ class GroupListDesktop extends StatelessWidget {
                     Row(
                       children: [
                         tableActionIconButton(
-                          icon: Iconsax.edit,
+                          icon: AppIcons.edit,
                           onTap: () {
                             controller.onEditGroup(group);
                           },
                         ),
                         const SizedBox(width: 6),
                         tableActionIconButton(
-                          icon: Iconsax.trash,
+                          icon: AppIcons.delete,
                           color: Colors.red,
                           onTap: () {
                             controller.deleteGroup(group.id);

@@ -100,6 +100,7 @@ class ProgramListDesktop extends StatelessWidget {
                         color: Colors.red,
                         onTap: () {
                           controller.onDeleteProgram(program.id);
+                          controller.fetchPrograms();
                         },
                       ),
                     ],

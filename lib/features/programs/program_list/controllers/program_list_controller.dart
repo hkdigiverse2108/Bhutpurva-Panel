@@ -74,6 +74,8 @@ class ProgramListController extends BaseController {
     Get.toNamed(AppPages.programDetails, arguments: program.id);
   }
 
+  // final isDeleting = false.obs;
+
   void onDeleteProgram(String id) {
     executeApi(
       apiCall: () async {
@@ -82,9 +84,10 @@ class ProgramListController extends BaseController {
         );
         if (response.status == 200) {
           programs.removeWhere((element) => element.id == id);
-          programs.refresh();
+          total--;
         }
       },
+      // loadingState: isDeleting,
       errorMessage: "Failed to delete program",
     );
   }

@@ -47,11 +47,7 @@ class ProgramDetailController extends BaseController {
     executeApi(
       apiCall: () async {
         final ResModel response = await apiService.get(
-          ApiConstants.attendances(
-            page: currentPage.value,
-            limit: rowsPerPage.value,
-            query: search.value.isNotEmpty ? search.value : null,
-          ),
+          ApiConstants.AttendanceProgram(programId!),
         );
         if (response.status == 200) {
           final data = response.data;
@@ -59,12 +55,25 @@ class ProgramDetailController extends BaseController {
             attendances.assignAll(
               data.map((e) => AttendanceModel.fromJson(e)).toList(),
             );
-          } else if (data is Map) {
-            final list = data['data'] ?? data['attendances'] ?? [];
-            attendances.assignAll(
-              (list as List).map((e) => AttendanceModel.fromJson(e)).toList(),
-            );
-            total.value = data['totalData'] ?? data['total'] ?? 0;
+            total.value = data.length;
+          } else if (data is Map<String, dynamic>) {
+            if (data.containsKey('_id') || data.containsKey('programId')) {
+              // The data itself is a single attendance record
+              attendances.assignAll([AttendanceModel.fromJson(data)]);
+              total.value = 1;
+            } else {
+              // Paginated or wrapped list
+              final list = data['data'] ?? data['attendances'] ?? [];
+              attendances.assignAll(
+                (list as List)
+                    .map(
+                      (e) =>
+                          AttendanceModel.fromJson(e as Map<String, dynamic>),
+                    )
+                    .toList(),
+              );
+              total.value = data['totalData'] ?? data['total'] ?? list.length;
+            }
           }
         }
       },

@@ -70,7 +70,10 @@ class AnubhutiDesktop extends StatelessWidget {
                     children: [
                       tableActionIconButton(
                         icon: Iconsax.trash,
-                        onTap: () {},
+                        onTap: () {
+                          controller.onDeleteAnubhuti(item.id);
+                          controller.fetchAnubhuti();
+                        },
                         color: Colors.red,
                       ),
                     ],

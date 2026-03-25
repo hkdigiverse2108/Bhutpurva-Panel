@@ -111,7 +111,7 @@ class ApiService extends GetxService {
           .post(
             url,
             headers: {'Content-Type': 'application/json', ...headers},
-            body: jsonEncode(body),
+            body: body != null ? jsonEncode(body) : null,
           )
           .timeout(
             const Duration(seconds: 10),
@@ -148,7 +148,7 @@ class ApiService extends GetxService {
       final response = await _client.put(
         url,
         headers: {'Content-Type': 'application/json', ...headers},
-        body: jsonEncode(body),
+        body: body != null ? jsonEncode(body) : null,
       );
       return _handleResponse(response);
     } on ApiException {
@@ -221,7 +221,7 @@ class ApiService extends GetxService {
       final response = await _client.delete(
         url,
         headers: {'Content-Type': 'application/json', ...headers},
-        body: jsonEncode(body),
+        body: body != null ? jsonEncode(body) : null,
       );
       return _handleResponse(response);
     } on ApiException {

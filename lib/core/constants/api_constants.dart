@@ -107,6 +107,8 @@ class ApiConstants {
     });
   }
 
+  static String deleteAnubhuti(String id) => 'anubhuti/$id';
+
   // alumni
   static String alumni({int page = 1, int? limit, String? query}) {
     return _buildUrl('user/get', {
@@ -208,13 +210,7 @@ class ApiConstants {
   static String programDetails(String id) => 'program/$id';
 
   //attendence
-  static String attendances({int page = 1, int? limit, String? query}) {
-    return _buildUrl('attendance/get', {
-      'page': page,
-      'limit': limit,
-      'search': query,
-    });
-  }
+  static String AttendanceProgram(String id) => 'attendance/program/$id';
 
   static String updateAttendance(String id) => 'attendance/update/$id';
 

@@ -47,8 +47,13 @@ class BatchDetailsController extends BaseController {
   @override
   void onInit() {
     super.onInit();
-    batchDetail.value = Get.arguments;
-    id = batchDetail.value!.id;
+    final args = Get.arguments;
+    if (args is BatchesModel) {
+      batchDetail.value = args;
+      id = args.id;
+    } else {
+      id = args.id;
+    }
     fetchBatchDetailsById(id);
     // fetchAllAlumni();
   }

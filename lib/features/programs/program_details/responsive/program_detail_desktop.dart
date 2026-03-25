@@ -49,46 +49,119 @@ class ProgramDetailDesktop extends StatelessWidget {
         body: Obx(() {
           Widget child;
 
+          // 🔄 LOADING
           if (controller.isLoading.value) {
             child = const AppTableShimmer(
               key: ValueKey('attendance_shimmer'),
               columnWidths: [60, null, null, null],
             );
-          } else {
-            child = AppPaginatedTable<AttendanceModel>(
-              key: const ValueKey('attendance_table'),
-              columns: const [
-                AppTableColumn(title: 'No', width: 60),
-                AppTableColumn(title: 'Name'),
-                AppTableColumn(title: 'Batch'),
-                AppTableColumn(title: 'Date'),
-              ],
-              rows: controller.attendances,
-              totalRows: controller.total.value,
-              rowsPerPage: controller.rowsPerPage.value,
-              onPageChanged: controller.onPageChange,
-              onRefresh: controller.fetchAttendance,
-              rowBuilder: (item, index) {
-                return DataRow(
-                  color: TableHelpers.rowHoverColor(),
-                  cells: [
-                    DataCell(Text((index + 1).toString())),
-                    DataCell(
-                      InkWell(
-                        child: Text(
-                          item.programId.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: ColorConst.primary,
-                          ),
-                        ),
-                      ),
+          }
+          // 📭 EMPTY
+          else if (controller.attendances.isEmpty) {
+            child = const Center(
+              key: ValueKey('empty_state'),
+              child: Text("No attendance records found"),
+            );
+          }
+          // ✅ MAIN UI
+          else {
+            final program = controller.program.isNotEmpty
+                ? controller.program.first
+                : null;
+
+            child = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // =========================
+                // 🧾 PROGRAM HEADER
+                // =========================
+                if (program != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
                     ),
-                    DataCell(Text(item.batchId.name)),
-                    DataCell(Text(DateFormat('dd MMM yyyy').format(item.date))),
-                  ],
-                );
-              },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 🔥 TOP ROW (Name + Date)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              program.name,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (program.createdAt != null)
+                              Text(
+                                DateFormat(
+                                  'dd MMM yyyy',
+                                ).format(program.createdAt!),
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // 📝 DESCRIPTION
+                        Text(
+                          program.description ?? '',
+                          style: const TextStyle(color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                // =========================
+                // 📊 TABLE
+                // =========================
+                Expanded(
+                  child: AppPaginatedTable<AttendanceModel>(
+                    key: const ValueKey('attendance_table'),
+                    columns: const [
+                      AppTableColumn(title: 'No', width: 60),
+                      AppTableColumn(title: 'Name'),
+                      AppTableColumn(title: 'Father Name'),
+                      AppTableColumn(title: 'Phone'),
+                      AppTableColumn(title: 'Whatsapp'),
+                      AppTableColumn(title: 'Date'),
+                    ],
+                    rows: controller.attendances,
+                    totalRows: controller.total.value,
+                    rowsPerPage: controller.rowsPerPage.value,
+                    onPageChanged: controller.onPageChange,
+                    onRefresh: controller.fetchAttendance,
+                    rowBuilder: (item, index) {
+                      return DataRow(
+                        color: TableHelpers.rowHoverColor(),
+                        cells: [
+                          DataCell(Text((index + 1).toString())),
+                          DataCell(Text(item.students.first.studentId.name)),
+                          DataCell(
+                            Text(item.students.first.studentId.fatherName),
+                          ),
+                          DataCell(
+                            Text(item.students.first.studentId.phoneNumber),
+                          ),
+                          DataCell(
+                            Text(item.students.first.studentId.whatsappNumber),
+                          ),
+                          DataCell(
+                            Text(DateFormat('dd MMM yyyy').format(item.date)),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           }
 

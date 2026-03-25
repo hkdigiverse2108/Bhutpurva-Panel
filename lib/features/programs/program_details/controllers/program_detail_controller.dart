@@ -33,8 +33,28 @@ class ProgramDetailController extends BaseController {
       program.assignAll([args]);
     } else if (args is String) {
       programId = args;
+      fetchProgram();
     }
     fetchAttendance();
+  }
+
+  void fetchProgram() {
+    if (programId == null) return;
+    executeApi(
+      apiCall: () async {
+        final ResModel response = await apiService.get(
+          ApiConstants.programDetails(programId!),
+        );
+        if (response.status == 200 && response.data != null) {
+          // If the backend wraps the object in a 'data' key, unwrap it:
+          final Map<String, dynamic> data =
+              response.data is Map && (response.data as Map).containsKey('data')
+              ? response.data['data']
+              : response.data;
+          program.assignAll([Program.fromJson(data)]);
+        }
+      },
+    );
   }
 
   @override

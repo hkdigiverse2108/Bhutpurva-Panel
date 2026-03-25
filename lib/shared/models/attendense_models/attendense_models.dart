@@ -69,7 +69,7 @@ class Id {
 }
 
 class Student {
-  final String studentId;
+  final StudentId studentId;
   final bool isPresent;
 
   Student({required this.studentId, required this.isPresent});
@@ -78,11 +78,54 @@ class Student {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Student.fromJson(Map<String, dynamic> json) =>
-      Student(studentId: json["studentId"], isPresent: json["isPresent"]);
+  factory Student.fromJson(Map<String, dynamic> json) => Student(
+    studentId: StudentId.fromJson(json["studentId"]),
+    isPresent: json["isPresent"],
+  );
 
   Map<String, dynamic> toJson() => {
-    "studentId": studentId,
+    "studentId": studentId.toJson(),
     "isPresent": isPresent,
+  };
+}
+
+class StudentId {
+  final String id;
+  final String name;
+  final String fatherName;
+  final String surname;
+  final String phoneNumber;
+  final String whatsappNumber;
+
+  StudentId({
+    required this.id,
+    required this.name,
+    required this.fatherName,
+    required this.surname,
+    required this.phoneNumber,
+    required this.whatsappNumber,
+  });
+
+  factory StudentId.fromRawJson(String str) =>
+      StudentId.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory StudentId.fromJson(Map<String, dynamic> json) => StudentId(
+    id: json["_id"],
+    name: json["name"],
+    fatherName: json["fatherName"],
+    surname: json["surname"],
+    phoneNumber: json["phoneNumber"],
+    whatsappNumber: json["whatsappNumber"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "fatherName": fatherName,
+    "surname": surname,
+    "phoneNumber": phoneNumber,
+    "whatsappNumber": whatsappNumber,
   };
 }

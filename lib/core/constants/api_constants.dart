@@ -217,4 +217,13 @@ class ApiConstants {
   }
 
   static String updateAttendance(String id) => 'attendance/update/$id';
+
+  // tithi calendar
+  static String tithiCalendar({int? year}) =>
+      _buildUrl('tithiCalender', {'year': year});
+  static const initTithiCalendar = 'tithiCalender/add-update';
+  static const updateTithiCalendarMonth = 'tithiCalender/add-update-month';
+
+  // image
+  static const image = "upload";
 }

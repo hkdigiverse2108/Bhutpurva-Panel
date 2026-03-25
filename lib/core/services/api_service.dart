@@ -164,6 +164,7 @@ class ApiService extends GetxService {
     Map<String, String>? fields,
     Map<String, String>? headers,
     List<http.MultipartFile>? files,
+    dynamic oldImages,
   }) async {
     if (!await hasConnection()) throw Exception("No internet connection");
 
@@ -182,6 +183,14 @@ class ApiService extends GetxService {
 
     if (fields != null) request.fields.addAll(fields);
     if (files != null) request.files.addAll(files);
+
+    if (oldImages != null) {
+      if (oldImages is String) {
+        request.fields['oldImages'] = oldImages;
+      } else if (oldImages is List) {
+        request.fields['oldImages'] = jsonEncode(oldImages);
+      }
+    }
 
     try {
       final streamedResponse = await request.send();

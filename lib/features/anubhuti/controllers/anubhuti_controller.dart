@@ -34,11 +34,13 @@ class AnubhutiController extends BaseController {
   void fetchAnubhuti() {
     executeApi(
       apiCall: () async {
-        final ResModel res = await apiService.get(ApiConstants.anubhuti(
-          page: page,
-          limit: rowsPerPage,
-          query: query.value,
-        ));
+        final ResModel res = await apiService.get(
+          ApiConstants.anubhuti(
+            page: page,
+            limit: rowsPerPage,
+            query: query.value,
+          ),
+        );
         if (res.status == 200) {
           final dataList = res.data['anubhutis'] ?? res.data['data'] ?? [];
           anubhuti.assignAll(
@@ -50,6 +52,21 @@ class AnubhutiController extends BaseController {
         }
       },
       errorMessage: "Failed to fetch anubhuti",
+    );
+  }
+
+  void onDeleteAnubhuti(String id) {
+    executeApi(
+      apiCall: () async {
+        final ResModel res = await apiService.delete(
+          ApiConstants.deleteAnubhuti(id),
+        );
+        if (res.status == 200) {
+          anubhuti.removeWhere((element) => element.id == id);
+          total--;
+        }
+      },
+      errorMessage: "Failed to delete anubhuti",
     );
   }
 

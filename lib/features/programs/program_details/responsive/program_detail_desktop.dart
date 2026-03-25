@@ -1,14 +1,16 @@
+import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
+import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/programs/program_details/controllers/program_detail_controller.dart';
 import 'package:bhutpurva_penal/shared/models/attendense_models/attendense_models.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
-
 import 'package:bhutpurva_penal/shared/widgets/icons/icons.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_paginated_table.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_table_columns.dart';
+import 'package:bhutpurva_penal/shared/widgets/tables/app_table_shimmer.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,79 +23,94 @@ class ProgramDetailDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = ProgramDetailController.instance;
 
-    return AdminTablePageLayout(
-      header: const BreadcrumbWithHeading(
-        heading: 'Attendence',
-        breadcrumbsItems: [BreadcrumbItem(title: 'Attendence')],
-      ),
-      toolbar: AdminTableToolbar(
-        search: TableSearchField(
-          controller: controller.searchController,
-          hint: 'Search Attendence...',
-          onSearchChanged: controller.onSearchChanged,
+    return Scaffold(
+      body: AdminTablePageLayout(
+        header: Obx(() {
+          final programName = controller.program.isNotEmpty
+              ? controller.program.first.name
+              : 'Attendance Details';
+          return BreadcrumbWithHeading(
+            heading: programName,
+            breadcrumbsItems: [
+              BreadcrumbItem(title: 'Programs', route: AppPages.managePrograms),
+              BreadcrumbItem(title: programName),
+            ],
+            returnToPreviousScreen: true,
+          );
+        }),
+        toolbar: AdminTableToolbar(
+          search: TableSearchField(
+            controller: controller.searchController,
+            hint: 'Search Attendance...',
+            onSearchChanged: controller.onSearchChanged,
+          ),
+          actions: const [],
         ),
-        actions: const [],
-      ),
-      body: Obx(
-        () => AppPaginatedTable<AttendanceModel>(
-          columns: const [
-            AppTableColumn(title: 'Name'),
-            AppTableColumn(title: 'Batch'),
-            AppTableColumn(title: 'Date'),
-            AppTableColumn(title: 'Actions', width: 100),
-          ],
-          rows: controller.attendances,
-          totalRows: controller.total.value,
-          rowsPerPage: controller.rowsPerPage.value,
-          isLoading: controller.isLoading.value,
-          onPageChanged: controller.onPageChange,
-          onRefresh: controller.fetchAttendance,
+        body: Obx(() {
+          Widget child;
 
-          rowBuilder: (program, index) {
-            return DataRow(
-              cells: [
-                DataCell(
-                  InkWell(
-                    child: Text(
-                      program.programId.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: ColorConst.primary,
-                      ),
-                    ),
-                  ),
-                ),
-                DataCell(Text(program.batchId.name)),
-                // DataCell(
-                //   Tooltip(
-                //     message: program.studentId.name,
-                //     child: Text(
-                //       program.studentId.name,
-                //       maxLines: 1,
-                //       overflow: TextOverflow.ellipsis,
-                //     ),
-                //   ),
-                // ),
-                DataCell(Text(DateFormat('dd MMM yyyy').format(program.date))),
-                DataCell(
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          AppIcons.edit,
-                          size: 20,
-                          color: ColorConst.primary,
+          if (controller.isLoading.value) {
+            child = const AppTableShimmer(
+              key: ValueKey('attendance_shimmer'),
+              columnWidths: [60, null, null, null],
+            );
+          } else {
+            child = AppPaginatedTable<AttendanceModel>(
+              key: const ValueKey('attendance_table'),
+              columns: const [
+                AppTableColumn(title: 'No', width: 60),
+                AppTableColumn(title: 'Name'),
+                AppTableColumn(title: 'Batch'),
+                AppTableColumn(title: 'Date'),
+              ],
+              rows: controller.attendances,
+              totalRows: controller.total.value,
+              rowsPerPage: controller.rowsPerPage.value,
+              onPageChanged: controller.onPageChange,
+              onRefresh: controller.fetchAttendance,
+              rowBuilder: (item, index) {
+                return DataRow(
+                  color: TableHelpers.rowHoverColor(),
+                  cells: [
+                    DataCell(Text((index + 1).toString())),
+                    DataCell(
+                      InkWell(
+                        child: Text(
+                          item.programId.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: ColorConst.primary,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                    ),
+                    DataCell(Text(item.batchId.name)),
+                    DataCell(Text(DateFormat('dd MMM yyyy').format(item.date))),
+                  ],
+                );
+              },
             );
-          },
-        ),
+          }
+
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 350),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.04),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: child,
+          );
+        }),
       ),
     );
   }

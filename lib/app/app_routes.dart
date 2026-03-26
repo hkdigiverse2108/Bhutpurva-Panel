@@ -15,6 +15,8 @@ import 'package:bhutpurva_penal/features/calender/bindings/calender_binding.dart
 import 'package:bhutpurva_penal/features/calender/calender.dart';
 import 'package:bhutpurva_penal/features/dashboard/bindings/dashboard_binding.dart';
 import 'package:bhutpurva_penal/features/dashboard/dashboard.dart';
+import 'package:bhutpurva_penal/features/delete_request/bindings/delete_request_binding.dart';
+import 'package:bhutpurva_penal/features/delete_request/delete_request.dart';
 import 'package:bhutpurva_penal/features/feedback/bindings/feedback_binding.dart';
 import 'package:bhutpurva_penal/features/feedback/feedback.dart';
 import 'package:bhutpurva_penal/features/life_light/bindings/life_light_binding.dart';
@@ -226,6 +228,12 @@ class AppRoutes {
       name: AppPages.programDetails,
       page: () => const ProgramDetail(),
       binding: ProgramBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.deleteRequest,
+      page: () => const DeleteRequest(),
+      binding: DeleteRequestBinding(),
       middlewares: [AppMiddleware()],
     ),
   ];

@@ -50,6 +50,9 @@ class AppPages {
   static const String programDetails = '/program-details';
   static const String editAttendance = '/edit-attendance';
 
+  // delete request
+  static const String deleteRequest = '/delete-request';
+
   static const List<String> sidebarMenuItems = [
     dashboard,
     manageGroups,

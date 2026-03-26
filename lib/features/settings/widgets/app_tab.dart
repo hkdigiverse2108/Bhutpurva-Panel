@@ -15,91 +15,93 @@ class AppTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = SettingsController.instance;
-    final bool isMobile = DeviceUtility.isMobileScreen(context);
+    final isMobile = DeviceUtility.isMobileScreen(context);
 
     return Form(
       key: controller.appFormKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AdminFormSectionCard(
             title: 'App Details',
             fields: [
-              if (isMobile)
-                Column(
-                  children: [
-                    _buildLogo(controller),
-                    const Gap(16),
-                    _buildLogoActions(controller),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    _buildLogo(controller),
-                    const Gap(16),
-                    Expanded(child: _buildLogoActions(controller)),
-                  ],
+              Flex(
+                direction: isMobile ? Axis.vertical : Axis.horizontal,
+                crossAxisAlignment: isMobile
+                    ? CrossAxisAlignment.center
+                    : CrossAxisAlignment.start,
+                children: [
+                  _buildLogo(controller),
+                  const Gap(16),
+                  _buildLogoActions(controller, isMobile),
+                ],
+              ),
+
+              _buildResponsiveRow(isMobile, [
+                OuterLabelTextField(
+                  label: 'App Name',
+                  hint: 'Enter App Name',
+                  controller: controller.appNameController,
+                  prefixIcon: const Icon(PhosphorIconsBold.appWindow),
                 ),
-              const Gap(16),
-              if (isSmallScreen(context)) ...[
-                _buildAppNameField(controller),
-                const Gap(16),
-                _buildWebsiteUrlField(controller),
-              ] else
-                Row(
-                  children: [
-                    Expanded(child: _buildAppNameField(controller)),
-                    const Gap(16),
-                    Expanded(child: _buildWebsiteUrlField(controller)),
-                  ],
+                OuterLabelTextField(
+                  label: 'Website Url',
+                  hint: 'Enter Website Url',
+                  controller: controller.webSiteUrlController,
+                  prefixIcon: const Icon(PhosphorIconsBold.globe),
                 ),
-              const Gap(16),
-              _buildAddressField(controller),
+              ]),
+
+              OuterLabelTextField(
+                label: 'Organization Address',
+                hint: 'Enter Organization Address',
+                controller: controller.organizationAddressController,
+                prefixIcon: const Icon(PhosphorIconsBold.mapPin),
+              ),
             ],
           ),
+
           const Gap(16),
-          SizedBox(
-            width: isMobile ? double.infinity : 550,
-            child: AdminFormSectionCard(
-              title: "Platform Details",
-              fields: [
-                OuterLabelTextField(
-                  label: 'App Url',
-                  controller: controller.appUrlController,
-                  prefixIcon: const Icon(PhosphorIconsBold.link),
-                  hint: 'https://example.com',
-                ),
-                OuterLabelTextField(
-                  label: 'PlayStore Url',
-                  controller: controller.playStoreUrlController,
-                  prefixIcon: const Icon(PhosphorIconsBold.googlePlayLogo),
-                  hint: 'https://play.google.com/store/...',
-                ),
-                OuterLabelTextField(
-                  label: 'AppStore Url',
-                  controller: controller.appStoreUrlController,
-                  prefixIcon: const Icon(PhosphorIconsBold.appStoreLogo),
-                  hint: 'https://apps.apple.com/app/...',
-                ),
-                const Gap(16),
-                SizedBox(
+
+          AdminFormSectionCard(
+            title: "Platform Details",
+            fields: [
+              OuterLabelTextField(
+                label: 'App Url',
+                controller: controller.appUrlController,
+                prefixIcon: const Icon(PhosphorIconsBold.link),
+                hint: 'https://example.com',
+              ),
+              OuterLabelTextField(
+                label: 'PlayStore Url',
+                controller: controller.playStoreUrlController,
+                prefixIcon: const Icon(PhosphorIconsBold.googlePlayLogo),
+                hint: 'https://play.google.com/store/...',
+              ),
+              OuterLabelTextField(
+                label: 'AppStore Url',
+                controller: controller.appStoreUrlController,
+                prefixIcon: const Icon(PhosphorIconsBold.appStoreLogo),
+                hint: 'https://apps.apple.com/app/...',
+              ),
+
+              /// 🔹 Button (aligned like AccountTab)
+              Align(
+                alignment: isMobile ? Alignment.center : Alignment.centerRight,
+                child: SizedBox(
                   width: isMobile ? double.infinity : 150,
+                  height: 40,
                   child: ElevatedButton(
                     onPressed: controller.updateApp,
                     child: const Text('Update'),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-
-  bool isSmallScreen(BuildContext context) =>
-      MediaQuery.of(context).size.width < 1000;
 
   Widget _buildLogo(SettingsController controller) {
     return Obx(
@@ -127,13 +129,14 @@ class AppTab extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoActions(SettingsController controller) {
+  Widget _buildLogoActions(SettingsController controller, bool isMobile) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: isMobile
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
-        Wrap(
-          spacing: 16,
-          runSpacing: 10,
+        Flex(
+          direction: isMobile ? Axis.vertical : Axis.horizontal,
           children: [
             TableActionButton(
               onTap: () {},
@@ -141,6 +144,7 @@ class AppTab extends StatelessWidget {
               icon: PhosphorIconsRegular.pencil,
               color: ColorConst.primary,
             ),
+            Gap(isMobile ? 10 : 16),
             TableActionButton(
               onTap: () {},
               label: 'Remove Logo',
@@ -150,60 +154,32 @@ class AppTab extends StatelessWidget {
           ],
         ),
         const Gap(10),
-        const Text(
-          "Images should be at least 400 x 400px as a png or jpeg file.",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-          style: TextStyle(fontSize: 12),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            "Images should be at least 400 x 400px as a png or jpeg file.",
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
+            style: const TextStyle(fontSize: 12),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildAppNameField(SettingsController controller) {
-    return TextFormField(
-      keyboardType: TextInputType.name,
-      controller: controller.appNameController,
-      decoration: const InputDecoration(
-        labelText: 'App Name',
-        hintText: "Enter App Name",
-        prefixIcon: Icon(PhosphorIconsBold.appWindow, fill: 0.0),
-      ),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Name is required';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildWebsiteUrlField(SettingsController controller) {
-    return TextFormField(
-      keyboardType: TextInputType.url,
-      controller: controller.webSiteUrlController,
-      decoration: const InputDecoration(
-        labelText: 'Website Url',
-        hintText: "Enter Website Url",
-        prefixIcon: Icon(PhosphorIconsBold.globe, fill: 0.0),
-      ),
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Website URL is required';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildAddressField(SettingsController controller) {
-    return TextFormField(
-      controller: controller.organizationAddressController,
-      decoration: const InputDecoration(
-        labelText: 'Organization Address',
-        hintText: "Enter Organization Address",
-        prefixIcon: Icon(PhosphorIconsBold.mapPin, fill: 0.0),
-      ),
+  /// 🔹 Same helper as AccountTab
+  Widget _buildResponsiveRow(bool isMobile, List<Widget> children) {
+    if (isMobile) {
+      return Column(
+        children: children.expand((widget) => [widget, const Gap(16)]).toList()
+          ..removeLast(),
+      );
+    }
+    return Row(
+      children:
+          children
+              .expand((widget) => [Expanded(child: widget), const Gap(16)])
+              .toList()
+            ..removeLast(),
     );
   }
 }

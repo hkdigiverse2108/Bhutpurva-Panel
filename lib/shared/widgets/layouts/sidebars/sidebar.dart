@@ -95,6 +95,11 @@ class Sidebar extends StatelessWidget {
                 icon: Iconsax.user,
               ),
               AdminMenuItem(
+                route: AppPages.deleteRequest,
+                title: 'Delete Request',
+                icon: Iconsax.trash,
+              ),
+              AdminMenuItem(
                 route: AppPages.lifeLight,
                 title: 'Life Light',
                 icon: PhosphorIconsBold.flowerLotus,

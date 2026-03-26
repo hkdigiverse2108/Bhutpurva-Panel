@@ -172,28 +172,4 @@ class AccountTab extends StatelessWidget {
             ..removeLast(),
     );
   }
-
-  // Widget _buildTextField({
-  //   required String label,
-  //   required String hint,
-  //   required TextEditingController controller,
-  //   required IconData icon,
-  //   TextInputType keyboardType = TextInputType.text,
-  // }) {
-  //   return TextFormField(
-  //     keyboardType: keyboardType,
-  //     controller: controller,
-  //     decoration: InputDecoration(
-  //       labelText: label,
-  //       hintText: hint,
-  //       prefixIcon: Icon(icon, fill: 0.0),
-  //     ),
-  //     validator: (value) {
-  //       if (value == null || value.trim().isEmpty) {
-  //         return '$label is required';
-  //       }
-  //       return null;
-  //     },
-  //   );
-  // }
 }

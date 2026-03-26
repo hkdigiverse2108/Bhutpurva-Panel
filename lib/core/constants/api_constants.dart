@@ -254,4 +254,8 @@ class ApiConstants {
 
   // image
   static const image = "upload";
+
+  // delete request
+  static String deleteRequest = "deleteRequest/get";
+  static String deleteRequestUpdate = "deleteRequest/update";
 }

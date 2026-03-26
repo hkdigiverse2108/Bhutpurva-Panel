@@ -33,7 +33,7 @@ class SurveyResponsesTablet extends GetView<SurveyResponsesController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const AppTableShimmer(columnWidths: [40, null, 100, 80]);
+          return const AppTableShimmer(columnWidths: [60, null, 150, 100]);
         }
         if (controller.responses.isEmpty) {
           return const Center(
@@ -45,10 +45,10 @@ class SurveyResponsesTablet extends GetView<SurveyResponsesController> {
         }
         return AppPaginatedTable<SurveyResponseModel>(
           columns: [
-            AppTableColumn(title: 'No', width: 40),
+            AppTableColumn(title: 'No', width: 60),
             AppTableColumn(title: 'Participant Name'),
-            AppTableColumn(title: 'Submitted At', width: 100),
-            AppTableColumn(title: 'Action', width: 80),
+            AppTableColumn(title: 'Submitted At', width: 150),
+            AppTableColumn(title: 'Action', width: 100),
           ],
           rows: controller.responses,
           totalRows: controller.total,

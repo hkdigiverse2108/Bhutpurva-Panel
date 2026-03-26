@@ -50,6 +50,12 @@ class AppPages {
   static const String programDetails = '/program-details';
   static const String editAttendance = '/edit-attendance';
 
+  // surveys
+  static const String manageSurveys = '/manage-surveys';
+  static const String createSurvey = '/create-survey';
+  static const String editSurvey = '/edit-survey';
+  static String surveyResponses(String id) => '/survey-responses/$id';
+
   static const List<String> sidebarMenuItems = [
     dashboard,
     manageGroups,
@@ -61,5 +67,6 @@ class AppPages {
     calender,
     feedback,
     settings,
+    manageSurveys,
   ];
 }

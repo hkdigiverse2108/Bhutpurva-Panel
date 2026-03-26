@@ -57,6 +57,8 @@ class SettingsController extends BaseController {
   final playStoreIdController = TextEditingController();
   final appStoreIdController = TextEditingController();
   final sgsiPdfController = TextEditingController();
+  final anubhutiImage = ''.obs;
+  final lifeLightImage = ''.obs;
   final appLogo = ''.obs;
   final organizationAddressController = TextEditingController();
 
@@ -294,6 +296,8 @@ class SettingsController extends BaseController {
     sgsiPdfController.text = setting?.sgsiPdf ?? '';
     appLogo.value = setting?.logo ?? '';
     organizationAddressController.text = setting?.address ?? '';
+    anubhutiImage.value = setting?.anubhutiImage ?? '';
+    lifeLightImage.value = setting?.lifeLightImage ?? '';
 
     // Support controls
     supportPhoneController.text = setting?.supportPhone ?? '';

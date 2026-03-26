@@ -31,18 +31,24 @@ class BatchesModel {
   String toRawJson() => json.encode(toJson());
 
   factory BatchesModel.fromJson(Map<String, dynamic> json) => BatchesModel(
-    id: json["_id"],
-    name: json["name"],
+    id: json["_id"] ?? '',
+    name: json["name"] ?? '',
     groupId: json["groupId"] == null ? null : GroupId.fromJson(json["groupId"]),
-    monitorIds: List<dynamic>.from(json["monitorIds"].map((x) => x)),
-    isActive: json["isActive"],
-    isDeleted: json["isDeleted"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    students: List<Student>.from(
-      json["students"].map((x) => Student.fromJson(x)),
+    monitorIds: List<dynamic>.from(
+      (json["monitorIds"] as List?)?.map((x) => x) ?? [],
     ),
-    studentCount: json["studentCount"],
+    isActive: json["isActive"] ?? true,
+    isDeleted: json["isDeleted"] ?? false,
+    createdAt: json["createdAt"] != null
+        ? DateTime.tryParse(json["createdAt"].toString()) ?? DateTime.now()
+        : DateTime.now(),
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.tryParse(json["updatedAt"].toString()) ?? DateTime.now()
+        : DateTime.now(),
+    students: List<Student>.from(
+      (json["students"] as List?)?.map((x) => Student.fromJson(x)) ?? [],
+    ),
+    studentCount: json["studentCount"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
@@ -83,13 +89,19 @@ class GroupId {
   String toRawJson() => json.encode(toJson());
 
   factory GroupId.fromJson(Map<String, dynamic> json) => GroupId(
-    id: json["_id"],
-    name: json["name"],
-    leaderIds: List<String>.from(json["leaderIds"].map((x) => x)),
-    isActive: json["isActive"],
-    isDeleted: json["isDeleted"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    id: json["_id"] ?? '',
+    name: json["name"] ?? '',
+    leaderIds: List<String>.from(
+      (json["leaderIds"] as List?)?.map((x) => x) ?? [],
+    ),
+    isActive: json["isActive"] ?? true,
+    isDeleted: json["isDeleted"] ?? false,
+    createdAt: json["createdAt"] != null
+        ? DateTime.tryParse(json["createdAt"].toString()) ?? DateTime.now()
+        : DateTime.now(),
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.tryParse(json["updatedAt"].toString()) ?? DateTime.now()
+        : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -127,13 +139,13 @@ class Student {
   String toRawJson() => json.encode(toJson());
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-    id: json["_id"],
-    email: json["email"],
-    name: json["name"],
-    surname: json["surname"],
-    phoneNumber: json["phoneNumber"],
-    currentCity: json["currentCity"],
-    isVerified: json["isVerified"],
+    id: json["_id"] ?? '',
+    email: json["email"] ?? '',
+    name: json["name"] ?? '',
+    surname: json["surname"] ?? '',
+    phoneNumber: json["phoneNumber"] ?? '',
+    currentCity: json["currentCity"] ?? '',
+    isVerified: json["isVerified"] ?? false,
   );
 
   Map<String, dynamic> toJson() => {

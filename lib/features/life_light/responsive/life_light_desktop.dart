@@ -3,6 +3,7 @@ import 'package:bhutpurva_penal/features/life_light/controllers/life_light_contr
 import 'package:bhutpurva_penal/shared/models/life_light_models/life_light_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
@@ -32,7 +33,13 @@ class LifeLightDesktop extends GetView<LifeLightController> {
           hint: 'Search Group...',
           onSearchChanged: controller.onSearchChanged,
         ),
-        actions: [SizedBox()],
+        actions: [
+          TableActionButton(
+            onTap: () => controller.openUploadImagePopup(),
+            icon: Iconsax.image,
+            label: "Life Light Image",
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

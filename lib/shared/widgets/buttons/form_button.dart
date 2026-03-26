@@ -20,68 +20,85 @@ class AdminFormButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool disabled = onPressed == null || isLoading;
+    final Color effectiveColor = _getVariantColor(context);
+    final bool isGhost = variant == AdminButtonVariant.ghost;
+    final bool isSecondary = variant == AdminButtonVariant.secondary;
 
-    final ButtonStyle style = _style(context);
-
-    return ElevatedButton(
-      onPressed: disabled ? null : onPressed,
-      style: style,
-      child: isLoading
-          ? const SizedBox(
-              height: 18,
-              width: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 16),
-                  const SizedBox(width: 6),
-                ],
-                Text(label),
-              ],
+    return UnconstrainedBox(
+      alignment: Alignment.centerLeft,
+      child: Material(
+        color: disabled
+            ? Colors.grey.shade200
+            : (isGhost ? Colors.transparent : effectiveColor),
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          onTap: disabled ? null : onPressed,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: isSecondary
+                  ? Border.all(color: Colors.grey.shade300)
+                  : (isGhost
+                        ? Border.all(
+                            color: effectiveColor.withValues(alpha: 0.3),
+                          )
+                        : null),
             ),
+            child: Center(
+              child: isLoading
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(
+                            icon,
+                            size: 16,
+                            color: isGhost || isSecondary
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          const SizedBox(width: 6),
+                        ],
+                        Text(
+                          label,
+                          style: TextStyle(
+                            color: isGhost || isSecondary
+                                ? Colors.black
+                                : Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  ButtonStyle _style(BuildContext context) {
+  Color _getVariantColor(BuildContext context) {
     switch (variant) {
       case AdminButtonVariant.primary:
-        return ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        );
-
+        return Theme.of(context).primaryColor;
       case AdminButtonVariant.secondary:
-        return ElevatedButton.styleFrom(
-          backgroundColor: Colors.grey.shade100,
-          foregroundColor: Colors.black,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: BorderSide(color: Colors.grey.shade300),
-          ),
-        );
-
+        return Colors.grey.shade100;
       case AdminButtonVariant.danger:
-        return ElevatedButton.styleFrom(
-          backgroundColor: Colors.red.shade600,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        );
-
+        return Colors.red.shade600;
       case AdminButtonVariant.ghost:
-        return ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          foregroundColor: Theme.of(context).colorScheme.primary,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        );
+        return Theme.of(context).primaryColor;
     }
   }
 }

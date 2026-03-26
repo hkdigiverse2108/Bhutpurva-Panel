@@ -59,16 +59,18 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
   }
 
   void _updateControllerValue() {
-    final selected = widget.items
-        .where((e) => e.value == widget.value)
-        .cast<AdminDropdownItem<T>?>()
-        .firstOrNull;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final selected = widget.items
+          .where((e) => e.value == widget.value)
+          .cast<AdminDropdownItem<T>?>()
+          .firstOrNull;
 
-    if (selected != null) {
-      _controller.text = selected.label;
-    } else {
-      _controller.clear();
-    }
+      final newText = selected?.label ?? '';
+      if (_controller.text != newText) {
+        _controller.text = newText;
+      }
+    });
   }
 
   void _removeOverlay() {

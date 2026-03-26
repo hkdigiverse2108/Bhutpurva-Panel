@@ -14,6 +14,8 @@ import 'package:bhutpurva_penal/shared/widgets/tables/app_paginated_table.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_table_columns.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_table_shimmer.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.dart';
+import 'package:bhutpurva_penal/app/app_pages.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -86,7 +88,7 @@ class GroupListDesktop extends StatelessWidget {
               AppTableColumn(title: "Leader Count"),
               AppTableColumn(title: "Batch Count"),
               AppTableColumn(title: "Status", width: 120),
-              AppTableColumn(title: "Actions", width: 140),
+              AppTableColumn(title: "Actions", width: 170),
             ],
             rows: controller.groups,
             totalRows: controller.total,
@@ -152,10 +154,27 @@ class GroupListDesktop extends StatelessWidget {
                     Row(
                       children: [
                         tableActionIconButton(
+                          icon: Iconsax.document_text_1,
+                          onTap: () {
+                            Get.toNamed(AppPages.createSurvey, arguments: {'scope': 'group', 'groupId': group.id});
+                          },
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 6),
+                        tableActionIconButton(
                           icon: AppIcons.edit,
                           onTap: () {
                             controller.onEditGroup(group);
                           },
+                        ),
+                        const SizedBox(width: 6),
+                        tableActionIconButton(
+                          icon: Iconsax.add,
+                          color: Colors.green,
+                          onTap: () => Get.toNamed(AppPages.createSurvey, arguments: {
+                            'scope': 'group',
+                            'groupId': group.id,
+                          }),
                         ),
                         const SizedBox(width: 6),
                         tableActionIconButton(

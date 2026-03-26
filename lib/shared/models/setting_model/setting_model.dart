@@ -28,6 +28,8 @@ class Setting {
   final String? playStoreId;
   final String? playStoreUrl;
   final String? sgsiPdf;
+  final String? anubhutiImage;
+  final String? lifeLightImage;
   final SocialLinks? socialLinks;
   final String? supportEmail;
   final String? supportPhone;
@@ -49,6 +51,8 @@ class Setting {
     this.logo,
     this.playStoreId,
     this.playStoreUrl,
+    this.anubhutiImage,
+    this.lifeLightImage,
     this.sgsiPdf,
     this.socialLinks,
     this.supportEmail,
@@ -78,6 +82,8 @@ class Setting {
     logo: json["logo"],
     playStoreId: json["playStoreId"],
     playStoreUrl: json["playStoreUrl"],
+    anubhutiImage: json["anubhutiImage"],
+    lifeLightImage: json["lifeLightImage"],
     sgsiPdf: json["sgsiPdf"],
     socialLinks: json["socialLinks"] == null
         ? null
@@ -105,6 +111,8 @@ class Setting {
     "logo": logo,
     "playStoreId": playStoreId,
     "playStoreUrl": playStoreUrl,
+    "anubhutiImage": anubhutiImage,
+    "lifeLightImage": lifeLightImage,
     "sgsiPdf": sgsiPdf,
     "socialLinks": socialLinks?.toJson(),
     "supportEmail": supportEmail,

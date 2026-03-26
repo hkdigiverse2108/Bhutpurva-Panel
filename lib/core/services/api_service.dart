@@ -265,6 +265,23 @@ class ApiService extends GetxService {
   dynamic readFromStorage(String key) => _storage.read(key);
 
   void removeFromStorage(String key) => _storage.remove(key);
+
+  Future<dynamic> getImage(String endpoint) async {
+    if (!await hasConnection()) throw Exception("No internet connection");
+
+    Uri url = Uri.parse('$baseUrl$endpoint');
+    _logger.i("GET Request: $url");
+
+    try {
+      final response = await _client.get(url);
+      return _handleResponse(response);
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      _logger.e("GET error: $e");
+      throw Exception("GET error: $e");
+    }
+  }
 }
 
 class ApiException implements Exception {

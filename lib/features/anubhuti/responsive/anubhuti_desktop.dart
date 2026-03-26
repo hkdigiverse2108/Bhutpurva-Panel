@@ -37,7 +37,9 @@ class AnubhutiDesktop extends StatelessWidget {
         actions: [
           TableActionButton(
             label: 'Add Anubhuti Image',
-            onTap: () {},
+            onTap: () {
+              controller.openUploadImagePopup();
+            },
             icon: Iconsax.add,
           ),
         ],

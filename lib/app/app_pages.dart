@@ -70,5 +70,6 @@ class AppPages {
     feedback,
     settings,
     manageSurveys,
+    deleteRequest,
   ];
 }

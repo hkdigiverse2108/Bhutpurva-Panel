@@ -78,11 +78,9 @@ class ProgramDetailController extends BaseController {
             total.value = data.length;
           } else if (data is Map<String, dynamic>) {
             if (data.containsKey('_id') || data.containsKey('programId')) {
-              // The data itself is a single attendance record
               attendances.assignAll([AttendanceModel.fromJson(data)]);
               total.value = 1;
             } else {
-              // Paginated or wrapped list
               final list = data['data'] ?? data['attendances'] ?? [];
               attendances.assignAll(
                 (list as List)

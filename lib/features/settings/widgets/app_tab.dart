@@ -90,11 +90,7 @@ class AppTab extends StatelessWidget {
                 alignment: isMobile ? Alignment.center : Alignment.centerRight,
                 child: SizedBox(
                   width: isMobile ? double.infinity : 150,
-                  height: 40,
-                  child: ElevatedButton(
                   child: AdminFormButton(
-                  child: AdminFormButton(
-
                     onPressed: controller.updateApp,
                     label: 'Update',
                   ),

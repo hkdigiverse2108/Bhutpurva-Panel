@@ -236,11 +236,12 @@ class AppRoutes {
       binding: ProgramBinding(),
       middlewares: [AppMiddleware()],
     ),
-
     GetPage(
       name: AppPages.deleteRequest,
       page: () => const DeleteRequest(),
       binding: DeleteRequestBinding(),
+      middlewares: [AppMiddleware()],
+    ),
 
     // surveys
     GetPage(
@@ -265,14 +266,6 @@ class AppRoutes {
       name: '/survey-responses/:id',
       page: () => const SurveyResponsesView(),
       binding: SurveyResponsesBinding(),
-      middlewares: [AppMiddleware()],
-    ),
-
-    // delete request
-    GetPage(
-      name: AppPages.deleteRequest,
-      page: () => const DeleteRequest(),
-      binding: DeleteRequestBinding(),
       middlewares: [AppMiddleware()],
     ),
   ];

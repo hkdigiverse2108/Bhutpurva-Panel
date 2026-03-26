@@ -22,14 +22,14 @@ class AddUpdateSurveyController extends BaseController {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  
+
   final scopeValue = 'overall'.obs;
 
   final groups = <GroupDropdownModel>[].obs;
   final selectedGroupId = RxnString();
   final isGroupsLoading = false.obs;
 
-  final batches = <BatchesModel>[].obs; 
+  final batches = <BatchesModel>[].obs;
   final selectedBatchId = RxnString();
   final isBatchesLoading = false.obs;
 
@@ -40,15 +40,15 @@ class AddUpdateSurveyController extends BaseController {
     super.onInit();
     final args = Get.arguments;
     if (args is Map<String, dynamic>) {
-        if (args.containsKey('id')) {
-            surveyId = args['id'];
-        } else {
-            prefilledScope = args['scope'];
-            prefilledGroupId = args['groupId'];
-            prefilledBatchId = args['batchId'];
-        }
+      if (args.containsKey('id')) {
+        surveyId = args['id'];
+      } else {
+        prefilledScope = args['scope'];
+        prefilledGroupId = args['groupId'];
+        prefilledBatchId = args['batchId'];
+      }
     } else if (args is String) {
-        surveyId = args;
+      surveyId = args;
     }
 
     if (surveyId != null) {
@@ -56,14 +56,14 @@ class AddUpdateSurveyController extends BaseController {
       fetchSurveyDetails();
     } else {
       if (prefilledScope != null) {
-          scopeValue.value = prefilledScope!;
-          if (prefilledScope == 'group') {
-              selectedGroupId.value = prefilledGroupId;
-              getGroups();
-          } else if (prefilledScope == 'batch') {
-              selectedBatchId.value = prefilledBatchId;
-              getBatches();
-          }
+        scopeValue.value = prefilledScope!;
+        if (prefilledScope == 'group') {
+          selectedGroupId.value = prefilledGroupId;
+          getGroups();
+        } else if (prefilledScope == 'batch') {
+          selectedBatchId.value = prefilledBatchId;
+          getBatches();
+        }
       }
       addQuestion();
     }
@@ -72,7 +72,9 @@ class AddUpdateSurveyController extends BaseController {
   void fetchSurveyDetails() {
     executeApi(
       apiCall: () async {
-        final ResModel response = await apiService.get(ApiConstants.surveyDetails(surveyId!));
+        final ResModel response = await apiService.get(
+          ApiConstants.surveyDetails(surveyId!),
+        );
         if (response.status == 200) {
           final data = SurveyModel.fromJson(response.data);
           titleController.text = data.title;
@@ -99,7 +101,11 @@ class AddUpdateSurveyController extends BaseController {
       final response = await apiService.get(ApiConstants.groupsDropdown(""));
       if (response.status == 200) {
         final list = response.data ?? [];
-        groups.assignAll((list as Iterable).map<GroupDropdownModel>((e) => GroupDropdownModel.fromJson(e)).toList());
+        groups.assignAll(
+          (list as Iterable)
+              .map<GroupDropdownModel>((e) => GroupDropdownModel.fromJson(e))
+              .toList(),
+        );
       }
     } finally {
       isGroupsLoading(false);
@@ -109,10 +115,16 @@ class AddUpdateSurveyController extends BaseController {
   Future<void> getBatches() async {
     isBatchesLoading(true);
     try {
-      final response = await apiService.get(ApiConstants.dropdownBatches(query: ""));
+      final response = await apiService.get(
+        ApiConstants.dropdownBatches(query: ""),
+      );
       if (response.status == 200) {
         final list = response.data ?? [];
-        batches.assignAll((list as Iterable).map<BatchesModel>((e) => BatchesModel.fromJson(e)).toList());
+        batches.assignAll(
+          (list as Iterable)
+              .map<BatchesModel>((e) => BatchesModel.fromJson(e))
+              .toList(),
+        );
       }
     } finally {
       isBatchesLoading(false);
@@ -133,12 +145,15 @@ class AddUpdateSurveyController extends BaseController {
   }
 
   void addQuestion() {
-    questions.add(QuestionModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(), // Temporary ID for UI
-      questionText: '',
-      questionType: 'text',
-      options: [],
-    ));
+    questions.add(
+      QuestionModel(
+        id: DateTime.now().millisecondsSinceEpoch
+            .toString(), // Temporary ID for UI
+        questionText: '',
+        questionType: 'text',
+        options: [],
+      ),
+    );
   }
 
   void removeQuestion(int index) {
@@ -154,7 +169,9 @@ class AddUpdateSurveyController extends BaseController {
   void updateQuestionType(int index, String? type) {
     if (type != null) {
       questions[index].questionType = type;
-      if (type != 'single_choice' && type != 'multiple_choice' && type != 'dropdown') {
+      if (type != 'single_choice' &&
+          type != 'multiple_choice' &&
+          type != 'dropdown') {
         questions[index].options.clear();
       } else if (questions[index].options.isEmpty) {
         questions[index].options.add('');
@@ -188,53 +205,78 @@ class AddUpdateSurveyController extends BaseController {
 
   void saveSurvey() {
     if (!formKey.currentState!.validate()) return;
-    
+
     for (var i = 0; i < questions.length; i++) {
-        var q = questions[i];
-        if (q.questionText.trim().isEmpty) {
-            AppSnackBar.show(title: "Error", message: "Question ${i+1} text cannot be empty", type: AppSnackBarType.error);
+      var q = questions[i];
+      if (q.questionText.trim().isEmpty) {
+        AppSnackBar.show(
+          title: "Error",
+          message: "Question ${i + 1} text cannot be empty",
+          type: AppSnackBarType.error,
+        );
+        return;
+      }
+      if ([
+        'single_choice',
+        'multiple_choice',
+        'dropdown',
+      ].contains(q.questionType)) {
+        for (var opt in q.options) {
+          if (opt.trim().isEmpty) {
+            AppSnackBar.show(
+              title: "Error",
+              message: "Options for Question ${i + 1} cannot be empty",
+              type: AppSnackBarType.error,
+            );
             return;
+          }
         }
-        if (['single_choice', 'multiple_choice', 'dropdown'].contains(q.questionType)) {
-            for (var opt in q.options) {
-                if (opt.trim().isEmpty) {
-                   AppSnackBar.show(title: "Error", message: "Options for Question ${i+1} cannot be empty", type: AppSnackBarType.error);
-                   return;
-                }
-            }
-        }
+      }
     }
 
     if (scopeValue.value == 'group' && selectedGroupId.value == null) {
-        AppSnackBar.show(title: "Error", message: "Please select a group", type: AppSnackBarType.error);
-        return;
+      AppSnackBar.show(
+        title: "Error",
+        message: "Please select a group",
+        type: AppSnackBarType.error,
+      );
+      return;
     }
     if (scopeValue.value == 'batch' && selectedBatchId.value == null) {
-        AppSnackBar.show(title: "Error", message: "Please select a batch", type: AppSnackBarType.error);
-        return;
+      AppSnackBar.show(
+        title: "Error",
+        message: "Please select a batch",
+        type: AppSnackBarType.error,
+      );
+      return;
     }
 
     final body = {
-      if (isEditMode.value) 'id': surveyId,
+      if (isEditMode.value) 'surveyId': surveyId,
       'title': titleController.text,
       'description': descriptionController.text,
       'scope': scopeValue.value,
       if (scopeValue.value == 'group') 'groupId': selectedGroupId.value,
       if (scopeValue.value == 'batch') 'batchId': selectedBatchId.value,
-      'questions': questions.map((q) => {
-        'questionText': q.questionText,
-        'questionType': q.questionType,
-        'options': q.options,
-        'isRequired': q.isRequired,
-        if (isEditMode.value && !q.id.contains(RegExp(r'^\d+$'))) '_id': q.id,
-      }).toList(),
+      'questions': questions
+          .map(
+            (q) => {
+              'questionText': q.questionText,
+              'questionType': q.questionType,
+              'options': q.options,
+              'isRequired': q.isRequired,
+              if (isEditMode.value && !q.id.contains(RegExp(r'^\d+$')))
+                '_id': q.id,
+            },
+          )
+          .toList(),
       'isActive': true,
     };
 
     executeApi(
       apiCall: () async {
         final ResModel response = await (isEditMode.value
-            ? apiService.post(ApiConstants.updateSurvey, body: body)
+            ? apiService.put(ApiConstants.updateSurvey, body: body)
             : apiService.post(ApiConstants.createSurvey, body: body));
 
         if (response.status == 200 || response.status == 201) {

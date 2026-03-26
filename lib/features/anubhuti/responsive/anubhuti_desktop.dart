@@ -3,6 +3,7 @@ import 'package:bhutpurva_penal/features/anubhuti/controllers/anubhuti_controlle
 import 'package:bhutpurva_penal/shared/models/anubhuti_models/anubhuti_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_page_layout.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
@@ -33,7 +34,13 @@ class AnubhutiDesktop extends StatelessWidget {
           hint: 'Search Group...',
           onSearchChanged: controller.onSearchChanged,
         ),
-        actions: [SizedBox()],
+        actions: [
+          TableActionButton(
+            label: 'Add Anubhuti Image',
+            onTap: () {},
+            icon: Iconsax.add,
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

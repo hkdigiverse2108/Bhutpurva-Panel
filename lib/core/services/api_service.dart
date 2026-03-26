@@ -237,7 +237,7 @@ class ApiService extends GetxService {
     _logger.d(
       "Response [${response.statusCode}] from ${response.request?.url}",
     );
-    _logger.v("Response Body: ${response.body}");
+    _logger.t("Response Body: ${response.body}");
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final body = jsonDecode(response.body);

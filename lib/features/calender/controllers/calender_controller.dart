@@ -1,6 +1,8 @@
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/features/calender/models/tithi_calendar_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -164,13 +166,25 @@ class CalenderController extends GetxController {
       );
 
       if (updateRes.status == 200) {
-        Get.snackbar('Success', 'Image updated successfully');
+        AppSnackBar.show(
+          title: "Success",
+          message: "Image updated successfully",
+          type: AppSnackBarType.success,
+        );
         await fetchCalendar();
       } else {
-        Get.snackbar('Error', updateRes.message ?? 'Failed to update calendar');
+        AppSnackBar.show(
+          title: "Error",
+          message: updateRes.message ?? 'Failed to update calendar',
+          type: AppSnackBarType.error,
+        );
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackBar.show(
+        title: "Error",
+        message: e.toString(),
+        type: AppSnackBarType.error,
+      );
     } finally {
       isUploading(false);
     }

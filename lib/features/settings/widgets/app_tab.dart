@@ -5,6 +5,7 @@ import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_button.dart'
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/outer_label_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -89,10 +90,14 @@ class AppTab extends StatelessWidget {
                 alignment: isMobile ? Alignment.center : Alignment.centerRight,
                 child: SizedBox(
                   width: isMobile ? double.infinity : 150,
+<<<<<<< HEAD
                   height: 40,
                   child: ElevatedButton(
+=======
+                  child: AdminFormButton(
+>>>>>>> 3d57f6d854def1747577e2418de83d20c1e38915
                     onPressed: controller.updateApp,
-                    child: const Text('Update'),
+                    label: 'Update',
                   ),
                 ),
               ),

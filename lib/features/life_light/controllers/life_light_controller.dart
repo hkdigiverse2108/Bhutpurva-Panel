@@ -1,14 +1,23 @@
-import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
 import 'package:bhutpurva_penal/shared/models/life_light_models/life_light_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
+import 'package:bhutpurva_penal/shared/widgets/Upload_image/upload_image.dart';
+import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 class LifeLightController extends BaseController {
   static LifeLightController get instance => Get.find();
 
+  final settingsController = SettingsController.instance;
   final apiService = ApiService();
 
   var lifeLight = <LifeLightModel>[].obs;
@@ -22,9 +31,20 @@ class LifeLightController extends BaseController {
 
   late Worker _searchWorker;
 
+  var isUploading = false.obs;
+  var currentImageUrl = RxnString();
+
   @override
   void onInit() {
     super.onInit();
+
+    currentImageUrl.value = settingsController.lifeLightImage.value;
+
+    // Listen for changes in settings and update currentImageUrl
+    ever(settingsController.lifeLightImage, (String val) {
+      currentImageUrl.value = val;
+    });
+
     _searchWorker = debounce(query, (_) {
       page = 1;
       fetchLifeLight();
@@ -79,6 +99,81 @@ class LifeLightController extends BaseController {
         }
       },
       errorMessage: "Failed to delete life light data",
+    );
+  }
+
+  Future<void> uploadImage(XFile pickedFile) async {
+    try {
+      isUploading(true);
+
+      final bytes = await pickedFile.readAsBytes();
+      final mimeType = lookupMimeType(pickedFile.path) ?? 'image/jpeg';
+
+      final multipartFile = http.MultipartFile.fromBytes(
+        'files',
+        bytes,
+        filename: pickedFile.name,
+        contentType: MediaType.parse(mimeType),
+      );
+
+      final uploadRes = await apiService.postMultipart(
+        ApiConstants.image,
+        files: [multipartFile],
+        oldImages: currentImageUrl.value,
+      );
+
+      if (!(uploadRes.status == 200 || uploadRes.status == 201)) {
+        throw Exception(uploadRes.message ?? 'Upload failed');
+      }
+
+      if (uploadRes.data is Map &&
+          uploadRes.data['files'] != null &&
+          (uploadRes.data['files'] as List).isNotEmpty) {
+        currentImageUrl.value = uploadRes.data['files'][0];
+      }
+
+      final ResModel res = await apiService.post(
+        ApiConstants.updateSettings,
+        body: {"lifeLightImage": currentImageUrl.value},
+      );
+
+      if (res.status == 200) {
+        settingsController.lifeLightImage.value = currentImageUrl.value ?? '';
+        Get.back();
+        AppSnackBar.show(
+          title: "Success",
+          message: "Image updated successfully",
+          type: AppSnackBarType.success,
+        );
+      } else {
+        AppSnackBar.show(
+          title: "Error",
+          message: res.message ?? 'Failed to update image',
+          type: AppSnackBarType.error,
+        );
+      }
+    } catch (e) {
+      AppSnackBar.show(
+        title: "Error",
+        message: e.toString(),
+        type: AppSnackBarType.error,
+      );
+    } finally {
+      isUploading(false);
+    }
+  }
+
+  void openUploadImagePopup() {
+    Get.dialog(
+      Obx(
+        () => UploadImage(
+          imageUrl: currentImageUrl.value,
+          isUploading: isUploading.value,
+          onUpload: (file) {
+            uploadImage(file);
+          },
+        ),
+      ),
     );
   }
 

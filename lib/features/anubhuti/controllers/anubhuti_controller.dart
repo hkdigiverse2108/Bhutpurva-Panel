@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:bhutpurva_penal/core/constants/enums.dart';
+import 'package:bhutpurva_penal/features/settings/controllers/settings_controller.dart';
+import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +20,8 @@ import 'package:mime/mime.dart';
 
 class AnubhutiController extends BaseController {
   static AnubhutiController get instance => Get.find();
+
+  final settingsController = SettingsController.instance;
 
   final apiService = ApiService();
 
@@ -41,6 +46,13 @@ class AnubhutiController extends BaseController {
   @override
   void onInit() {
     super.onInit();
+
+    currentImageUrl.value = settingsController.anubhutiImage.value;
+
+    // Listen for changes in settings and update currentImageUrl
+    ever(settingsController.anubhutiImage, (String val) {
+      currentImageUrl.value = val;
+    });
 
     _searchWorker = debounce(query, (_) {
       page = 1;
@@ -154,12 +166,32 @@ class AnubhutiController extends BaseController {
         currentImageUrl.value = uploadRes.data['files'][0];
       }
 
-      Get.snackbar('Success', 'Image uploaded');
+      final ResModel res = await apiService.post(
+        ApiConstants.updateSettings,
+        body: {"anubhutiImage": currentImageUrl.value},
+      );
 
-      Get.back();
-      fetchAnubhuti();
+      if (res.status == 200) {
+        settingsController.anubhutiImage.value = currentImageUrl.value ?? '';
+        Get.back();
+        AppSnackBar.show(
+          title: "Success",
+          message: "Image updated successfully",
+          type: AppSnackBarType.success,
+        );
+      } else {
+        AppSnackBar.show(
+          title: "Error",
+          message: res.message ?? 'Failed to update image',
+          type: AppSnackBarType.error,
+        );
+      }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackBar.show(
+        title: "Error",
+        message: e.toString(),
+        type: AppSnackBarType.error,
+      );
     } finally {
       isUploading(false);
     }
@@ -167,11 +199,14 @@ class AnubhutiController extends BaseController {
 
   void openUploadImagePopup() {
     Get.dialog(
-      UploadImage(
-        imageUrl: currentImageUrl.value,
-        onUpload: (file) {
-          uploadImage(file);
-        },
+      Obx(
+        () => UploadImage(
+          imageUrl: currentImageUrl.value,
+          isUploading: isUploading.value,
+          onUpload: (file) {
+            uploadImage(file);
+          },
+        ),
       ),
     );
   }

@@ -50,8 +50,16 @@ class AppPages {
   static const String programDetails = '/program-details';
   static const String editAttendance = '/edit-attendance';
 
+<<<<<<< HEAD
   // delete request
   static const String deleteRequest = '/delete-request';
+=======
+  // surveys
+  static const String manageSurveys = '/manage-surveys';
+  static const String createSurvey = '/create-survey';
+  static const String editSurvey = '/edit-survey';
+  static String surveyResponses(String id) => '/survey-responses/$id';
+>>>>>>> 3d57f6d854def1747577e2418de83d20c1e38915
 
   static const List<String> sidebarMenuItems = [
     dashboard,
@@ -64,5 +72,6 @@ class AppPages {
     calender,
     feedback,
     settings,
+    manageSurveys,
   ];
 }

@@ -65,7 +65,7 @@ class BatchListDesktop extends StatelessWidget {
             AppTableColumn(title: "Group"),
             AppTableColumn(title: "Monitors"),
             AppTableColumn(title: "Students", width: 120),
-            AppTableColumn(title: "Actions", width: 140),
+            AppTableColumn(title: "Actions", width: 170),
           ],
           rows: controller.batches,
           totalRows: controller.total,
@@ -88,10 +88,30 @@ class BatchListDesktop extends StatelessWidget {
                   Row(
                     children: [
                       tableActionIconButton(
+                        icon: Iconsax.document_text_1,
+                        onTap: () {
+                          Get.toNamed(
+                            AppPages.createSurvey,
+                            arguments: {'scope': 'batch', 'batchId': item.id},
+                          );
+                        },
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 6),
+                      tableActionIconButton(
                         icon: Iconsax.edit,
                         onTap: () {
                           controller.onEditBatch(item.id);
                         },
+                      ),
+                      const SizedBox(width: 6),
+                      tableActionIconButton(
+                        icon: Iconsax.add,
+                        color: Colors.green,
+                        onTap: () => Get.toNamed(
+                          AppPages.createSurvey,
+                          arguments: {'scope': 'batch', 'batchId': item.id},
+                        ),
                       ),
                       const SizedBox(width: 6),
                       tableActionIconButton(

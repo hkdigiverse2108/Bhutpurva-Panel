@@ -42,6 +42,12 @@ import 'package:bhutpurva_penal/features/programs/program_details/program_detail
 import 'package:bhutpurva_penal/features/programs/program_list/program_list.dart';
 import 'package:bhutpurva_penal/features/settings/bindings/settings_binding.dart';
 import 'package:bhutpurva_penal/features/settings/settings.dart';
+import 'package:bhutpurva_penal/features/survey/add_update_survey/bindings/add_update_survey_binding.dart';
+import 'package:bhutpurva_penal/features/survey/add_update_survey/views/add_update_survey_view.dart';
+import 'package:bhutpurva_penal/features/survey/survey_list/bindings/survey_list_binding.dart';
+import 'package:bhutpurva_penal/features/survey/survey_list/views/survey_list_view.dart';
+import 'package:bhutpurva_penal/features/survey/survey_responses/bindings/survey_responses_binding.dart';
+import 'package:bhutpurva_penal/features/survey/survey_responses/views/survey_responses_view.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
@@ -230,10 +236,37 @@ class AppRoutes {
       binding: ProgramBinding(),
       middlewares: [AppMiddleware()],
     ),
+<<<<<<< HEAD
     GetPage(
       name: AppPages.deleteRequest,
       page: () => const DeleteRequest(),
       binding: DeleteRequestBinding(),
+=======
+
+    // surveys
+    GetPage(
+      name: AppPages.manageSurveys,
+      page: () => const SurveyListView(),
+      binding: SurveyListBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.createSurvey,
+      page: () => const AddUpdateSurveyView(),
+      binding: AddUpdateSurveyBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: AppPages.editSurvey,
+      page: () => const AddUpdateSurveyView(),
+      binding: AddUpdateSurveyBinding(),
+      middlewares: [AppMiddleware()],
+    ),
+    GetPage(
+      name: '/survey-responses/:id',
+      page: () => const SurveyResponsesView(),
+      binding: SurveyResponsesBinding(),
+>>>>>>> 3d57f6d854def1747577e2418de83d20c1e38915
       middlewares: [AppMiddleware()],
     ),
   ];

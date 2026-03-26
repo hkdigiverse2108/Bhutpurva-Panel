@@ -131,6 +131,11 @@ class Sidebar extends StatelessWidget {
                 icon: Iconsax.message,
               ),
               AdminMenuItem(
+                route: AppPages.manageSurveys,
+                title: 'Surveys',
+                icon: Iconsax.document_text_1,
+              ),
+              AdminMenuItem(
                 route: AppPages.settings,
                 title: 'Settings',
                 icon: Iconsax.setting,

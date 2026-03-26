@@ -220,6 +220,38 @@ class ApiConstants {
   static const initTithiCalendar = 'tithiCalender/add-update';
   static const updateTithiCalendarMonth = 'tithiCalender/add-update-month';
 
+  // surveys
+  static String surveys({
+    int page = 1,
+    int? limit,
+    String? query,
+    String? scope,
+    String? groupFilter,
+    String? batchFilter,
+  }) {
+    return _buildUrl('survey/get', {
+      'page': page,
+      'limit': limit,
+      'search': query,
+      'scope': scope,
+      'groupFilter': groupFilter,
+      'batchFilter': batchFilter,
+    });
+  }
+
+  static String surveyDetails(String id) => 'survey/get/$id';
+  static const createSurvey = 'survey/create';
+  static const updateSurvey = 'survey/update';
+  static String deleteSurvey(String id) => 'survey/delete/$id';
+
+  static String surveyResponses(String surveyId, {int page = 1, int? limit}) {
+    return _buildUrl('survey/responses', {
+      'surveyId': surveyId,
+      'page': page,
+      'limit': limit,
+    });
+  }
+
   // image
   static const image = "upload";
 

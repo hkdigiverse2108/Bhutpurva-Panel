@@ -11,23 +11,30 @@ class CreateLocationController extends BaseController {
   final apiService = ApiService();
 
   final nameController = TextEditingController();
-  final typeController = TextEditingController();
-  final statusController = TextEditingController();
 
-  final locationTypes = ["District", "State", "Country", "City"].obs;
+  final locationTypes = ["Country", "State", "District", "City"].obs;
 
-  final parentLocation = RxnString();
+  final allLocations = <LocationDropdownModel>[].obs;
+
+  final parentLocationList = <LocationDropdownModel>[].obs;
+
+  final parentMap = {
+    "City": "District",
+    "District": "State",
+    "State": "Country",
+    "Country": null,
+  };
+
   final selectedType = RxnString();
+  final parentLocation = RxnString();
   final isActive = true.obs;
 
   final isParentLocationLoading = false.obs;
 
-  final parentLocationList = <LocationDropdownModel>[].obs;
-
   @override
   void onInit() {
-    getParentLocation();
     super.onInit();
+    getParentLocation();
   }
 
   void getParentLocation() {
@@ -40,12 +47,37 @@ class CreateLocationController extends BaseController {
 
         if (response.status == 200 || response.status == 201) {
           final list = response.data as List? ?? [];
+
+          allLocations.clear();
+          parentLocationList.clear();
+
           for (var element in list) {
-            parentLocationList.add(LocationDropdownModel.fromJson(element));
+            allLocations.add(LocationDropdownModel.fromJson(element));
           }
         }
       },
       errorMessage: "Could not get parent location",
+    );
+  }
+
+  void updateParentLocations(String type) {
+    selectedType.value = type;
+
+    final parentType = parentMap[type];
+
+    parentLocation.value = null;
+
+    if (parentType == null) {
+      parentLocationList.clear();
+      return;
+    }
+
+    final normalizedParentType = parentType.toLowerCase();
+
+    parentLocationList.assignAll(
+      allLocations
+          .where((e) => e.type?.toLowerCase() == normalizedParentType)
+          .toList(),
     );
   }
 
@@ -57,6 +89,7 @@ class CreateLocationController extends BaseController {
           body: {
             'name': nameController.text.trim(),
             'type': selectedType.value?.toLowerCase(),
+            'parentId': parentLocation.value,
             'isActive': isActive.value,
           },
         );
@@ -75,8 +108,6 @@ class CreateLocationController extends BaseController {
   @override
   void onClose() {
     nameController.dispose();
-    typeController.dispose();
-    statusController.dispose();
     super.onClose();
   }
 }

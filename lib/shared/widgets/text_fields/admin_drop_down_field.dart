@@ -12,6 +12,7 @@ class AdminSearchSelectField<T> extends StatefulWidget {
   final int maxVisibleItems;
   final bool outSide;
   final bool isLoading;
+  final bool enabled;
 
   const AdminSearchSelectField({
     super.key,
@@ -24,6 +25,7 @@ class AdminSearchSelectField<T> extends StatefulWidget {
     this.maxVisibleItems = 6,
     this.outSide = false,
     this.isLoading = false,
+    this.enabled = true,
   });
 
   @override

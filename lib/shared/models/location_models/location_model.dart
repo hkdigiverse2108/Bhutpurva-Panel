@@ -48,8 +48,9 @@ class LocationModel {
 class LocationDropdownModel {
   final String id;
   final String name;
+  final String? type;
 
-  LocationDropdownModel({required this.id, required this.name});
+  LocationDropdownModel({required this.id, required this.name, this.type});
 
   factory LocationDropdownModel.fromRawJson(String str) =>
       LocationDropdownModel.fromJson(json.decode(str));
@@ -57,7 +58,11 @@ class LocationDropdownModel {
   String toRawJson() => json.encode(toJson());
 
   factory LocationDropdownModel.fromJson(Map<String, dynamic> json) =>
-      LocationDropdownModel(id: json["_id"], name: json["name"]);
+      LocationDropdownModel(
+        id: json["_id"],
+        name: json["name"],
+        type: json["type"],
+      );
 
-  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+  Map<String, dynamic> toJson() => {"_id": id, "name": name, "type": type};
 }

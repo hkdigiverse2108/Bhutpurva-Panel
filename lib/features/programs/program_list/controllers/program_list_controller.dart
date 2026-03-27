@@ -14,12 +14,19 @@ class ProgramListController extends BaseController {
 
   final programs = <Program>[].obs;
 
+  final batchFilter = ''.obs;
+  // final nameFilter = ''.obs;
+
   int page = 1;
   int rowsPerPage = 10;
   int total = 0;
 
   final searchController = TextEditingController();
   final query = ''.obs;
+  final showFilter = false.obs;
+
+  final batchController = TextEditingController();
+  final nameController = TextEditingController();
 
   @override
   void onInit() {
@@ -59,6 +66,7 @@ class ProgramListController extends BaseController {
 
   void onPageChange(int value) {
     page = (value ~/ rowsPerPage) + 1;
+
     fetchPrograms();
   }
 
@@ -90,5 +98,15 @@ class ProgramListController extends BaseController {
       // loadingState: isDeleting,
       errorMessage: "Failed to delete program",
     );
+  }
+
+  void onBatchChanged(String value) {
+    batchController.text = value;
+    fetchPrograms();
+  }
+
+  void onNameChanged(String value) {
+    nameController.text = value;
+    fetchPrograms();
   }
 }

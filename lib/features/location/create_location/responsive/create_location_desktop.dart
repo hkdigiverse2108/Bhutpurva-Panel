@@ -66,22 +66,30 @@ class CreateLocationDesktop extends StatelessWidget {
                         onChanged: (type) {
                           if (type == null) return;
                           controller.selectedType.value = type;
+                          controller.parentLocation.value = null;
+                          controller.updateParentLocations(type);
                         },
                       ),
                     ),
                     Obx(
                       () => AdminSearchSelectField<String>(
                         label: 'Select Parent Location',
+
                         items: controller.parentLocationList
                             .map(
                               (e) =>
                                   AdminDropdownItem(value: e.id, label: e.name),
                             )
                             .toList(),
+
                         onChanged: (type) {
                           if (type == null) return;
                           controller.parentLocation.value = type;
                         },
+
+                        enabled:
+                            controller.selectedType.value != null &&
+                            controller.selectedType.value != "Country",
                       ),
                     ),
                     Obx(

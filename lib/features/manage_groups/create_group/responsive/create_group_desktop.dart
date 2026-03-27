@@ -228,11 +228,12 @@ class CreateGroupDesktop extends StatelessWidget {
                           return Column(
                             children: [
                               AdminFormButton(
-                                label: 'Cancel',
+                                label: ' Cancel ',
                                 variant: AdminButtonVariant.secondary,
                                 onPressed: () => Get.back(),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 8),
+                              // const Gap(SizeConst.spaceBtwInputFields),
                               AdminFormButton(
                                 label: 'Create Group',
                                 isLoading: controller.isLoading.value,
@@ -249,7 +250,7 @@ class CreateGroupDesktop extends StatelessWidget {
                             SizedBox(
                               width: 150,
                               child: AdminFormButton(
-                                label: 'Cancel',
+                                label: ' Cancel ',
                                 variant: AdminButtonVariant.secondary,
                                 onPressed: () => Get.back(),
                               ),

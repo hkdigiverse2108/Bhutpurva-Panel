@@ -153,7 +153,7 @@ class ApiConstants {
       'limit': limit,
       'search': query,
       'typeFilter': type,
-      'isActive': status == 'Active' ? true : (status == null ? null : false),
+      'isActive': status,
     });
   }
 

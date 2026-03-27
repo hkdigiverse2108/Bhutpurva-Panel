@@ -20,7 +20,9 @@ class CreateLocationController extends BaseController {
   final selectedType = RxnString();
   final isActive = true.obs;
 
-  final parentLocationList = <LocationModel>[].obs;
+  final isParentLocationLoading = false.obs;
+
+  final parentLocationList = <LocationDropdownModel>[].obs;
 
   @override
   void onInit() {
@@ -30,6 +32,7 @@ class CreateLocationController extends BaseController {
 
   void getParentLocation() {
     executeApi(
+      loadingState: isParentLocationLoading,
       apiCall: () async {
         final ResModel response = await apiService.get(
           ApiConstants.locationsDropdown(status: "Active"),
@@ -38,7 +41,7 @@ class CreateLocationController extends BaseController {
         if (response.status == 200 || response.status == 201) {
           final list = response.data as List? ?? [];
           for (var element in list) {
-            parentLocationList.add(LocationModel.fromJson(element));
+            parentLocationList.add(LocationDropdownModel.fromJson(element));
           }
         }
       },

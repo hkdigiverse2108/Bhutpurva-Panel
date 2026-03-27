@@ -22,7 +22,7 @@ class SurveyModel {
     this.createdAt,
     this.updatedAt,
   });
-  
+
   factory SurveyModel.fromJson(Map<String, dynamic> json) {
     return SurveyModel(
       id: json['_id'] ?? json['id'] ?? '',

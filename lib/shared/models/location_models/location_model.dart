@@ -44,3 +44,20 @@ class LocationModel {
     "updatedAt": updatedAt.toIso8601String(),
   };
 }
+
+class LocationDropdownModel {
+  final String id;
+  final String name;
+
+  LocationDropdownModel({required this.id, required this.name});
+
+  factory LocationDropdownModel.fromRawJson(String str) =>
+      LocationDropdownModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory LocationDropdownModel.fromJson(Map<String, dynamic> json) =>
+      LocationDropdownModel(id: json["_id"], name: json["name"]);
+
+  Map<String, dynamic> toJson() => {"_id": id, "name": name};
+}

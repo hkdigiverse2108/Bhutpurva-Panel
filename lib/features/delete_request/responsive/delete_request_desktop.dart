@@ -100,14 +100,14 @@ class DeleteRequestDesktop extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(width: 8),
-                      tableActionIconButton(
-                        icon: AppIcons.delete,
-                        color: Colors.red,
-                        onTap: () {
-                          controller.deleteDeleteRequest(request.id);
-                        },
-                      ),
+                      // const SizedBox(width: 8),
+                      // tableActionIconButton(
+                      //   icon: AppIcons.delete,
+                      //   color: Colors.red,
+                      //   onTap: () {
+                      //     controller.deleteDeleteRequest(request.id);
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

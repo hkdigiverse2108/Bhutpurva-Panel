@@ -31,6 +31,7 @@ class AddUpdateSurveyDesktop extends GetView<AddUpdateSurveyController> {
                   : 'Create Survey',
             ),
           ],
+          returnToPreviousScreen: true,
         ),
       ),
       body: Form(

@@ -38,6 +38,7 @@ class PolicyTab extends StatelessWidget {
               () => Row(
                 children: [
                   _buildTab(
+                    context,
                     title: 'Privacy Policy',
                     isActive:
                         controller.selectedPolicy.value == PolicyType.privacy,
@@ -45,13 +46,15 @@ class PolicyTab extends StatelessWidget {
                     showRightBorder: true,
                   ),
                   _buildTab(
+                    context,
                     title: 'Activist Policy',
                     isActive:
                         controller.selectedPolicy.value == PolicyType.activist,
                     onTap: () => controller.select(PolicyType.activist),
-                    showRightBorder: false,
+                    showRightBorder: true,
                   ),
                   _buildTab(
+                    context,
                     title: 'About App',
                     isActive:
                         controller.selectedPolicy.value == PolicyType.aboutApp,
@@ -129,15 +132,19 @@ class PolicyTab extends StatelessWidget {
                   ),
                 ),
                 const Gap(8),
-                Align(
-                  alignment: DeviceUtility.isMobileScreen(context)
-                      ? Alignment.center
-                      : Alignment.centerRight,
-                  child: SizedBox(
-                    width: DeviceUtility.isMobileScreen(context)
-                        ? double.infinity
-                        : 200,
-                    child: Obx(
+                // Align(
+                //   alignment: DeviceUtility.isMobileScreen(context)
+                //       ? Alignment.center
+                //       : Alignment.centerRight,
+                //   child: SizedBox(
+                //     width: DeviceUtility.isMobileScreen(context)
+                //         ? double.infinity
+                //         : 200,
+                // child:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Obx(
                       () => AdminFormButton(
                         onPressed: () => controller.updatePolicy(
                           controller.getPolicyTypeString(
@@ -148,8 +155,10 @@ class PolicyTab extends StatelessWidget {
                         label: 'Update',
                       ),
                     ),
-                  ),
+                  ],
                 ),
+                // ),
+                // ),
               ],
             ),
           ),
@@ -158,7 +167,8 @@ class PolicyTab extends StatelessWidget {
     );
   }
 
-  Widget _buildTab({
+  Widget _buildTab(
+    BuildContext context, {
     required String title,
     required bool isActive,
     required VoidCallback onTap,
@@ -182,9 +192,14 @@ class PolicyTab extends StatelessWidget {
             ),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: DeviceUtility.isMobileScreen(context) ? 3 : 12,
+        ),
         alignment: Alignment.center,
-        child: Text(title, style: const TextStyle(color: ColorConst.primary)),
+        child: Text(
+          title,
+          style: const TextStyle(color: ColorConst.primary, fontSize: 13),
+        ),
       ),
     );
   }

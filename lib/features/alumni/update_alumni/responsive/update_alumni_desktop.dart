@@ -77,23 +77,17 @@ class UpdateAlumniDesktop extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    width: 150,
-                    child: AdminFormButton(
-                      label: 'Cancel',
-                      variant: AdminButtonVariant.secondary,
-                      onPressed: () => Get.back(),
-                    ),
+                  AdminFormButton(
+                    label: 'Cancel',
+                    variant: AdminButtonVariant.secondary,
+                    onPressed: () => Get.back(),
                   ),
                   const SizedBox(width: 12),
-                  SizedBox(
-                    width: 150,
-                    child: Obx(
-                      () => AdminFormButton(
-                        label: 'Update Profile',
-                        isLoading: controller.isUpdateLoading.value,
-                        onPressed: () => controller.updateAlumniProfile(),
-                      ),
+                  Obx(
+                    () => AdminFormButton(
+                      label: 'Update Profile',
+                      isLoading: controller.isUpdateLoading.value,
+                      onPressed: () => controller.updateAlumniProfile(),
                     ),
                   ),
                 ],

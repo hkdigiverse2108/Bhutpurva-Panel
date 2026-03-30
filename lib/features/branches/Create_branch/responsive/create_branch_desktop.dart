@@ -7,7 +7,6 @@ import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model
 import 'package:bhutpurva_penal/shared/widgets/buttons/form_button.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_form_section_card.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_from_page_layout.dart';
-import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -102,26 +101,20 @@ class CreateBranchDesktop extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Cancel',
-                            variant: AdminButtonVariant.secondary,
-                            onPressed: () => Get.back(),
-                          ),
+                        AdminFormButton(
+                          label: 'Cancel',
+                          variant: AdminButtonVariant.secondary,
+                          onPressed: () => Get.back(),
                         ),
                         const SizedBox(width: 12),
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Create Branch',
-                            isLoading: controller.isLoading.value,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                controller.createBranch();
-                              }
-                            },
-                          ),
+                        AdminFormButton(
+                          label: 'Create Branch',
+                          isLoading: controller.isLoading.value,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              controller.createBranch();
+                            }
+                          },
                         ),
                       ],
                     );

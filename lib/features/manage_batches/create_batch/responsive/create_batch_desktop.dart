@@ -4,7 +4,6 @@ import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
 import 'package:bhutpurva_penal/features/manage_batches/create_batch/controllers/create_batch_controller.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
-import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
 import 'package:bhutpurva_penal/shared/models/user/user_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
@@ -180,22 +179,16 @@ class CreateBatchDesktop extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Cancel',
-                            variant: AdminButtonVariant.secondary,
-                            onPressed: () => Get.back(),
-                          ),
+                        AdminFormButton(
+                          label: 'Cancel',
+                          variant: AdminButtonVariant.secondary,
+                          onPressed: () => Get.back(),
                         ),
                         const SizedBox(width: 12),
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Create Batch',
-                            isLoading: controller.isLoading.value,
-                            onPressed: controller.createBatch,
-                          ),
+                        AdminFormButton(
+                          label: 'Create Batch',
+                          isLoading: controller.isLoading.value,
+                          onPressed: controller.createBatch,
                         ),
                       ],
                     );

@@ -129,26 +129,20 @@ class EditProgramDesktop extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Cancel',
-                            variant: AdminButtonVariant.secondary,
-                            onPressed: () => Get.back(),
-                          ),
+                        AdminFormButton(
+                          label: 'Cancel',
+                          variant: AdminButtonVariant.secondary,
+                          onPressed: () => Get.back(),
                         ),
-                        const SizedBox(width: 12),
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Update Program',
-                            isLoading: controller.isLoading.value,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                controller.updateProgram();
-                              }
-                            },
-                          ),
+                        const SizedBox(width: SizeConst.spaceBtwItems),
+                        AdminFormButton(
+                          label: 'Update Program',
+                          isLoading: controller.isLoading.value,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              controller.updateProgram();
+                            }
+                          },
                         ),
                       ],
                     ),

@@ -246,22 +246,16 @@ class EditGroupDesktop extends StatelessWidget {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            SizedBox(
-                              width: 150,
-                              child: AdminFormButton(
-                                label: 'Cancel',
-                                variant: AdminButtonVariant.secondary,
-                                onPressed: () => Get.back(),
-                              ),
+                            AdminFormButton(
+                              label: 'Cancel',
+                              variant: AdminButtonVariant.secondary,
+                              onPressed: () => Get.back(),
                             ),
                             const SizedBox(width: 12),
-                            SizedBox(
-                              width: 150,
-                              child: AdminFormButton(
-                                label: 'Update Group',
-                                isLoading: controller.isLoading.value,
-                                onPressed: controller.updateGroup,
-                              ),
+                            AdminFormButton(
+                              label: 'Update Group',
+                              isLoading: controller.isLoading.value,
+                              onPressed: controller.updateGroup,
                             ),
                           ],
                         );

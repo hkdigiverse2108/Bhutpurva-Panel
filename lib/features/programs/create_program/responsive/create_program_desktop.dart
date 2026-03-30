@@ -127,26 +127,20 @@ class CreateProgramDesktop extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Cancel',
-                            variant: AdminButtonVariant.secondary,
-                            onPressed: () => Get.back(),
-                          ),
+                        AdminFormButton(
+                          label: 'Cancel',
+                          variant: AdminButtonVariant.secondary,
+                          onPressed: () => Get.back(),
                         ),
                         const SizedBox(width: 12),
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Create Program',
-                            isLoading: controller.isLoading.value,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                controller.createProgram();
-                              }
-                            },
-                          ),
+                        AdminFormButton(
+                          label: 'Create Program',
+                          isLoading: controller.isLoading.value,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              controller.createProgram();
+                            }
+                          },
                         ),
                       ],
                     ),

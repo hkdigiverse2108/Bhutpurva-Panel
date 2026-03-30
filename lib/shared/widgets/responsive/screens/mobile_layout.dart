@@ -2,7 +2,6 @@ import 'package:bhutpurva_penal/shared/widgets/layouts/headers/header.dart';
 import 'package:bhutpurva_penal/shared/widgets/layouts/sidebars/sidebar.dart';
 import 'package:flutter/material.dart';
 
-
 class MobileLayout extends StatelessWidget {
   MobileLayout({super.key, this.body});
 
@@ -14,9 +13,9 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: Sidebar(),
+      drawer: const SizedBox(width: 250, child: Sidebar()),
       appBar: Header(scaffoldKey: scaffoldKey),
-      body: body ?? Container(),
+      body: body ?? const SizedBox(),
     );
   }
 }

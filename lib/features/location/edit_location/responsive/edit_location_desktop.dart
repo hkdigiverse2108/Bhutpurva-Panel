@@ -124,26 +124,20 @@ class EditLocationDesktop extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Cancel',
-                            variant: AdminButtonVariant.secondary,
-                            onPressed: () => Get.back(),
-                          ),
+                        AdminFormButton(
+                          label: 'Cancel',
+                          variant: AdminButtonVariant.secondary,
+                          onPressed: () => Get.back(),
                         ),
                         const SizedBox(width: 12),
-                        SizedBox(
-                          width: 150,
-                          child: AdminFormButton(
-                            label: 'Update Location',
-                            isLoading: controller.isLoading.value,
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                controller.updateLocation();
-                              }
-                            },
-                          ),
+                        AdminFormButton(
+                          label: 'Update Location',
+                          isLoading: controller.isLoading.value,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              controller.updateLocation();
+                            }
+                          },
                         ),
                       ],
                     );

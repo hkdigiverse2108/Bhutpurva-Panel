@@ -1,7 +1,6 @@
 import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
-import 'package:bhutpurva_penal/features/manage_batches/batch_details/controllers/batch_details_controller.dart';
 import 'package:bhutpurva_penal/features/manage_groups/group_details/controllers/group_details_controller.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';

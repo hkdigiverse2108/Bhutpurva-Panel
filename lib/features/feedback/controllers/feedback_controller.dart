@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';

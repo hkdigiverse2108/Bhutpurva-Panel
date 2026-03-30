@@ -113,7 +113,7 @@ class GroupListMobile extends StatelessWidget {
                   DataCell(Text(group.name)),
                   DataCell(
                     Text(
-                      group.leaderIds?.length.toString() ?? "0",
+                      group.leaderIds.length.toString() ?? "0",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

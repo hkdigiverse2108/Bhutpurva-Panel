@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
-import 'package:bhutpurva_penal/features/manage_batches/batch_details/controllers/batch_details_controller.dart';
-import 'package:bhutpurva_penal/features/manage_batches/batch_list/controllers/batch_list_controller.dart';
 import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/app/app_pages.dart';

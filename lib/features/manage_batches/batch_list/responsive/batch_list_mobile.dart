@@ -1,4 +1,3 @@
-import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_list/controllers/batch_list_controller.dart';

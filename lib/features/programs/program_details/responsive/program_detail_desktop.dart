@@ -98,13 +98,12 @@ class ProgramDetailDesktop extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (program.createdAt != null)
-                              Text(
-                                DateFormat(
-                                  'dd MMM yyyy',
-                                ).format(program.createdAt!),
-                                style: const TextStyle(color: Colors.grey),
-                              ),
+                            Text(
+                              DateFormat(
+                                'dd MMM yyyy',
+                              ).format(program.createdAt!),
+                              style: const TextStyle(color: Colors.grey),
+                            ),
                           ],
                         ),
 

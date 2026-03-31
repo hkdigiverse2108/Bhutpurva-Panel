@@ -1,7 +1,8 @@
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
+import 'package:bhutpurva_penal/shared/models/batche_model/batches_model.dart';
+import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/survey_models/survey_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
@@ -13,6 +14,8 @@ class SurveyListController extends BaseController {
   final apiService = ApiService();
 
   var surveys = <SurveyModel>[].obs;
+  var batches = <BatchesModel>[].obs;
+  var groups = <GroupDropdownModel>[].obs;
 
   int page = 1;
   int rowsPerPage = 10;
@@ -21,6 +24,9 @@ class SurveyListController extends BaseController {
   final searchController = TextEditingController();
   var query = ''.obs;
   var scopeFilter = RxnString();
+  var groupIdFilter = RxnString();
+  var batchIdFilter = RxnString();
+  var showFilter = false.obs;
 
   late Worker _searchWorker;
 
@@ -33,6 +39,35 @@ class SurveyListController extends BaseController {
     }, time: const Duration(milliseconds: 500));
 
     fetchSurveys();
+    fetchGroupsAndBatches();
+  }
+
+  void fetchGroupsAndBatches() {
+    executeApi(
+      apiCall: () async {
+        final groupRes = await apiService.get(ApiConstants.groups(limit: 1000));
+        if (groupRes.status == 200) {
+          final data = groupRes.data;
+          final List dataList =
+              data['groups'] ?? data['group'] ?? data['data'] ?? [];
+          groups.assignAll(
+            dataList.map((e) => GroupDropdownModel.fromJson(e)).toList(),
+          );
+        }
+
+        final batchRes = await apiService.get(
+          ApiConstants.batches(limit: 1000),
+        );
+        if (batchRes.status == 200) {
+          final data = batchRes.data;
+          final List dataList =
+              data['batches'] ?? data['batch'] ?? data['data'] ?? [];
+          batches.assignAll(
+            dataList.map((e) => BatchesModel.fromJson(e)).toList(),
+          );
+        }
+      },
+    );
   }
 
   void onSearchChanged(String value) {
@@ -41,6 +76,18 @@ class SurveyListController extends BaseController {
 
   void onScopeFilterChanged(String? scope) {
     scopeFilter.value = scope;
+    page = 1;
+    fetchSurveys();
+  }
+
+  void onGroupFilterChanged(String? groupId) {
+    groupIdFilter.value = groupId;
+    page = 1;
+    fetchSurveys();
+  }
+
+  void onBatchFilterChanged(String? batchId) {
+    batchIdFilter.value = batchId;
     page = 1;
     fetchSurveys();
   }
@@ -54,21 +101,27 @@ class SurveyListController extends BaseController {
             limit: rowsPerPage,
             query: query.value.isNotEmpty ? query.value : null,
             scope: scopeFilter.value,
+            groupFilter: groupIdFilter.value,
+            batchFilter: batchIdFilter.value,
           ),
         );
 
         if (res.status == 200) {
           dynamic rawData = res.data;
           List dataList = [];
-          
+
           if (rawData is List) {
             dataList = rawData;
           } else if (rawData is Map) {
-            dataList = rawData['surveys'] ?? rawData['survey'] ?? rawData['data'] ?? [];
+            dataList =
+                rawData['surveys'] ??
+                rawData['survey'] ??
+                rawData['data'] ??
+                [];
           }
 
           surveys.value = dataList.map((e) => SurveyModel.fromJson(e)).toList();
-          
+
           if (rawData is Map) {
             total = rawData['totalData'] ?? rawData['total'] ?? dataList.length;
           } else {
@@ -101,13 +154,11 @@ class SurveyListController extends BaseController {
           AppSnackBar.show(
             title: "Success",
             message: "Survey deleted successfully",
-            type: AppSnackBarType.success,
           );
         } else {
           AppSnackBar.show(
             title: "Error",
             message: res.message ?? "Failed to delete survey",
-            type: AppSnackBarType.error,
           );
         }
       },

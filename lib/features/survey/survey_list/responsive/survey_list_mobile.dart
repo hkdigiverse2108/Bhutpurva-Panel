@@ -51,6 +51,34 @@ class SurveyListMobile extends GetView<SurveyListController> {
                     ),
                   ),
                 ),
+                Obx(
+                  () => SizedBox(
+                    width: 100,
+                    child: AdminSearchSelectField<String?>(
+                      label: 'Group',
+                      hint: 'Group',
+                      value: controller.groupIdFilter.value,
+                      items: controller.groups
+                          .map((e) => AdminDropdownItem(value: e.id, label: e.name))
+                          .toList(),
+                      onChanged: controller.onGroupFilterChanged,
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => SizedBox(
+                    width: 100,
+                    child: AdminSearchSelectField<String?>(
+                      label: 'Batch',
+                      hint: 'Batch',
+                      value: controller.batchIdFilter.value,
+                      items: controller.batches
+                          .map((e) => AdminDropdownItem(value: e.id, label: e.name))
+                          .toList(),
+                      onChanged: controller.onBatchFilterChanged,
+                    ),
+                  ),
+                ),
               ],
               actions: [
                 TableActionButton(

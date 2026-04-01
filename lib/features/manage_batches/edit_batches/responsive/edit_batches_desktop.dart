@@ -83,15 +83,18 @@ class EditBatchDesktop extends StatelessWidget {
                 child: AdminFormSectionCard(
                   title: 'Batch Students',
                   fields: [
-                    Obx(
-                      () => AdminMultiSearchSelectField<UsersDropdownModel>(
+                    Obx(() {
+                      // Accessing .length explicitly registers the RxList with GetX Obx
+                      final _ = controller.selectedStudents.length;
+
+                      return AdminMultiSearchSelectField<UsersDropdownModel>(
                         label: 'Select Students',
                         items: controller.students
                             .map(
                               (e) => AdminDropdownItem(value: e, label: e.name),
                             )
                             .toList(),
-                        selectedItems: controller.selectedStudents,
+                        selectedItems: controller.selectedStudents.toList(),
                         onAdded: (student) {
                           if (!controller.selectedStudents.contains(student)) {
                             controller.selectedStudents.add(student);
@@ -101,8 +104,8 @@ class EditBatchDesktop extends StatelessWidget {
                           controller.selectedStudents.remove(student);
                         },
                         itemLabelBuilder: (student) => student.name,
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -123,10 +126,12 @@ class EditBatchDesktop extends StatelessWidget {
                             onPressed: () => Get.back(),
                           ),
                           const SizedBox(height: 12),
-                          AdminFormButton(
-                            label: 'Update Batch',
-                            isLoading: controller.isSaving.value,
-                            onPressed: controller.updateBatch,
+                          Obx(
+                            () => AdminFormButton(
+                              label: 'Update Batch',
+                              isLoading: controller.isSaving.value,
+                              onPressed: controller.updateBatch,
+                            ),
                           ),
                         ],
                       );
@@ -142,10 +147,12 @@ class EditBatchDesktop extends StatelessWidget {
                           onPressed: () => Get.back(),
                         ),
                         const SizedBox(width: 12),
-                        AdminFormButton(
-                          label: 'Update Batch',
-                          isLoading: controller.isSaving.value,
-                          onPressed: controller.updateBatch,
+                        Obx(
+                          () => AdminFormButton(
+                            label: 'Update Batch',
+                            isLoading: controller.isSaving.value,
+                            onPressed: controller.updateBatch,
+                          ),
                         ),
                       ],
                     );

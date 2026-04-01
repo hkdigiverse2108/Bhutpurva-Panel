@@ -79,13 +79,17 @@ class AllAlumniController extends BaseController {
     Get.toNamed(AppPages.editAlumni, arguments: id);
   }
 
-  void onAgeChanged(String value) {
-    ageFilter.value = value;
-    fetchAlumni();
+  void onAgeChanged(String? value) {
+    if (value != null) {
+      ageFilter.value = value;
+      fetchAlumni();
+    }
   }
 
-  void onRoleChanged(String value) {
-    roleFilter.value = value;
-    fetchAlumni();
+  void onRoleChanged(String? value) {
+    if (value != null) {
+      roleFilter.value = value;
+      fetchAlumni();
+    }
   }
 }

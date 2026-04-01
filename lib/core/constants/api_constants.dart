@@ -258,4 +258,26 @@ class ApiConstants {
   // delete request
   static String deleteRequest = "deleteRequest/get";
   static String deleteRequestUpdate = "deleteRequest/update";
+
+  // monitors
+  static String monitors({int page = 1, int? limit, String? batchFilter}) {
+    return _buildUrl('batch/get-monitors', {
+      'page': page,
+      'limit': limit,
+      'batchFilter': batchFilter,
+    });
+  }
+
+  static String createMonitor() => 'batch/add-monitor';
+  static String removeMonitor(String monitorId) => 'batch/remove-monitor/$monitorId';
+  static String assignDevotee() => 'batch/assign-devotee';
+  static String unassignDevotee() => 'batch/unassign-devotee';
+
+  // devotees
+  static String unassignedDevotees({String? batchFilter}) {
+    return _buildUrl('batch/get-unassigned-devotees', {'batchId': batchFilter});
+  }
+
+  static String createDevotee() => 'batch/add-devotee';
+  static String removeDevotee() => 'batch/remove-devotee';
 }

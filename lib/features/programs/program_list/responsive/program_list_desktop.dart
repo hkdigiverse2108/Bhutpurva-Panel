@@ -12,7 +12,6 @@ import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_pag
 import 'package:bhutpurva_penal/shared/widgets/layouts/templates/admin_table_toolbar.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_paginated_table.dart';
 import 'package:bhutpurva_penal/shared/widgets/tables/app_table_columns.dart';
-import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_filter_field.dart';
 import 'package:bhutpurva_penal/shared/widgets/text_fields/table_search_field.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +44,7 @@ class ProgramListDesktop extends StatelessWidget {
               },
               label: 'Filter',
               icon: Icons.filter_list,
+              isActive: controller.showFilter.value,
             ),
           ],
           actions: [
@@ -58,34 +58,12 @@ class ProgramListDesktop extends StatelessWidget {
         ),
         filter: AdminTableFilter(
           children: [
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Batch',
-              hint: 'Select Batch',
-              value: controller.batchFilter.value,
-              items: controller.programs
-                  .map(
-                    (batch) => AdminDropdownItem(
-                      value: batch.id,
-                      label: batch.batchId.name,
-                    ),
-                  )
-                  .toList(),
+              hint: 'Batch',
+              items: const [],
               onChanged: controller.onBatchChanged,
             ),
-            // TableFilterField(
-            //   label: 'Name',
-            //   hint: 'Enter Name',
-            //   value: controller.nameFilter.value,
-            //   items: controller.programs
-            //       .map(
-            //         (program) => AdminDropdownItem(
-            //           value: program.id,
-            //           label: program.name,
-            //         ),
-            //       )
-            //       .toList(),
-            //   onChanged: controller.onNameChanged,
-            // ),
           ],
         ),
         showFilter: controller.showFilter.value,

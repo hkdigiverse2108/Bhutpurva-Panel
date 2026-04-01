@@ -64,7 +64,7 @@ class AllAlumniMobile extends StatelessWidget {
         ),
         filter: AdminTableFilter(
           children: [
-            TableFilterField(
+            TableFilterField<String>(
               label: 'age',
               hint: 'Select age',
               value: controller.ageFilter.value,
@@ -75,7 +75,7 @@ class AllAlumniMobile extends StatelessWidget {
                   .toList(),
               onChanged: controller.onAgeChanged,
             ),
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Role',
               hint: 'Select role',
               value: controller.roleFilter.value,

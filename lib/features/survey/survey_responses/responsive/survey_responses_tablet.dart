@@ -1,3 +1,4 @@
+import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/survey/survey_responses/controllers/survey_responses_controller.dart';
@@ -22,65 +23,84 @@ class SurveyResponsesTablet extends GetView<SurveyResponsesController> {
     return AdminTablePageLayout(
       header: Obx(
         () => BreadcrumbWithHeading(
-          heading: controller.surveyDetails.value != null
-              ? 'Responses: ${controller.surveyDetails.value!.title}'
-              : 'Survey Responses',
+          heading: controller.surveyTitle.value,
           breadcrumbsItems: [
-            BreadcrumbItem(title: 'Surveys', route: '/surveys'),
+            BreadcrumbItem(title: 'Surveys', route: AppPages.manageSurveys),
             BreadcrumbItem(title: 'Responses'),
           ],
         ),
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const AppTableShimmer(columnWidths: [60, null, 150, 100]);
-        }
-        if (controller.responses.isEmpty) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(48.0),
-              child: Text('No responses found for this survey yet.'),
-            ),
-          );
-        }
-        return AppPaginatedTable<SurveyResponseModel>(
-          columns: [
-            AppTableColumn(title: 'No', width: 60),
-            AppTableColumn(title: 'Participant Name'),
-            AppTableColumn(title: 'Submitted At', width: 150),
-            AppTableColumn(title: 'Action', width: 100),
-          ],
-          rows: controller.responses,
-          totalRows: controller.total,
-          rowsPerPage: controller.rowsPerPage,
-          onPageChanged: controller.onPageChange,
-          rowBuilder: (item, index) {
-            final userName = item.userId != null
-                ? '${item.userId?.name ?? ''} ${item.userId?.surname ?? ''}'
-                      .trim()
-                : 'Unknown User';
-            final submittedDate = item.createdAt != null
-                ? DateFormat('dd MMM yyyy, hh:mm a').format(item.createdAt!)
-                : '-';
-
-            return DataRow(
-              color: TableHelpers.rowHoverColor(),
-              cells: [
-                DataCell(Text('${index + 1}')),
-                DataCell(Text(userName.isNotEmpty ? userName : 'Unknown User')),
-                DataCell(Text(submittedDate)),
-                DataCell(
-                  tableActionIconButton(
-                    icon: Iconsax.eye,
-                    onTap: () => _showResponseDetails(context, item, userName),
-                    color: Colors.blue,
+      body: RefreshIndicator(
+        onRefresh: () async => controller.fetchResponses(),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const AppTableShimmer(columnWidths: [60, null, 150, 100]);
+          }
+          if (controller.responses.isEmpty) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Iconsax.document_text, size: 64, color: Colors.grey),
+                      const SizedBox(height: SizeConst.spaceBtwItems),
+                      const Text(
+                        'No responses found for this survey yet.',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      const SizedBox(height: SizeConst.spaceBtwItems),
+                      ElevatedButton(
+                        onPressed: () => controller.fetchResponses(),
+                        child: const Text('Retry'),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             );
-          },
-        );
-      }),
+          }
+          return AppPaginatedTable<SurveyResponseModel>(
+            columns: const [
+              AppTableColumn(title: 'No', width: 60),
+              AppTableColumn(title: 'Participant Name'),
+              AppTableColumn(title: 'Submitted At', width: 150),
+              AppTableColumn(title: 'Action', width: 100),
+            ],
+            rows: controller.responses,
+            totalRows: controller.total,
+            rowsPerPage: controller.rowsPerPage,
+            onPageChanged: controller.onPageChange,
+            rowBuilder: (item, index) {
+              final userName = item.userId != null
+                  ? '${item.userId?.name ?? ''} ${item.userId?.surname ?? ''}'
+                        .trim()
+                  : 'Unknown User';
+              final submittedDate = item.createdAt != null
+                  ? DateFormat('dd MMM yyyy, hh:mm a').format(item.createdAt!)
+                  : '-';
+
+              return DataRow(
+                color: TableHelpers.rowHoverColor(),
+                cells: [
+                  DataCell(Text('${index + 1}')),
+                  DataCell(Text(userName.isNotEmpty ? userName : 'Unknown User')),
+                  DataCell(Text(submittedDate)),
+                  DataCell(
+                    tableActionIconButton(
+                      icon: Iconsax.eye,
+                      onTap: () => _showResponseDetails(context, item, userName),
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }),
+      ),
     );
   }
 

@@ -72,8 +72,29 @@ class EditLocationDesktop extends StatelessWidget {
                             .toList(),
                         onChanged: (type) {
                           if (type == null) return;
-                          controller.selectedType.value = type;
+                          controller.updateParentLocations(type);
                         },
+                      ),
+                    ),
+                    Obx(
+                      () => AdminSearchSelectField<String>(
+                        label: 'Select Parent Location',
+                        isLoading: controller.isFetching.value ||
+                            controller.isParentLocationLoading.value,
+                        value: controller.selectedParentLocation.value,
+                        items: controller.parentLocationList
+                            .map(
+                              (e) => AdminDropdownItem(
+                                value: e.id,
+                                label: e.name,
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) {
+                          controller.selectedParentLocation.value = val;
+                        },
+                        enabled: controller.selectedType.value != null &&
+                            controller.selectedType.value != "Country",
                       ),
                     ),
                     Obx(

@@ -6,6 +6,7 @@ import 'package:bhutpurva_penal/shared/models/group_models/group_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/models/survey_models/survey_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/snackbar/app_snackbar.dart';
+import 'package:bhutpurva_penal/shared/widgets/text_fields/admin_drop_down_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,9 +18,13 @@ class SurveyListController extends BaseController {
   var batches = <BatchesModel>[].obs;
   var groups = <GroupDropdownModel>[].obs;
 
-  int page = 1;
-  int rowsPerPage = 10;
-  int total = 0;
+  // Stable pre-mapped items — prevents identity churn in dropdown widgets
+  var groupDropdownItems = <AdminDropdownItem<String>>[].obs;
+  var batchDropdownItems = <AdminDropdownItem<String>>[].obs;
+
+  var page = 1.obs;
+  var rowsPerPage = 10.obs;
+  var total = 0.obs;
 
   final searchController = TextEditingController();
   var query = ''.obs;
@@ -28,13 +33,15 @@ class SurveyListController extends BaseController {
   var batchIdFilter = RxnString();
   var showFilter = false.obs;
 
+  final groupAndBatchLoading = false.obs;
+
   late Worker _searchWorker;
 
   @override
   void onInit() {
     super.onInit();
     _searchWorker = debounce(query, (_) {
-      page = 1;
+      page.value = 1;
       fetchSurveys();
     }, time: const Duration(milliseconds: 500));
 
@@ -44,6 +51,7 @@ class SurveyListController extends BaseController {
 
   void fetchGroupsAndBatches() {
     executeApi(
+      loadingState: groupAndBatchLoading,
       apiCall: () async {
         final groupRes = await apiService.get(ApiConstants.groups(limit: 1000));
         if (groupRes.status == 200) {
@@ -52,6 +60,9 @@ class SurveyListController extends BaseController {
               data['groups'] ?? data['group'] ?? data['data'] ?? [];
           groups.assignAll(
             dataList.map((e) => GroupDropdownModel.fromJson(e)).toList(),
+          );
+          groupDropdownItems.assignAll(
+            groups.map((e) => AdminDropdownItem(value: e.id, label: e.name)).toList(),
           );
         }
 
@@ -65,6 +76,9 @@ class SurveyListController extends BaseController {
           batches.assignAll(
             dataList.map((e) => BatchesModel.fromJson(e)).toList(),
           );
+          batchDropdownItems.assignAll(
+            batches.map((e) => AdminDropdownItem(value: e.id, label: e.name)).toList(),
+          );
         }
       },
     );
@@ -76,19 +90,29 @@ class SurveyListController extends BaseController {
 
   void onScopeFilterChanged(String? scope) {
     scopeFilter.value = scope;
-    page = 1;
+    page.value = 1;
     fetchSurveys();
   }
 
   void onGroupFilterChanged(String? groupId) {
     groupIdFilter.value = groupId;
-    page = 1;
+    page.value = 1;
     fetchSurveys();
   }
 
   void onBatchFilterChanged(String? batchId) {
     batchIdFilter.value = batchId;
-    page = 1;
+    page.value = 1;
+    fetchSurveys();
+  }
+
+  void resetFilters() {
+    scopeFilter.value = null;
+    groupIdFilter.value = null;
+    batchIdFilter.value = null;
+    query.value = '';
+    searchController.clear();
+    page.value = 1;
     fetchSurveys();
   }
 
@@ -97,8 +121,8 @@ class SurveyListController extends BaseController {
       apiCall: () async {
         final ResModel res = await apiService.get(
           ApiConstants.surveys(
-            page: page,
-            limit: rowsPerPage,
+            page: page.value,
+            limit: rowsPerPage.value,
             query: query.value.isNotEmpty ? query.value : null,
             scope: scopeFilter.value,
             groupFilter: groupIdFilter.value,
@@ -120,16 +144,19 @@ class SurveyListController extends BaseController {
                 [];
           }
 
-          surveys.value = dataList.map((e) => SurveyModel.fromJson(e)).toList();
+          surveys.assignAll(
+            dataList.map((e) => SurveyModel.fromJson(e)).toList(),
+          );
 
           if (rawData is Map) {
-            total = rawData['totalData'] ?? rawData['total'] ?? dataList.length;
+            total.value =
+                rawData['totalData'] ?? rawData['total'] ?? dataList.length;
           } else {
-            total = dataList.length;
+            total.value = dataList.length;
           }
         } else {
           surveys.clear();
-          total = 0;
+          total.value = 0;
         }
       },
       errorMessage: "Failed to fetch surveys",
@@ -137,7 +164,7 @@ class SurveyListController extends BaseController {
   }
 
   void onPageChange(int newPage) {
-    page = newPage;
+    page.value = newPage;
     fetchSurveys();
   }
 
@@ -150,7 +177,7 @@ class SurveyListController extends BaseController {
         );
         if (res.status == 200) {
           surveys.removeWhere((element) => element.id == id);
-          total--;
+          total.value--;
           AppSnackBar.show(
             title: "Success",
             message: "Survey deleted successfully",

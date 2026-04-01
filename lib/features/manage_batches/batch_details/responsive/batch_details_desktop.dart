@@ -3,6 +3,7 @@ import 'package:bhutpurva_penal/core/constants/color_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_details/controllers/batch_details_controller.dart';
 import 'package:bhutpurva_penal/shared/models/student_model/student_model.dart';
+import 'package:bhutpurva_penal/shared/models/monitor_model/monitor_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb.dart';
 import 'package:bhutpurva_penal/shared/widgets/breadcrumbs/breadcrumb_item_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/buttons/table_action_icon_button.dart';
@@ -86,10 +87,10 @@ class BatchDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'Mobile Number'),
                   AppTableColumn(title: 'City'),
                   AppTableColumn(title: 'Status', width: 120),
-                  AppTableColumn(title: 'Actions', width: 140),
+                  AppTableColumn(title: 'Actions', width: 200),
                 ],
                 rows: controller.devotees,
-                totalRows: controller.totalDevotees,
+                totalRows: controller.totalDevotees.value,
                 rowsPerPage: controller.rowsPerPage,
                 onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
@@ -112,12 +113,72 @@ class BatchDetailsDesktop extends StatelessWidget {
                         Text(item.isVerified ? 'Verified' : 'Not Verified'),
                       ),
                       DataCell(
-                        TableActionButton(
-                          onTap: () {
-                            controller.onEditStudent(item);
-                          },
-                          label: 'Edit Profile',
-                          icon: Icons.edit,
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              tableActionIconButton(
+                                icon: PhosphorIconsBold.pencilSimpleLine,
+                                onTap: () {
+                                  controller.onEditStudent(item);
+                                },
+                                color: ColorConst.primary,
+                              ),
+                              if (!controller.isBatchLoading.value &&
+                                  !controller.isMonitorLoading.value &&
+                                  !controller.monitors.any(
+                                    (m) => m.userId.id == item.id,
+                                  )) ...[
+                                const Gap(6),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.dialog(
+                                      AlertDialog(
+                                        title: const Text('Promote to Monitor'),
+                                        content: const Text(
+                                          'Are you sure you want to promote this student to monitor?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Get.back(),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              controller.promoteToMonitor(
+                                                item.id,
+                                              );
+                                            },
+                                            child: const Text('Confirm'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: ColorConst.primary
+                                        .withValues(alpha: 0.1),
+                                    foregroundColor: ColorConst.primary,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Promote',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -138,150 +199,201 @@ class BatchDetailsDesktop extends StatelessWidget {
                   AppTableColumn(title: 'No', width: 60),
                   AppTableColumn(title: 'Monitor Name'),
                   AppTableColumn(title: 'Mobile Number'),
-                  AppTableColumn(title: 'City'),
                   AppTableColumn(title: 'Status', width: 120),
-                  AppTableColumn(title: 'Actions', width: 160),
+                  AppTableColumn(title: 'Actions', width: 200),
                 ],
                 rows: controller.monitors,
-                totalRows: controller.totalLeaders,
+                totalRows: controller.totalMonitors.value,
                 rowsPerPage: controller.rowsPerPage,
                 onPageChanged: controller.onPageChange,
                 checkboxColumn: true,
-                rowBuilder: (item, index) {
+                rowBuilder: (MonitorModel item, index) {
                   return DataRow(
                     color: TableHelpers.rowHoverColor(),
                     cells: [
                       DataCell(Text((index + 1).toString())),
-                      DataCell(Text(item.name)),
-                      DataCell(Text(item.phoneNumber)),
+                      DataCell(Text(item.userId.name)),
+                      DataCell(Text(item.userId.phoneNumber)),
+                      DataCell(Text(item.status.capitalizeFirst ?? "-")),
                       DataCell(
-                        Text(
-                          item.addressIds.isNotEmpty
-                              ? item.addressIds.first.city
-                              : 'N/A',
-                        ),
-                      ),
-                      DataCell(
-                        Text(item.isVerified ? 'Verified' : 'Not Verified'),
-                      ),
-                      DataCell(
-                        Row(
-                          children: [
-                            tableActionTextButton(
-                              text: 'Assign',
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return SmartSelectionDialog<StudentModel>(
-                                      title: 'Assign Members',
-                                      searchWidget: Obx(
-                                        () =>
-                                            AdminSearchSelectField<
-                                              StudentModel
-                                            >(
-                                              label: 'Student',
-                                              items: controller.allAlumni
-                                                  .map(
-                                                    (e) => AdminDropdownItem(
-                                                      value: e,
-                                                      label: e.name,
-                                                    ),
-                                                  )
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              tableActionTextButton(
+                                text: 'Assign',
+                                onTap: () {
+                                  final existingDevotees = controller.devotees
+                                      .where((e) => item.devoteeIds.contains(e.id))
+                                      .toList()
+                                      .obs;
+
+                                  controller.selectedAlumni.clear();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return SmartSelectionDialog<StudentModel>(
+                                        title: 'Assign Members',
+                                        existingItems: existingDevotees,
+                                        onRemoveExisting: (devotee) {
+                                          controller.unassignDevotee(
+                                            item.id,
+                                            devotee.id,
+                                          );
+                                          existingDevotees.remove(devotee);
+                                        },
+                                        onDone: () {
+                                          if (controller
+                                              .selectedAlumni
+                                              .isNotEmpty) {
+                                            controller.assignDevotees(
+                                              item.id,
+                                              controller.selectedAlumni
+                                                  .map((e) => e.id)
                                                   .toList(),
-                                              onChanged: (value) {
-                                                if (value == null) return;
-
-                                                if (!controller.selectedAlumni
-                                                    .contains(value)) {
-                                                  controller.selectedAlumni.add(
-                                                    value,
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                      ),
-                                      onRemove: (item) {
-                                        controller.selectedAlumni.remove(item);
-                                      },
-                                      itemBuilder:
-                                          (context, StudentModel item) {
-                                            return Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 10,
-                                                  ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border: Border.all(
-                                                  color: Colors.grey.shade200,
-                                                ),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  /// Avatar / Initial
-                                                  CircleAvatar(
-                                                    radius: 16,
-                                                    backgroundColor:
-                                                        Colors.blue.shade50,
-                                                    child: Text(
-                                                      item.name.isNotEmpty
-                                                          ? item.name[0]
-                                                                .toUpperCase()
-                                                          : '?',
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.blue,
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                  const SizedBox(width: 12),
-
-                                                  /// Name
-                                                  Expanded(
-                                                    child: Text(
-                                                      item.name,
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
                                             );
-                                          },
-                                      selectedItems: controller.selectedAlumni,
-                                    );
-                                  },
-                                );
-                              },
-                              textColor: ColorConst.primary,
-                              backgroundColor: ColorConst.primary.withValues(
-                                alpha: 0.1,
+                                          }
+                                          Get.back();
+                                        },
+                                        searchWidget: Obx(
+                                          () =>
+                                              AdminSearchSelectField<
+                                                StudentModel
+                                              >(
+                                                label: 'Student',
+                                                items: controller.allAlumni
+                                                    .where(
+                                                      (a) =>
+                                                          !existingDevotees.any(
+                                                            (e) => e.id == a.id,
+                                                          ),
+                                                    )
+                                                    .map(
+                                                      (e) => AdminDropdownItem(
+                                                        value: e,
+                                                        label: e.name,
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                onChanged: (value) {
+                                                  if (value == null) return;
+
+                                                  if (!controller.selectedAlumni
+                                                      .contains(value)) {
+                                                    controller.selectedAlumni
+                                                        .add(value);
+                                                  }
+                                                },
+                                              ),
+                                        ),
+                                        onRemove: (item) {
+                                          controller.selectedAlumni.remove(
+                                            item,
+                                          );
+                                        },
+                                        itemBuilder:
+                                            (context, StudentModel item) {
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 10,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: Colors.grey.shade200,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    /// Avatar / Initial
+                                                    CircleAvatar(
+                                                      radius: 16,
+                                                      backgroundColor:
+                                                          Colors.blue.shade50,
+                                                      child: Text(
+                                                        item.name.isNotEmpty
+                                                            ? item.name[0]
+                                                                  .toUpperCase()
+                                                            : '?',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.blue,
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    const SizedBox(width: 12),
+
+                                                    /// Name
+                                                    Expanded(
+                                                      child: Text(
+                                                        item.name,
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                        selectedItems:
+                                            controller.selectedAlumni,
+                                      );
+                                    },
+                                  );
+                                },
+                                textColor: ColorConst.primary,
+                                backgroundColor: ColorConst.primary.withValues(
+                                  alpha: 0.1,
+                                ),
                               ),
-                            ),
-                            const Gap(8),
-                            tableActionIconButton(
-                              icon: PhosphorIconsBold.eye,
-                              onTap: () {},
-                              color: ColorConst.info,
-                            ),
-                            const Gap(8),
-                            tableActionIconButton(
-                              icon: PhosphorIconsBold.trash,
-                              onTap: () {},
-                              color: ColorConst.error,
-                            ),
-                          ],
+                              const Gap(8),
+                              tableActionIconButton(
+                                icon: PhosphorIconsBold.eye,
+                                onTap: () {},
+                                color: ColorConst.info,
+                              ),
+                              const Gap(8),
+                              tableActionIconButton(
+                                icon: PhosphorIconsBold.trash,
+                                onTap: () {
+                                  Get.dialog(
+                                    AlertDialog(
+                                      title: const Text('Remove Monitor'),
+                                      content: const Text(
+                                        'Are you sure you want to remove this monitor?',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Get.back(),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                            controller.removeMonitor(item.id);
+                                          },
+                                          child: const Text('Confirm'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                color: ColorConst.error,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

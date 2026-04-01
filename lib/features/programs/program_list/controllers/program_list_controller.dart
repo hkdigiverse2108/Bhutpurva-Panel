@@ -100,13 +100,17 @@ class ProgramListController extends BaseController {
     );
   }
 
-  void onBatchChanged(String value) {
-    batchController.text = value;
-    fetchPrograms();
+  void onBatchChanged(String? value) {
+    if (value != null) {
+      batchController.text = value;
+      fetchPrograms();
+    }
   }
 
-  void onNameChanged(String value) {
-    nameController.text = value;
-    fetchPrograms();
+  void onNameChanged(String? value) {
+    if (value != null) {
+      nameController.text = value;
+      fetchPrograms();
+    }
   }
 }

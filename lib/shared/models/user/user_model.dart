@@ -357,11 +357,11 @@ class UsersDropdownModel {
 
   factory UsersDropdownModel.fromJson(Map<String, dynamic> json) =>
       UsersDropdownModel(
-        id: json["_id"],
-        name: json["name"],
-        fatherName: json["fatherName"],
-        surname: json["surname"],
-        role: json["role"],
+        id: json["_id"] ?? "",
+        name: json["name"] ?? "",
+        fatherName: json["fatherName"] ?? "",
+        surname: json["surname"] ?? "",
+        role: json["role"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

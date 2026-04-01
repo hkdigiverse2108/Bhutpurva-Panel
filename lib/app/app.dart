@@ -18,6 +18,8 @@ class App extends StatelessWidget {
       initialRoute: AppPages.dashboard,
       getPages: AppRoutes.pages,
       defaultTransition: Transition.fadeIn,
+      popGesture: true,
+      navigatorKey: Get.key,
       unknownRoute: GetPage(
         name: '/not-found',
         page: () => const Scaffold(body: Center(child: Text('404 Not Found'))),

@@ -61,7 +61,7 @@ class LocationDesktop extends GetView<LocationController> {
         ),
         filter: AdminTableFilter(
           children: [
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Location Type',
               hint: 'Select Location Type',
               value: controller.typeFilter.value,
@@ -72,11 +72,11 @@ class LocationDesktop extends GetView<LocationController> {
                   )
                   .toList(),
               onChanged: (value) {
-                controller.typeFilter.value = value;
+                controller.typeFilter.value = value ?? '';
                 controller.fetchLocations();
               },
             ),
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Status',
               hint: 'Select Status',
               value: controller.statusFilter.value,
@@ -86,7 +86,7 @@ class LocationDesktop extends GetView<LocationController> {
                   )
                   .toList(),
               onChanged: (value) {
-                controller.statusFilter.value = value;
+                controller.statusFilter.value = value ?? '';
                 controller.fetchLocations();
               },
             ),

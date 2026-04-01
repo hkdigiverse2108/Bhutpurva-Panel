@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AdminTableFilter extends StatelessWidget {
   final List<Widget> children;
+  final VoidCallback? onReset;
 
-  const AdminTableFilter({super.key, required this.children});
+  const AdminTableFilter({super.key, required this.children, this.onReset});
 
   int _columns(double width) {
     if (width >= 1200) return 4;
@@ -25,7 +26,22 @@ class AdminTableFilter extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Filters', style: Theme.of(context).textTheme.titleMedium),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Filters', style: Theme.of(context).textTheme.titleMedium),
+              if (onReset != null)
+                TextButton.icon(
+                  onPressed: onReset,
+                  icon: const Icon(Icons.refresh, size: 16),
+                  label: const Text('Clear All'),
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    foregroundColor: Colors.red,
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: 10),
           LayoutBuilder(
             builder: (context, constraints) {

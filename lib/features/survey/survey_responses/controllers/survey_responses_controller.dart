@@ -13,6 +13,7 @@ class SurveyResponsesController extends BaseController {
 
   late String surveyId;
   final surveyDetails = Rxn<SurveyModel>();
+  final surveyTitle = 'Loading...'.obs;
 
   var responses = <SurveyResponseModel>[].obs;
 
@@ -23,18 +24,20 @@ class SurveyResponsesController extends BaseController {
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments;
-    if (args is String) {
-      surveyId = args;
-    } else {
-      surveyId = Get.parameters['id'] ?? '';
-    }
+    
+    // Prioritize URL parameters for deep linking on web
+    surveyId = Get.parameters['id'] ?? (Get.arguments is String ? Get.arguments : '');
 
     if (surveyId.isNotEmpty) {
       fetchSurveyDetails();
       fetchResponses();
     } else {
-      AppSnackBar.show(title: "Error", message: "Invalid Survey ID provided.", type: AppSnackBarType.error);
+      surveyTitle.value = 'Invalid Survey';
+      AppSnackBar.show(
+        title: "Error",
+        message: "Invalid Survey ID provided.",
+        type: AppSnackBarType.error,
+      );
     }
   }
 
@@ -42,10 +45,14 @@ class SurveyResponsesController extends BaseController {
     try {
       final ResModel response = await apiService.get(ApiConstants.surveyDetails(surveyId));
       if (response.status == 200) {
-        surveyDetails.value = SurveyModel.fromJson(response.data);
+        final survey = SurveyModel.fromJson(response.data);
+        surveyDetails.value = survey;
+        surveyTitle.value = survey.title;
+      } else {
+        surveyTitle.value = 'Survey Not Found';
       }
     } catch (e) {
-      // Background fetch, ignore error on UI
+      surveyTitle.value = 'Error Loading Survey';
     }
   }
 
@@ -57,9 +64,10 @@ class SurveyResponsesController extends BaseController {
         );
 
         if (res.status == 200) {
-          final dataList = res.data['data'] as List? ?? [];
+          // The API returns responses in the 'responses' key and total count in 'totalData'
+          final dataList = res.data['responses'] as List? ?? [];
           responses.value = dataList.map((e) => SurveyResponseModel.fromJson(e)).toList();
-          total = res.data['total'] ?? 0;
+          total = res.data['totalData'] ?? 0;
         } else {
           responses.clear();
           total = 0;

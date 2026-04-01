@@ -1,3 +1,4 @@
+import 'package:bhutpurva_penal/app/app_pages.dart';
 import 'package:bhutpurva_penal/core/constants/size_const.dart';
 import 'package:bhutpurva_penal/core/helpers/table_helpers.dart';
 import 'package:bhutpurva_penal/features/survey/survey_responses/controllers/survey_responses_controller.dart';
@@ -20,29 +21,42 @@ class SurveyResponsesDesktop extends GetView<SurveyResponsesController> {
   @override
   Widget build(BuildContext context) {
     return AdminTablePageLayout(
-      header: Obx(() => BreadcrumbWithHeading(
-        heading: controller.surveyDetails.value != null 
-            ? 'Responses: ${controller.surveyDetails.value!.title}'
-            : 'Survey Responses',
-        breadcrumbsItems: [
-          BreadcrumbItem(title: 'Surveys', route: '/surveys'),
-          BreadcrumbItem(title: 'Responses'),
-        ],
-      )),
+      header: Obx(
+        () => BreadcrumbWithHeading(
+          heading: controller.surveyTitle.value,
+          returnToPreviousScreen: true,
+          breadcrumbsItems: [
+            BreadcrumbItem(title: 'Surveys', route: AppPages.manageSurveys),
+            BreadcrumbItem(title: 'Responses'),
+          ],
+        ),
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
-           return const AppTableShimmer(
-             columnWidths: [60, null, 150, 100],
-           );
+          return const AppTableShimmer(columnWidths: [60, null, 150, 100]);
         }
         if (controller.responses.isEmpty) {
-          return const Center(child: Padding(
-            padding: EdgeInsets.all(48.0),
-            child: Text('No responses found for this survey yet.'),
-          ));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Iconsax.document_text, size: 64, color: Colors.grey),
+                const SizedBox(height: SizeConst.spaceBtwItems),
+                const Text(
+                  'No responses found for this survey yet.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: SizeConst.spaceBtwItems),
+                ElevatedButton(
+                  onPressed: () => controller.fetchResponses(),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          );
         }
         return AppPaginatedTable<SurveyResponseModel>(
-          columns: [
+          columns: const [
             AppTableColumn(title: 'No', width: 60),
             AppTableColumn(title: 'Participant Name'),
             AppTableColumn(title: 'Submitted At', width: 150),
@@ -53,11 +67,12 @@ class SurveyResponsesDesktop extends GetView<SurveyResponsesController> {
           rowsPerPage: controller.rowsPerPage,
           onPageChanged: controller.onPageChange,
           rowBuilder: (item, index) {
-            final userName = item.userId != null 
-                ? '${item.userId?.name ?? ''} ${item.userId?.surname ?? ''}'.trim()
+            final userName = item.userId != null
+                ? '${item.userId?.name ?? ''} ${item.userId?.surname ?? ''}'
+                      .trim()
                 : 'Unknown User';
-            final submittedDate = item.createdAt != null 
-                ? DateFormat('dd MMM yyyy, hh:mm a').format(item.createdAt!) 
+            final submittedDate = item.createdAt != null
+                ? DateFormat('dd MMM yyyy, hh:mm a').format(item.createdAt!)
                 : '-';
 
             return DataRow(
@@ -81,10 +96,16 @@ class SurveyResponsesDesktop extends GetView<SurveyResponsesController> {
     );
   }
 
-  void _showResponseDetails(BuildContext context, SurveyResponseModel response, String userName) {
+  void _showResponseDetails(
+    BuildContext context,
+    SurveyResponseModel response,
+    String userName,
+  ) {
     Get.dialog(
       Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SizeConst.borderRadiusLg)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SizeConst.borderRadiusLg),
+        ),
         child: Container(
           width: 500,
           padding: const EdgeInsets.all(SizeConst.defaultSpace),
@@ -98,14 +119,17 @@ class SurveyResponsesDesktop extends GetView<SurveyResponsesController> {
                   Expanded(
                     child: Text(
                       'Response by $userName',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Iconsax.close_circle),
                     onPressed: () => Get.back(),
-                  )
+                  ),
                 ],
               ),
               const Divider(),
@@ -114,11 +138,14 @@ class SurveyResponsesDesktop extends GetView<SurveyResponsesController> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: response.answers.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: SizeConst.spaceBtwItems),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: SizeConst.spaceBtwItems),
                   itemBuilder: (context, index) {
                     final ans = response.answers[index];
-                    final questionText = controller.getQuestionText(ans.questionId);
-                    
+                    final questionText = controller.getQuestionText(
+                      ans.questionId,
+                    );
+
                     String displayAnswer = '';
                     if (ans.answer is List) {
                       displayAnswer = (ans.answer as List).join(', ');

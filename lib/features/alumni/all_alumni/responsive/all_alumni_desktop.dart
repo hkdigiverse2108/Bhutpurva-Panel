@@ -56,27 +56,22 @@ class AllAlumniDesktop extends StatelessWidget {
         ),
         filter: AdminTableFilter(
           children: [
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Age',
-              hint: 'Select age',
-              value: controller.ageFilter.value,
-              items: controller.batches
-                  .map(
-                    (age) => AdminDropdownItem(value: age.id, label: age.name),
-                  )
-                  .toList(),
+              hint: 'Age',
+              items: [
+                AdminDropdownItem(value: '18-25', label: '18-25'),
+                AdminDropdownItem(value: '26-35', label: '26-35'),
+              ],
               onChanged: controller.onAgeChanged,
             ),
-            TableFilterField(
+            TableFilterField<String>(
               label: 'Role',
-              hint: 'Select role',
-              value: controller.roleFilter.value,
-              items: controller.batches
-                  .map(
-                    (batch) =>
-                        AdminDropdownItem(value: batch.id, label: batch.name),
-                  )
-                  .toList(),
+              hint: 'Role',
+              items: [
+                AdminDropdownItem(value: 'alumni', label: 'Alumni'),
+                AdminDropdownItem(value: 'admin', label: 'Admin'),
+              ],
               onChanged: controller.onRoleChanged,
             ),
           ],

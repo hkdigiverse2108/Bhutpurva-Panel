@@ -101,7 +101,7 @@ class ProgramDetailDesktop extends StatelessWidget {
                             Text(
                               DateFormat(
                                 'dd MMM yyyy',
-                              ).format(program.createdAt!),
+                              ).format(program.createdAt),
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ],

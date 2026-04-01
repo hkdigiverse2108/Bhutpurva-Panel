@@ -269,7 +269,8 @@ class ApiConstants {
   }
 
   static String createMonitor() => 'batch/add-monitor';
-  static String removeMonitor(String monitorId) => 'batch/remove-monitor/$monitorId';
+  static String removeMonitor(String monitorId) =>
+      'batch/remove-monitor/$monitorId';
   static String assignDevotee() => 'batch/assign-devotee';
   static String unassignDevotee() => 'batch/unassign-devotee';
 

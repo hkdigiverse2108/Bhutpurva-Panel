@@ -59,7 +59,8 @@ class CreateBatchController extends BaseController {
       loadingState: isLeadersLoading,
       apiCall: () async {
         final ResModel response = await apiService.get(
-          ApiConstants.usersDropdown(roleFilter: AlumniRole.user.name),
+          // ApiConstants.usersDropdown(roleFilter: AlumniRole.user.name),
+          ApiConstants.usersDropdown(),
         );
         if (response.status == 200) {
           final usersList = response.data ?? [];

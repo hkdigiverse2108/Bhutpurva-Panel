@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
-import 'package:bhutpurva_penal/core/constants/enums.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
 import 'package:bhutpurva_penal/features/manage_batches/batch_list/controllers/batch_list_controller.dart';
@@ -68,7 +67,8 @@ class EditBatchController extends BaseController {
     return executeApi(
       apiCall: () async {
         final ResModel response = await apiService.get(
-          ApiConstants.usersDropdown(roleFilter: AlumniRole.user.name),
+          // ApiConstants.usersDropdown(roleFilter: AlumniRole.user.name),
+          ApiConstants.usersDropdown(),
         );
         if (response.status == 200) {
           final usersList = response.data ?? [];

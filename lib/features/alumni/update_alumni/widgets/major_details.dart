@@ -54,11 +54,14 @@ class MajorDetails extends StatelessWidget {
                       onChanged: (value) {
                         if (value != null) controller.class10Branch.value = value;
                       },
-                      items: [
-                        AdminDropdownItem(value: 'Science', label: 'Science'),
-                        AdminDropdownItem(value: 'Commerce', label: 'Commerce'),
-                        AdminDropdownItem(value: 'Arts', label: 'Arts'),
-                      ],
+                      items: controller.branches
+                          .map(
+                            (e) => AdminDropdownItem(
+                              value: e.name,
+                              label: e.name,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),
@@ -158,11 +161,14 @@ class MajorDetails extends StatelessWidget {
                       onChanged: (value) {
                         if (value != null) controller.class12Branch.value = value;
                       },
-                      items: [
-                        AdminDropdownItem(value: 'Science', label: 'Science'),
-                        AdminDropdownItem(value: 'Commerce', label: 'Commerce'),
-                        AdminDropdownItem(value: 'Arts', label: 'Arts'),
-                      ],
+                      items: controller.branches
+                          .map(
+                            (e) => AdminDropdownItem(
+                              value: e.name,
+                              label: e.name,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 ),

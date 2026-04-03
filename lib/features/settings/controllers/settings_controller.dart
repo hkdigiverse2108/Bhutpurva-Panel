@@ -115,7 +115,8 @@ class SettingsController extends BaseController {
 
     // Reactively load policy whenever the selection changes
     ever(selectedPolicy, (PolicyType type) {
-      log("Selected policy changed to: ${type.name}");
+      if (ApiConstants.showLogs)
+        log("Selected policy changed to: ${type.name}");
       fetchPolicy(getPolicyTypeString(type));
     });
   }
@@ -144,7 +145,7 @@ class SettingsController extends BaseController {
       loadingState: isSettingsLoading,
       apiCall: () async {
         final res = await apiService.get(ApiConstants.settings);
-        log("Settings API Response: ${res.data}");
+        if (ApiConstants.showLogs) log("Settings API Response: ${res.data}");
 
         if (res.status == 200) {
           final data = res.data;
@@ -181,7 +182,8 @@ class SettingsController extends BaseController {
         final res = await apiService.get(
           ApiConstants.userDetails(currentUserId),
         );
-        log("User Details API Response: ${res.data}");
+        if (ApiConstants.showLogs)
+          log("User Details API Response: ${res.data}");
         if (res.status == 200) {
           final model = UserModel.fromJson(res.data);
           usersId.value = model.id;
@@ -352,7 +354,7 @@ class SettingsController extends BaseController {
           ApiConstants.updateSettings,
           body: body,
         );
-        log("Update Settings Response: ${res.data}");
+        if (ApiConstants.showLogs) log("Update Settings Response: ${res.data}");
         if (res.status == 200) {
           fetchSettings();
         }
@@ -386,7 +388,7 @@ class SettingsController extends BaseController {
           ApiConstants.changePassword,
           body: body,
         );
-        log("Update Password Response: ${res.data}");
+        if (ApiConstants.showLogs) log("Update Password Response: ${res.data}");
         if (res.status == 200) {
           currentPasswordController.clear();
           newPasswordController.clear();
@@ -518,7 +520,7 @@ class SettingsController extends BaseController {
         log("Updating Account with body: $body");
 
         final res = await apiService.put(ApiConstants.updateUser, body: body);
-        log("Update Account Response: ${res.data}");
+        if (ApiConstants.showLogs) log("Update Account Response: ${res.data}");
 
         if (res.status == 200) {
           fetchUserDetails();

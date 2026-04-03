@@ -1,5 +1,6 @@
 class ApiConstants {
   static const baseUrl = 'http://localhost:5000/';
+  static const bool showLogs = false;
 
   // Helper method to build URLs with query parameters
   static String _buildUrl(String path, Map<String, dynamic> params) {
@@ -36,6 +37,12 @@ class ApiConstants {
       'isActive': status,
     });
   }
+
+  // location
+  static String location({String? typeFilter, String? parentId}) => _buildUrl(
+    "location/dropdown",
+    {'typeFilter': typeFilter, 'parentIdFilter': parentId},
+  );
 
   static String deleteGroup(String id) => 'group/delete/$id';
 

@@ -13,7 +13,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:bhutpurva_penal/core/helpers/base_controller.dart';
 import 'package:bhutpurva_penal/core/constants/api_constants.dart';
 import 'package:bhutpurva_penal/core/services/api_service.dart';
-import 'package:bhutpurva_penal/shared/models/anubhuti_models/anubhuti_model.dart';
+import 'package:bhutpurva_penal/shared/models/anubhuti/anubhuti_model.dart';
 import 'package:bhutpurva_penal/shared/models/res/res_model.dart';
 import 'package:bhutpurva_penal/shared/widgets/Upload_image/upload_image.dart';
 import 'package:mime/mime.dart';

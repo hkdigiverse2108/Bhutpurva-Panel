@@ -103,7 +103,7 @@ class ApiService extends GetxService {
     Uri url = Uri.parse('$baseUrl$endpoint');
 
     _logger.i("POST Request: $url");
-    log(url.toString());
+    if (ApiConstants.showLogs) log(url.toString());
     _logger.d("Body: $body");
 
     try {

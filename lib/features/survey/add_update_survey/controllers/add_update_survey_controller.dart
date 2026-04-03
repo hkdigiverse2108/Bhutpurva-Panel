@@ -280,12 +280,12 @@ class AddUpdateSurveyController extends BaseController {
             : apiService.post(ApiConstants.createSurvey, body: body));
 
         if (response.status == 200 || response.status == 201) {
+          Get.back(result: true);
           AppSnackBar.show(
             title: "Success",
             message: isEditMode.value ? "Survey updated" : "Survey created",
             type: AppSnackBarType.success,
           );
-          Get.back(result: true);
         } else {
           AppSnackBar.show(
             title: "Error",

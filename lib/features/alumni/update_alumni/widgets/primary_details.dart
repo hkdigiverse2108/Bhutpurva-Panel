@@ -258,20 +258,12 @@ class PrimaryDetails extends StatelessWidget {
             ),
             const Gap(16),
             Expanded(
-              child: Obx(
-                () => AdminSearchSelectField(
-                  label: 'Current City',
-                  prefixIcon: PhosphorIconsBold.city,
-                  value: controller.currentCity.value,
-                  onChanged: (value) {
-                    if (value != null) controller.currentCity.value;
-                  },
-                  items: [
-                    AdminDropdownItem(
-                      value: controller.currentCity.value,
-                      label: controller.currentCity.value,
-                    ),
-                  ],
+              child: TextFormField(
+                controller: controller.currentCityController,
+                decoration: InputDecoration(
+                  labelText: 'Current City',
+                  hintText: 'Enter Current City',
+                  prefixIcon: const Icon(PhosphorIconsBold.city, fill: 0.0),
                 ),
               ),
             ),

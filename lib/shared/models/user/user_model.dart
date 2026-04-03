@@ -281,10 +281,14 @@ class StudyId {
   String toRawJson() => json.encode(toJson());
 
   factory StudyId.fromJson(Map<String, dynamic> json) => StudyId(
-    id: json["_id"],
-    classes: Classes.fromJson(json["classes"]),
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    id: json["_id"] ?? "",
+    classes: Classes.fromJson(json["classes"] ?? {}),
+    createdAt: json["createdAt"] != null
+        ? DateTime.parse(json["createdAt"])
+        : DateTime.now(),
+    updatedAt: json["updatedAt"] != null
+        ? DateTime.parse(json["updatedAt"])
+        : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -296,23 +300,66 @@ class StudyId {
 }
 
 class Classes {
-  Class1Class class1;
-  Class1Class class10;
+  Class1Class? class1;
+  Class1Class? class2;
+  Class1Class? class3;
+  Class1Class? class4;
+  Class1Class? class5;
+  Class1Class? class6;
+  Class1Class? class7;
+  Class1Class? class8;
+  Class1Class? class9;
+  Class1Class? class10;
+  Class1Class? class11;
+  Class1Class? class12;
 
-  Classes({required this.class1, required this.class10});
+  Classes({
+    this.class1,
+    this.class2,
+    this.class3,
+    this.class4,
+    this.class5,
+    this.class6,
+    this.class7,
+    this.class8,
+    this.class9,
+    this.class10,
+    this.class11,
+    this.class12,
+  });
 
   factory Classes.fromRawJson(String str) => Classes.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Classes.fromJson(Map<String, dynamic> json) => Classes(
-    class1: Class1Class.fromJson(json["class1"]),
-    class10: Class1Class.fromJson(json["class10"]),
+    class1: json["class1"] != null ? Class1Class.fromJson(json["class1"]) : null,
+    class2: json["class2"] != null ? Class1Class.fromJson(json["class2"]) : null,
+    class3: json["class3"] != null ? Class1Class.fromJson(json["class3"]) : null,
+    class4: json["class4"] != null ? Class1Class.fromJson(json["class4"]) : null,
+    class5: json["class5"] != null ? Class1Class.fromJson(json["class5"]) : null,
+    class6: json["class6"] != null ? Class1Class.fromJson(json["class6"]) : null,
+    class7: json["class7"] != null ? Class1Class.fromJson(json["class7"]) : null,
+    class8: json["class8"] != null ? Class1Class.fromJson(json["class8"]) : null,
+    class9: json["class9"] != null ? Class1Class.fromJson(json["class9"]) : null,
+    class10: json["class10"] != null ? Class1Class.fromJson(json["class10"]) : null,
+    class11: json["class11"] != null ? Class1Class.fromJson(json["class11"]) : null,
+    class12: json["class12"] != null ? Class1Class.fromJson(json["class12"]) : null,
   );
 
   Map<String, dynamic> toJson() => {
-    "class1": class1.toJson(),
-    "class10": class10.toJson(),
+    if (class1 != null) "class1": class1!.toJson(),
+    if (class2 != null) "class2": class2!.toJson(),
+    if (class3 != null) "class3": class3!.toJson(),
+    if (class4 != null) "class4": class4!.toJson(),
+    if (class5 != null) "class5": class5!.toJson(),
+    if (class6 != null) "class6": class6!.toJson(),
+    if (class7 != null) "class7": class7!.toJson(),
+    if (class8 != null) "class8": class8!.toJson(),
+    if (class9 != null) "class9": class9!.toJson(),
+    if (class10 != null) "class10": class10!.toJson(),
+    if (class11 != null) "class11": class11!.toJson(),
+    if (class12 != null) "class12": class12!.toJson(),
   };
 }
 

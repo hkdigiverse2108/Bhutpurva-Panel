@@ -208,6 +208,7 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
           link: _link,
           child: TextFormField(
             controller: _controller,
+            enabled: widget.enabled,
             decoration: InputDecoration(
               label: widget.outSide
                   ? null
@@ -223,7 +224,7 @@ class _AdminSearchSelectFieldState<T> extends State<AdminSearchSelectField<T>> {
               suffixIcon: const Icon(Icons.keyboard_arrow_down),
             ),
             onTap: () {
-              if (_entry == null) {
+              if (widget.enabled && _entry == null) {
                 _filtered = widget.items;
                 _showOverlay();
               }

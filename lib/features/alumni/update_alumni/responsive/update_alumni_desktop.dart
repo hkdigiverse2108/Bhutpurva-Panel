@@ -30,21 +30,32 @@ class UpdateAlumniDesktop extends StatelessWidget {
             BreadcrumbItem(title: 'Update Alumni'),
           ],
         ),
-        body: Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              PrimaryDetails(controller: controller),
-              const Gap(16),
-              MajorDetails(controller: controller),
-              const Gap(16),
-              AddressDetails(),
-              const Gap(16),
-              SecondaryDetails(),
-              const Gap(16),
-            ],
-          ),
-        ),
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 100),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          return Form(
+            key: controller.formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                PrimaryDetails(controller: UpdateAlumniController.instance),
+                const Gap(16),
+                MajorDetails(controller: UpdateAlumniController.instance),
+                const Gap(16),
+                const AddressDetails(),
+                const Gap(16),
+                const SecondaryDetails(),
+                const Gap(16),
+              ],
+            ),
+          );
+        }),
         footerBar: Container(
           padding: EdgeInsets.all(SizeConst.defaultSpace),
           width: 550,
